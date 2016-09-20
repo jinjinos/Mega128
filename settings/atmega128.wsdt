@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Workspace>
+  <ConfigDictionary>
+    
+  <CurrentConfigs><Project>atmega128/Debug</Project></CurrentConfigs></ConfigDictionary>
+  <Desktop>
+    <Static>
+      <Workspace>
+        <ColumnWidths>
+          
+          
+          
+          
+        <Column0>241</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
+      </Workspace>
+      <Build>
+        
+        
+        
+        
+      <PreferedWindows><Position>3</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows><Window><Factory>Find-All-Declarations</Factory></Window><Window><Factory>Debug-Log</Factory></Window></Windows></PreferedWindows><ColumnWidth0>31</ColumnWidth0><ColumnWidth1>1387</ColumnWidth1><ColumnWidth2>370</ColumnWidth2><ColumnWidth3>92</ColumnWidth3></Build>
+      <TerminalIO/>
+    <Find-All-Declarations><ColumnWidth0>664</ColumnWidth0><ColumnWidth1>94</ColumnWidth1><ColumnWidth2>1138</ColumnWidth2></Find-All-Declarations><PROJECT_GUI_CALL_GRAPH><col-names><item>File</item><item>Function</item><item>Line</item></col-names><col-widths><item>200</item><item>700</item><item>100</item></col-widths><PreferedWindows><Position>3</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows/></PreferedWindows></PROJECT_GUI_CALL_GRAPH><Debug-Log><ColumnWidth0>28</ColumnWidth0><ColumnWidth1>1021</ColumnWidth1></Debug-Log></Static>
+    <Windows>
+      
+      
+    <Wnd1>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-3140-22315</Identity>
+            <TabName>Workspace</TabName>
+            <Factory>Workspace</Factory>
+            <Session>
+              
+            <NodeDict><ExpandedNode>atmega128</ExpandedNode><ExpandedNode>atmega128/Output</ExpandedNode><ExpandedNode>atmega128/SRC</ExpandedNode></NodeDict></Session>
+          </Tab>
+        </Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd1><Wnd3>
+        <Tabs>
+          
+        <Tab><Identity>TabID-20978-27507</Identity><TabName>Find All Declarations</TabName><Factory>Find-All-Declarations</Factory><Session/></Tab><Tab><Identity>TabID-1753-10547</Identity><TabName>Debug Log</TabName><Factory>Debug-Log</Factory><Session/></Tab><Tab><Identity>TabID-25530-28548</Identity><TabName>Build</TabName><Factory>Build</Factory><Session/></Tab></Tabs>
+        
+      <SelectedTab>2</SelectedTab></Wnd3></Windows>
+    <Editor>
+      
+      
+      
+      
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\src\ds1302.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>184</YPos2><SelStart2>4260</SelStart2><SelEnd2>4260</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\inc\ds1302.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>16</YPos2><SelStart2>834</SelStart2><SelEnd2>834</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\src\main.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>18</XPos2><YPos2>135</YPos2><SelStart2>4212</SelStart2><SelEnd2>4212</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\src\uart.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>84</YPos2><SelStart2>465</SelStart2><SelEnd2>465</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>D:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\avr\inc\dlib\c\stdarg.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>30</YPos2><SelStart2>387</SelStart2><SelEnd2>387</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\src\redctrl.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>45</YPos2><SelStart2>720</SelStart2><SelEnd2>720</SelEnd2></Tab><ActiveTab>5</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\inc\redctrl.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>3</YPos2><SelStart2>658</SelStart2><SelEnd2>658</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\src\ds18b20.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>55</YPos2><SelStart2>1485</SelStart2><SelEnd2>1485</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\inc\ds18b20.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>503</SelStart2><SelEnd2>503</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\inc\delay.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>228</SelStart2><SelEnd2>228</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\src\queue.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>15</YPos2><SelStart2>89</SelStart2><SelEnd2>96</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\inc\queue.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>214</SelStart2><SelEnd2>214</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>D:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\avr\inc\dlib\c\stdbool.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>406</SelStart2><SelEnd2>406</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>D:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\avr\inc\dlib\c\stdio.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>127</SelStart2><SelEnd2>127</SelEnd2></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Positions>
+      
+      
+      
+      
+      
+    <Top><Row0><Sizes><Toolbar-04cb61f0><key>iaridepm.enu1</key></Toolbar-04cb61f0></Sizes></Row0></Top><Left><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>513</Bottom><Right>332</Right><x>-2</x><y>-2</y><xscreen>1462</xscreen><yscreen>257</yscreen><sizeHorzCX>1166800</sizeHorzCX><sizeHorzCY>322055</sizeHorzCY><sizeVertCX>266560</sizeVertCX><sizeVertCY>645363</sizeVertCY></Rect></Wnd1></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd3><Rect><Top>-2</Top><Left>-2</Left><Bottom>240</Bottom><Right>1255</Right><x>-2</x><y>-2</y><xscreen>1257</xscreen><yscreen>242</yscreen><sizeHorzCX>1003192</sizeHorzCX><sizeHorzCY>303258</sizeHorzCY><sizeVertCX>1166800</sizeVertCX><sizeVertCY>322055</sizeVertCY></Rect></Wnd3></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+  </Desktop>
+</Workspace>
+
+

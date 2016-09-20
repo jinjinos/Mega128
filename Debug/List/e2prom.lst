@@ -1,0 +1,332 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V6.20.2.50573 for Atmel AVR        12/Sep/2016  16:06:11 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    Source file  =  C:\Users\Admin\Desktop\ATmega128Project\src\e2prom.c     #
+#    Command line =  C:\Users\Admin\Desktop\ATmega128Project\src\e2prom.c     #
+#                    --cpu=m128a -ms -o C:\Users\Admin\Desktop\ATmega128Proje #
+#                    ct\Debug\Obj\ -lCN C:\Users\Admin\Desktop\ATmega128Proje #
+#                    ct\Debug\List\ -lb C:\Users\Admin\Desktop\ATmega128Proje #
+#                    ct\Debug\List\ -y --initializers_in_flash --no_cse       #
+#                    --no_inline --no_code_motion --no_cross_call             #
+#                    --no_clustering --no_tbaa --debug                        #
+#                    -DENABLE_BIT_DEFINITIONS -e -I                           #
+#                    C:\Users\Admin\Desktop\ATmega128Project\inc\             #
+#                    --eeprom_size 4096 --dlib --dlib_config "D:\Program      #
+#                    Files (x86)\IAR Systems\Embedded Workbench               #
+#                    6.5\avr\LIB\DLIB\dlAVR-3s-ec_mul-f.h" --vla              #
+#                    --use_c++_inline -On                                     #
+#    List file    =  C:\Users\Admin\Desktop\ATmega128Project\Debug\List\e2pro #
+#                    m.lst                                                    #
+#    Object file  =  C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\e2prom #
+#                    .r90                                                     #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+C:\Users\Admin\Desktop\ATmega128Project\src\e2prom.c
+      1          
+      2          //EEPROM操作驱动程序
+      3          
+      4          #include <iom128a.h>
+
+   \                                 In  segment ABSOLUTE, at 0x3c
+   \   union <unnamed> volatile __io _A_EECR
+   \                     _A_EECR:
+   \   00000000                      DS8 1
+
+   \                                 In  segment ABSOLUTE, at 0x3d
+   \   union <unnamed> volatile __io _A_EEDR
+   \                     _A_EEDR:
+   \   00000000                      DS8 1
+
+   \                                 In  segment ABSOLUTE, at 0x3e
+   \   union <unnamed> volatile __io _A_EEAR
+   \                     _A_EEAR:
+   \   00000000                      DS8 2
+
+   \                                 In  segment ABSOLUTE, at 0x5f
+   \   union <unnamed> volatile __io _A_SREG
+   \                     _A_SREG:
+   \   00000000                      DS8 1
+      5          #include "e2prom.h"
+      6          
+      7          /*SCL连接PD0   SDA连接PD1*/
+      8          //执行读EEPROM操作，CPU停止工作4个周期，再继续执行
+      9          //执行写EEPROM操作，CPU停止工作2个周期，再继续执行
+     10          /*
+     11          **相关寄存器
+     12          **EEARH + EEARL 地址寄存器：低12位来查找4K字节的数据地址 0-4096
+     13          **EEDR			数据寄存器：双向，读写缓冲寄存器
+     14          **EECR			控制寄存器：EERIE(3) 就绪中断使能
+     15          **							EEMWE(2) EEPROM主机写使能
+     16          **							EEWE (1) EEPROM写使能
+     17          **							EERE (0) EEPROM读使能
+     18          */
+     19          
+     20          
+     21          /*
+     22          EEPROM写时序
+     23          1. 等待 EEWE 为 0。
+     24          2. 等待 SPMCSR 寄存器的 SPMEN 为零。
+     25          3. 将新的 EEPROM 地址写入 EEAR。
+     26          4. 将新的 EEPROM 数据写入 EEDR。
+     27          5. 对 EECR 寄存器的 EEMWE 写 "1“，同时清零 EEWE。
+     28          6. 在置位 EEMWE 的 4 个周期内，置位 EEWE。
+     29          */
+     30          
+     31          //从EEPOM中读取一个字节数据
+
+   \                                 In  segment CODE, align 2, keep-with-next
+     32          unsigned char e2prom_Read_Byte(unsigned int addr)
+   \                     e2prom_Read_Byte:
+     33          {
+   \   00000000   0198               MOVW    R19:R18, R17:R16
+     34          	while(EECR & (1 << 1));	//等待上一次写操作完
+   \                     ??e2prom_Read_Byte_0:
+   \   00000002   99E1               SBIC    0x1C, 0x01
+   \   00000004   CFFE               RJMP    ??e2prom_Read_Byte_0
+     35          	//写高字节地址
+     36          	EEARH = (unsigned char)(addr >> 8);
+   \   00000006   0189               MOVW    R17:R16, R19:R18
+   \   00000008   2F01               MOV     R16, R17
+   \   0000000A   E010               LDI     R17, 0
+   \   0000000C   BB0F               OUT     0x1F, R16
+     37          	//写低地址字节
+     38          	EEARL = (unsigned char)addr;
+   \   0000000E   2F02               MOV     R16, R18
+   \   00000010   BB0E               OUT     0x1E, R16
+     39          	//读使能置位
+     40          	EECR |= 0x01;
+   \   00000012   9AE0               SBI     0x1C, 0x00
+     41          	//从数据寄存器返回数据
+     42          	return EEDR;
+   \   00000014   B30D               IN      R16, 0x1D
+   \   00000016   9508               RET
+   \   00000018                      REQUIRE _A_EECR
+   \   00000018                      REQUIRE _A_EEAR
+   \   00000018                      REQUIRE _A_EEDR
+     43          }
+     44          
+     45          //EEPROM读取函数
+     46          //addr:EEPROM内部开始读地址
+     47          //number:要读取的数据长度 1-255
+     48          //p_buff:读出数据存放的指针
+
+   \                                 In  segment CODE, align 2, keep-with-next
+     49          void e2prom_Read(unsigned int addr,unsigned char number,unsigned char *p_buff)
+   \                     e2prom_Read:
+   \                     ??e2prom_Read_0:
+     50          {
+     51          	while(EECR & (1 << 1));		//等待上一次写操作完成
+   \   00000000   99E1               SBIC    0x1C, 0x01
+   \   00000002   CFFE               RJMP    ??e2prom_Read_0
+     52          	
+     53          	while(number -- )
+   \                     ??e2prom_Read_1:
+   \   00000004   2F32               MOV     R19, R18
+   \   00000006   2F23               MOV     R18, R19
+   \   00000008   952A               DEC     R18
+   \   0000000A   2333               TST     R19
+   \   0000000C   F079               BREQ    ??e2prom_Read_2
+     54          	{
+     55          		//写高字节地址
+     56          		EEARH = (unsigned char)(addr >> 8);
+   \   0000000E   01B8               MOVW    R23:R22, R17:R16
+   \   00000010   2F67               MOV     R22, R23
+   \   00000012   E070               LDI     R23, 0
+   \   00000014   BB6F               OUT     0x1F, R22
+     57          		//写低地址字节
+     58          		EEARL = (unsigned char)addr;
+   \   00000016   2F30               MOV     R19, R16
+   \   00000018   BB3E               OUT     0x1E, R19
+     59          		//EEPROM读使能位置位
+     60          		EECR |= 0x01;
+   \   0000001A   9AE0               SBI     0x1C, 0x00
+     61          		*p_buff = EEDR;
+   \   0000001C   B33D               IN      R19, 0x1D
+   \   0000001E   01FA               MOVW    R31:R30, R21:R20
+   \   00000020   8330               ST      Z, R19
+     62          		//地址加1 
+     63          		addr++;
+   \   00000022   5F0F               SUBI    R16, 255
+   \   00000024   4F1F               SBCI    R17, 255
+     64          		//存储读取数据指针加1
+     65          		p_buff++;
+   \   00000026   5F4F               SUBI    R20, 255
+   \   00000028   4F5F               SBCI    R21, 255
+   \   0000002A   CFEC               RJMP    ??e2prom_Read_1
+     66          	}
+     67          }
+   \                     ??e2prom_Read_2:
+   \   0000002C   9508               RET
+   \   0000002E                      REQUIRE _A_EECR
+   \   0000002E                      REQUIRE _A_EEAR
+   \   0000002E                      REQUIRE _A_EEDR
+     68          
+     69          //EEPROM读取函数
+
+   \                                 In  segment CODE, align 2, keep-with-next
+     70          void e2prom_Read2(unsigned int addr,unsigned char number,unsigned char *p_buff)
+   \                     e2prom_Read2:
+     71          {
+   \   00000000   ........           CALL    ?PROLOGUE5_L09
+   \   00000004                      REQUIRE ?Register_R4_is_cg_reg
+   \   00000004   01C8               MOVW    R25:R24, R17:R16
+   \   00000006   2E42               MOV     R4, R18
+   \   00000008   01DA               MOVW    R27:R26, R21:R20
+     72          	while(number--)
+   \                     ??e2prom_Read2_0:
+   \   0000000A   2D04               MOV     R16, R4
+   \   0000000C   2E40               MOV     R4, R16
+   \   0000000E   944A               DEC     R4
+   \   00000010   2300               TST     R16
+   \   00000012   F031               BREQ    ??e2prom_Read2_1
+     73          	{
+     74          		*p_buff = e2prom_Read_Byte(addr);
+   \   00000014   018C               MOVW    R17:R16, R25:R24
+   \   00000016   ....               RCALL   e2prom_Read_Byte
+   \   00000018   930C               ST      X, R16
+     75          		addr++;
+   \   0000001A   9601               ADIW    R25:R24, 1
+     76          		p_buff++;
+   \   0000001C   9611               ADIW    R27:R26, 1
+   \   0000001E   CFF5               RJMP    ??e2prom_Read2_0
+     77          	}
+     78          }
+   \                     ??e2prom_Read2_1:
+   \   00000020   E0E5               LDI     R30, 5
+   \   00000022   ........           JMP     ?EPILOGUE_B5_L09
+     79          
+     80          //向EEPROM中写入一个字节的数据
+
+   \                                 In  segment CODE, align 2, keep-with-next
+     81          void e2prom_Write_Byte(unsigned int addr,unsigned char data)
+   \                     e2prom_Write_Byte:
+   \                     ??e2prom_Write_Byte_0:
+     82          {
+     83          	//wait for last time write over
+     84          	while(EECR &= (1 << 1));
+   \   00000000   B33C               IN      R19, 0x1C
+   \   00000002   7032               ANDI    R19, 0x02
+   \   00000004   BB3C               OUT     0x1C, R19
+   \   00000006   2333               TST     R19
+   \   00000008   F7D9               BRNE    ??e2prom_Write_Byte_0
+     85          	
+     86          	//you can't write e2prom while cpu is writing Flash,
+     87          	//so you should check flash writen before write e2prom
+     88          	//如果没有引导程序，写FLash操作，不需要等待SPMCSR的SPMEN位为0
+     89          //	while(SPMCSR & 0x01);	
+     90          	
+     91          	//set addr and data
+     92          	EEARH = (unsigned char)(addr >> 8);
+   \   0000000A   01A8               MOVW    R21:R20, R17:R16
+   \   0000000C   2F45               MOV     R20, R21
+   \   0000000E   E050               LDI     R21, 0
+   \   00000010   BB4F               OUT     0x1F, R20
+     93          	EEARL = (unsigned char)addr;
+   \   00000012   2F30               MOV     R19, R16
+   \   00000014   BB3E               OUT     0x1E, R19
+     94          	EEDR  = data;
+   \   00000016   BB2D               OUT     0x1D, R18
+     95          	
+     96          	//关闭中断，防止写EEPROM操作失败
+     97          	SREG &= ~(1 << 7);	//关闭全局中断使能
+   \   00000018   94F8               BCLR    7
+     98          	
+     99          	EECR |= (1 << 2);	//EEMWE置1
+   \   0000001A   9AE2               SBI     0x1C, 0x02
+    100          	EECR &= ~(1 << 1);	//EEWE清0
+   \   0000001C   98E1               CBI     0x1C, 0x01
+    101          	EECR |= (1 << 1);	//EEWE置1
+   \   0000001E   9AE1               SBI     0x1C, 0x01
+    102          	
+    103          	SREG |= (1 << 7);	//全局中断使能
+   \   00000020   9478               BSET    7
+    104          }
+   \   00000022   9508               RET
+   \   00000024                      REQUIRE _A_EECR
+   \   00000024                      REQUIRE _A_EEAR
+   \   00000024                      REQUIRE _A_EEDR
+   \   00000024                      REQUIRE _A_SREG
+    105          
+    106          //向EEPROM中写入多位数据（1-255）
+
+   \                                 In  segment CODE, align 2, keep-with-next
+    107          void e2prom_Write(unsigned int addr,unsigned char number,unsigned char *p_buff)
+   \                     e2prom_Write:
+    108          {
+   \   00000000   ........           CALL    ?PROLOGUE5_L09
+   \   00000004                      REQUIRE ?Register_R4_is_cg_reg
+   \   00000004   01C8               MOVW    R25:R24, R17:R16
+   \   00000006   2E42               MOV     R4, R18
+   \   00000008   01DA               MOVW    R27:R26, R21:R20
+    109          	while(number--)
+   \                     ??e2prom_Write_0:
+   \   0000000A   2D04               MOV     R16, R4
+   \   0000000C   2E40               MOV     R4, R16
+   \   0000000E   944A               DEC     R4
+   \   00000010   2300               TST     R16
+   \   00000012   F031               BREQ    ??e2prom_Write_1
+    110          	{
+    111          		e2prom_Write_Byte(addr,*p_buff);
+   \   00000014   912C               LD      R18, X
+   \   00000016   018C               MOVW    R17:R16, R25:R24
+   \   00000018   ....               RCALL   e2prom_Write_Byte
+    112          		addr++;
+   \   0000001A   9601               ADIW    R25:R24, 1
+    113          		p_buff++;
+   \   0000001C   9611               ADIW    R27:R26, 1
+   \   0000001E   CFF5               RJMP    ??e2prom_Write_0
+    114          	}
+    115          }
+   \                     ??e2prom_Write_1:
+   \   00000020   E0E5               LDI     R30, 5
+   \   00000022   ........           JMP     ?EPILOGUE_B5_L09
+    116          
+    117          
+    118          
+    119          
+    120          
+    121          
+    122          
+    123          
+    124          
+
+   Maximum stack usage in bytes:
+
+   CSTACK RSTACK Function
+   ------ ------ --------
+      0      2   e2prom_Read
+      5      2   e2prom_Read2
+        5      2   -> e2prom_Read_Byte
+      0      2   e2prom_Read_Byte
+      5      2   e2prom_Write
+        5      2   -> e2prom_Write_Byte
+      0      2   e2prom_Write_Byte
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  _A_EEAR
+       1  _A_EECR
+       1  _A_EEDR
+       1  _A_SREG
+      46  e2prom_Read
+      38  e2prom_Read2
+      24  e2prom_Read_Byte
+      38  e2prom_Write
+      36  e2prom_Write_Byte
+
+ 
+   5 bytes in segment ABSOLUTE
+ 182 bytes in segment CODE
+ 
+ 182 bytes of CODE memory
+   0 bytes of DATA memory (+ 5 bytes shared)
+
+Errors: none
+Warnings: none

@@ -1,0 +1,209 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V6.20.2.50573 for Atmel AVR       12/Sep/2016  16:06:12 /
+// Copyright 1996-2013 IAR Systems AB.                                        /
+//                                                                            /
+//    Source file  =  C:\Users\Admin\Desktop\ATmega128Project\src\timer.c     /
+//    Command line =  C:\Users\Admin\Desktop\ATmega128Project\src\timer.c     /
+//                    --cpu=m128a -ms -o C:\Users\Admin\Desktop\ATmega128Proj /
+//                    ect\Debug\Obj\ -lCN C:\Users\Admin\Desktop\ATmega128Pro /
+//                    ject\Debug\List\ -lb C:\Users\Admin\Desktop\ATmega128Pr /
+//                    oject\Debug\List\ -y --initializers_in_flash --no_cse   /
+//                    --no_inline --no_code_motion --no_cross_call            /
+//                    --no_clustering --no_tbaa --debug                       /
+//                    -DENABLE_BIT_DEFINITIONS -e -I                          /
+//                    C:\Users\Admin\Desktop\ATmega128Project\inc\            /
+//                    --eeprom_size 4096 --dlib --dlib_config "D:\Program     /
+//                    Files (x86)\IAR Systems\Embedded Workbench              /
+//                    6.5\avr\LIB\DLIB\dlAVR-3s-ec_mul-f.h" --vla             /
+//                    --use_c++_inline -On                                    /
+//    List file    =  C:\Users\Admin\Desktop\ATmega128Project\Debug\List\time /
+//                    r.s90                                                   /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME timer
+
+        RSEG CSTACK:DATA:NOROOT(0)
+        RSEG RSTACK:DATA:NOROOT(0)
+
+        EXTERN ?need_segment_init
+
+        PUBWEAK `?<Segment init: NEAR_Z>`
+        PUBLIC Time
+        PUBLIC Timer1_C
+        PUBLIC Timer1_H
+        PUBLIC Timer1_L
+        PUBWEAK _A_OCR0
+        PUBWEAK _A_TCCR0
+        PUBWEAK _A_TCCR1A
+        PUBWEAK _A_TCCR1B
+        PUBWEAK _A_TCCR1C
+        PUBWEAK _A_TCNT0
+        PUBWEAK _A_TCNT1
+        PUBWEAK _A_TIFR
+        PUBWEAK _A_TIMSK
+        PUBWEAK __?EEARH
+        PUBWEAK __?EEARL
+        PUBWEAK __?EECR
+        PUBWEAK __?EEDR
+        PUBLIC timer0Init
+        PUBLIC timer1Init
+
+
+        ASEGN ABSOLUTE:DATA:NOROOT,04cH
+// union <unnamed> volatile __io _A_TCNT1
+_A_TCNT1:
+        DS8 2
+
+        ASEGN ABSOLUTE:DATA:NOROOT,04eH
+// union <unnamed> volatile __io _A_TCCR1B
+_A_TCCR1B:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,04fH
+// union <unnamed> volatile __io _A_TCCR1A
+_A_TCCR1A:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,051H
+// union <unnamed> volatile __io _A_OCR0
+_A_OCR0:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,052H
+// union <unnamed> volatile __io _A_TCNT0
+_A_TCNT0:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,053H
+// union <unnamed> volatile __io _A_TCCR0
+_A_TCCR0:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,056H
+// union <unnamed> volatile __io _A_TIFR
+_A_TIFR:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,057H
+// union <unnamed> volatile __io _A_TIMSK
+_A_TIMSK:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,07aH
+// union <unnamed> volatile __io _A_TCCR1C
+_A_TCCR1C:
+        DS8 1
+
+        RSEG NEAR_Z:DATA:NOROOT(0)
+        REQUIRE `?<Segment init: NEAR_Z>`
+Timer1_H:
+        DS8 1
+
+        RSEG NEAR_Z:DATA:NOROOT(0)
+        REQUIRE `?<Segment init: NEAR_Z>`
+Timer1_L:
+        DS8 1
+
+        RSEG NEAR_Z:DATA:NOROOT(0)
+        REQUIRE `?<Segment init: NEAR_Z>`
+Time:
+        DS8 1
+
+        RSEG NEAR_Z:DATA:NOROOT(0)
+        REQUIRE `?<Segment init: NEAR_Z>`
+Timer1_C:
+        DS8 2
+
+        RSEG CODE:CODE:NOROOT(1)
+timer0Init:
+        MOV     R18, R16
+        OR      R18, R17
+        BRNE    ??timer0Init_0
+        LDI     R18, 7
+        OUT     0x33, R18
+        LDI     R18, 184
+        OUT     0x32, R18
+        RJMP    ??timer0Init_1
+??timer0Init_0:
+        CPI     R16, 17
+        LDI     R18, 0
+        CPC     R17, R18
+        BRNE    ??timer0Init_1
+        LDI     R18, 111
+        OUT     0x33, R18
+        LDI     R18, 128
+        OUT     0x31, R18
+??timer0Init_1:
+        IN      R18, 0x36
+        ORI     R18, 0x01
+        OUT     0x36, R18
+        IN      R18, 0x37
+        ORI     R18, 0x01
+        OUT     0x37, R18
+        RET
+        REQUIRE _A_TCCR0
+        REQUIRE _A_TCNT0
+        REQUIRE _A_OCR0
+        REQUIRE _A_TIFR
+        REQUIRE _A_TIMSK
+
+        RSEG CODE:CODE:NOROOT(1)
+timer1Init:
+        LDI     R16, 0
+        OUT     0x2F, R16
+        LDI     R16, 1
+        OUT     0x2E, R16
+        LDI     R16, 0
+        STS     _A_TCCR1C, R16
+        LDI     R16, 223
+        LDI     R17, 227
+        OUT     0x2D, R17
+        OUT     0x2C, R16
+        IN      R16, 0x36
+        ORI     R16, 0x04
+        OUT     0x36, R16
+        IN      R16, 0x37
+        ORI     R16, 0x04
+        OUT     0x37, R16
+        RET
+        REQUIRE _A_TCCR1A
+        REQUIRE _A_TCCR1B
+        REQUIRE _A_TCCR1C
+        REQUIRE _A_TCNT1
+        REQUIRE _A_TIFR
+        REQUIRE _A_TIMSK
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01cH
+__?EECR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01dH
+__?EEDR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01eH
+__?EEARL:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01fH
+__?EEARH:
+
+        RSEG INITTAB:CODE:NOROOT(0)
+`?<Segment init: NEAR_Z>`:
+        DC16    SFE(NEAR_Z) - SFB(NEAR_Z)
+        DC16    SFB(NEAR_Z)
+        DP      0
+        REQUIRE ?need_segment_init
+
+        END
+// 
+// 10 bytes in segment ABSOLUTE
+// 82 bytes in segment CODE
+//  7 bytes in segment INITTAB
+//  5 bytes in segment NEAR_Z
+// 
+// 82 bytes of CODE memory (+  7 bytes shared)
+//  5 bytes of DATA memory (+ 10 bytes shared)
+//
+//Errors: none
+//Warnings: none

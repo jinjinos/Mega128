@@ -1,0 +1,254 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V6.20.2.50573 for Atmel AVR       12/Sep/2016  16:06:12 /
+// Copyright 1996-2013 IAR Systems AB.                                        /
+//                                                                            /
+//    Source file  =  C:\Users\Admin\Desktop\ATmega128Project\src\removectrl. /
+//                    c                                                       /
+//    Command line =  C:\Users\Admin\Desktop\ATmega128Project\src\removectrl. /
+//                    c --cpu=m128a -ms -o C:\Users\Admin\Desktop\ATmega128Pr /
+//                    oject\Debug\Obj\ -lCN C:\Users\Admin\Desktop\ATmega128P /
+//                    roject\Debug\List\ -lb C:\Users\Admin\Desktop\ATmega128 /
+//                    Project\Debug\List\ -y --initializers_in_flash          /
+//                    --no_cse --no_inline --no_code_motion --no_cross_call   /
+//                    --no_clustering --no_tbaa --debug                       /
+//                    -DENABLE_BIT_DEFINITIONS -e -I                          /
+//                    C:\Users\Admin\Desktop\ATmega128Project\inc\            /
+//                    --eeprom_size 4096 --dlib --dlib_config "D:\Program     /
+//                    Files (x86)\IAR Systems\Embedded Workbench              /
+//                    6.5\avr\LIB\DLIB\dlAVR-3s-ec_mul-f.h" --vla             /
+//                    --use_c++_inline -On                                    /
+//    List file    =  C:\Users\Admin\Desktop\ATmega128Project\Debug\List\remo /
+//                    vectrl.s90                                              /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME removectrl
+
+        RSEG CSTACK:DATA:NOROOT(0)
+        RSEG RSTACK:DATA:NOROOT(0)
+
+        EXTERN ?need_segment_init
+
+        PUBWEAK `?<Segment init: NEAR_I>`
+        PUBWEAK _A_DDRC
+        PUBWEAK _A_PINC
+        PUBWEAK _A_PORTB
+        PUBWEAK _A_PORTC
+        PUBWEAK __?EEARH
+        PUBWEAK __?EEARL
+        PUBWEAK __?EECR
+        PUBWEAK __?EEDR
+        PUBLIC removeCtrlGetKey
+        PUBLIC removeCtrlInit
+        PUBLIC removeCtrlTest
+
+        EXTERN ledShowNumber
+        EXTERN printf
+        EXTERN wei_table
+
+
+        ASEGN ABSOLUTE:DATA:NOROOT,033H
+// union <unnamed> volatile __io _A_PINC
+_A_PINC:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,034H
+// union <unnamed> volatile __io _A_DDRC
+_A_DDRC:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,035H
+// union <unnamed> volatile __io _A_PORTC
+_A_PORTC:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,038H
+// union <unnamed> volatile __io _A_PORTB
+_A_PORTB:
+        DS8 1
+
+        RSEG CODE:CODE:NOROOT(1)
+removeCtrlInit:
+        IN      R16, 0x14
+        ANDI    R16, 0xE0
+        OUT     0x14, R16
+        IN      R16, 0x15
+        ORI     R16, 0x1F
+        OUT     0x15, R16
+        RET
+        REQUIRE _A_DDRC
+        REQUIRE _A_PORTC
+
+        RSEG CODE:CODE:NOROOT(1)
+removeCtrlGetKey:
+        SBIS    0x13, 0x00
+        RJMP    ??removeCtrlGetKey_0
+        SBIS    0x13, 0x01
+        RJMP    ??removeCtrlGetKey_1
+        LDI     R16, 49
+        RET
+??removeCtrlGetKey_1:
+        SBIS    0x13, 0x02
+        RJMP    ??removeCtrlGetKey_2
+        LDI     R16, 50
+        RET
+??removeCtrlGetKey_2:
+        SBIS    0x13, 0x03
+        RJMP    ??removeCtrlGetKey_3
+        LDI     R16, 51
+        RET
+??removeCtrlGetKey_3:
+        SBIS    0x13, 0x04
+        RJMP    ??removeCtrlGetKey_0
+        LDI     R16, 52
+        RET
+??removeCtrlGetKey_0:
+        LDI     R16, 0
+        RET
+        REQUIRE _A_PINC
+
+        RSEG CODE:CODE:NOROOT(1)
+removeCtrlTest:
+        ST      -Y, R24
+??removeCtrlTest_0:
+        RCALL   removeCtrlGetKey
+        MOV     R24, R16
+        TST     R16
+        BREQ    ??removeCtrlTest_1
+        MOV     R16, R24
+        SUBI    R16, 49
+        BREQ    ??removeCtrlTest_2
+        DEC     R16
+        BREQ    ??removeCtrlTest_3
+        DEC     R16
+        BREQ    ??removeCtrlTest_4
+        DEC     R16
+        BREQ    ??removeCtrlTest_5
+        RJMP    ??removeCtrlTest_6
+??removeCtrlTest_2:
+        IN      R16, 0x18
+        COM     R16
+        OUT     0x18, R16
+        LDI     R16, LOW(`?<Constant "\\304\\343\\260\\264\\317\\302\\265\\304\\2`)
+        LDI     R17, (`?<Constant "\\304\\343\\260\\264\\317\\302\\265\\304\\2`) >> 8
+        CALL    printf
+        RJMP    ??removeCtrlTest_6
+??removeCtrlTest_3:
+        LDI     R16, 255
+        OUT     0x18, R16
+        LDI     R16, LOW(`?<Constant "\\304\\343\\260\\264\\317\\302\\265\\304\\2_1`)
+        LDI     R17, (`?<Constant "\\304\\343\\260\\264\\317\\302\\265\\304\\2_1`) >> 8
+        CALL    printf
+        RJMP    ??removeCtrlTest_6
+??removeCtrlTest_4:
+        LDI     R16, 240
+        OUT     0x18, R16
+        LDI     R16, LOW(`?<Constant "\\304\\343\\260\\264\\317\\302\\265\\304\\2_2`)
+        LDI     R17, (`?<Constant "\\304\\343\\260\\264\\317\\302\\265\\304\\2_2`) >> 8
+        CALL    printf
+        RJMP    ??removeCtrlTest_6
+??removeCtrlTest_5:
+        LDI     R16, 255
+        OUT     0x18, R16
+        LDI     R16, LOW(`?<Constant "\\304\\343\\260\\264\\317\\302\\265\\304\\2_3`)
+        LDI     R17, (`?<Constant "\\304\\343\\260\\264\\317\\302\\265\\304\\2_3`) >> 8
+        CALL    printf
+??removeCtrlTest_6:
+        SBIC    0x13, 0x00
+        RJMP    ??removeCtrlTest_6
+??removeCtrlTest_1:
+        LDI     R16, 10
+        LDI     R17, 0
+        ST      -Y, R17
+        ST      -Y, R16
+        LDI     R22, 255
+        LDI     R23, 255
+        LDI     R20, LOW(wei_table)
+        LDI     R21, (wei_table) >> 8
+        MOV     R30, R24
+        LDI     R31, 0
+        SBIW    R31:R30, 48
+        MOVW    R17:R16, R31:R30
+        MOV     R18, R17
+        LSL     R18
+        SBC     R18, R18
+        MOV     R19, R18
+        CALL    ledShowNumber
+        RJMP    ??removeCtrlTest_0
+        REQUIRE _A_PORTB
+        REQUIRE _A_PINC
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01cH
+__?EECR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01dH
+__?EEDR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01eH
+__?EEARL:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01fH
+__?EEARH:
+
+        RSEG NEAR_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "\\304\\343\\260\\264\\`:
+        DC8 "\304\343\260\264\317\302\265\304\260\264\274\374\312\307A\015\012"
+
+        RSEG INITTAB:CODE:NOROOT(0)
+`?<Segment init: NEAR_I>`:
+        DC16    SFE(NEAR_I) - SFB(NEAR_I)
+        DC16    SFB(NEAR_I)
+        DP      SFB(NEAR_ID)
+        REQUIRE ?need_segment_init
+
+        RSEG NEAR_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "\\304\\343\\260\\264\\_1`:
+        DC8 "\304\343\260\264\317\302\265\304\260\264\274\374\312\307B\015\012"
+
+        RSEG NEAR_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "\\304\\343\\260\\264\\_2`:
+        DC8 "\304\343\260\264\317\302\265\304\260\264\274\374\312\307C\015\012"
+
+        RSEG NEAR_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "\\304\\343\\260\\264\\_3`:
+        DC8 "\304\343\260\264\317\302\265\304\260\264\274\374\312\307D\015\012"
+
+        RSEG NEAR_I:DATA:NOROOT(0)
+        REQUIRE `?<Segment init: NEAR_I>`
+`?<Constant "\\304\\343\\260\\264\\317\\302\\265\\304\\2`:
+        DS8 18
+        REQUIRE `?<Initializer for <Constant "\\304\\343\\260\\264\\`
+
+        RSEG NEAR_I:DATA:NOROOT(0)
+        REQUIRE `?<Segment init: NEAR_I>`
+`?<Constant "\\304\\343\\260\\264\\317\\302\\265\\304\\2_1`:
+        DS8 18
+        REQUIRE `?<Initializer for <Constant "\\304\\343\\260\\264\\_1`
+
+        RSEG NEAR_I:DATA:NOROOT(0)
+        REQUIRE `?<Segment init: NEAR_I>`
+`?<Constant "\\304\\343\\260\\264\\317\\302\\265\\304\\2_2`:
+        DS8 18
+        REQUIRE `?<Initializer for <Constant "\\304\\343\\260\\264\\_2`
+
+        RSEG NEAR_I:DATA:NOROOT(0)
+        REQUIRE `?<Segment init: NEAR_I>`
+`?<Constant "\\304\\343\\260\\264\\317\\302\\265\\304\\2_3`:
+        DS8 18
+        REQUIRE `?<Initializer for <Constant "\\304\\343\\260\\264\\_3`
+
+        END
+// 
+//   4 bytes in segment ABSOLUTE
+// 182 bytes in segment CODE
+//   7 bytes in segment INITTAB
+//  72 bytes in segment NEAR_I
+//  72 bytes in segment NEAR_ID
+// 
+// 254 bytes of CODE memory (+ 7 bytes shared)
+//  72 bytes of DATA memory (+ 4 bytes shared)
+//
+//Errors: none
+//Warnings: none

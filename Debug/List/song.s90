@@ -1,0 +1,243 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V6.20.2.50573 for Atmel AVR       12/Sep/2016  16:06:10 /
+// Copyright 1996-2013 IAR Systems AB.                                        /
+//                                                                            /
+//    Source file  =  C:\Users\Admin\Desktop\ATmega128Project\src\song.c      /
+//    Command line =  C:\Users\Admin\Desktop\ATmega128Project\src\song.c      /
+//                    --cpu=m128a -ms -o C:\Users\Admin\Desktop\ATmega128Proj /
+//                    ect\Debug\Obj\ -lCN C:\Users\Admin\Desktop\ATmega128Pro /
+//                    ject\Debug\List\ -lb C:\Users\Admin\Desktop\ATmega128Pr /
+//                    oject\Debug\List\ -y --initializers_in_flash --no_cse   /
+//                    --no_inline --no_code_motion --no_cross_call            /
+//                    --no_clustering --no_tbaa --debug                       /
+//                    -DENABLE_BIT_DEFINITIONS -e -I                          /
+//                    C:\Users\Admin\Desktop\ATmega128Project\inc\            /
+//                    --eeprom_size 4096 --dlib --dlib_config "D:\Program     /
+//                    Files (x86)\IAR Systems\Embedded Workbench              /
+//                    6.5\avr\LIB\DLIB\dlAVR-3s-ec_mul-f.h" --vla             /
+//                    --use_c++_inline -On                                    /
+//    List file    =  C:\Users\Admin\Desktop\ATmega128Project\Debug\List\song /
+//                    .s90                                                    /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME song
+
+        RSEG CSTACK:DATA:NOROOT(0)
+        RSEG RSTACK:DATA:NOROOT(0)
+
+        EXTERN ?EPILOGUE_B4_L09
+        EXTERN ?F2SL_L04
+        EXTERN ?F_ADD_L04
+        EXTERN ?F_MUL_L04
+        EXTERN ?PROLOGUE4_L09
+        EXTERN ?UL2F_L04
+        EXTERN ?need_segment_init
+
+        PUBWEAK `?<Segment init: NEAR_I>`
+        PUBLIC FREQH
+        PUBLIC FREQL
+        PUBLIC MUSIC
+        PUBLIC Song
+        PUBWEAK _A_TCCR1B
+        PUBWEAK _A_TCNT1
+        PUBWEAK __?EEARH
+        PUBWEAK __?EEARL
+        PUBWEAK __?EECR
+        PUBWEAK __?EEDR
+        PUBLIC delay_song
+        PUBLIC song
+
+        EXTERN Time
+        EXTERN Timer1_C
+        EXTERN Timer1_H
+        EXTERN Timer1_L
+
+
+        ASEGN ABSOLUTE:DATA:NOROOT,04cH
+// union <unnamed> volatile __io _A_TCNT1
+_A_TCNT1:
+        DS8 2
+
+        ASEGN ABSOLUTE:DATA:NOROOT,04eH
+// union <unnamed> volatile __io _A_TCCR1B
+_A_TCCR1B:
+        DS8 1
+
+        RSEG NEAR_I:DATA:NOROOT(0)
+        REQUIRE `?<Segment init: NEAR_I>`
+MUSIC:
+        DS8 102
+        REQUIRE `?<Initializer for MUSIC>`
+
+        RSEG NEAR_I:DATA:NOROOT(0)
+        REQUIRE `?<Segment init: NEAR_I>`
+FREQH:
+        DS8 28
+        REQUIRE `?<Initializer for FREQH>`
+
+        RSEG NEAR_I:DATA:NOROOT(0)
+        REQUIRE `?<Segment init: NEAR_I>`
+FREQL:
+        DS8 28
+        REQUIRE `?<Initializer for FREQL>`
+
+        RSEG CODE:CODE:NOROOT(1)
+delay_song:
+        LDI     R17, 0
+??delay_song_0:
+        CP      R17, R16
+        BRCC    ??delay_song_1
+        LDI     R20, 81
+        LDI     R21, 40
+        LDI     R22, 9
+        SUBI    R20, 1
+        SBCI    R21, 0
+        SBCI    R22, 0
+        BRNE    $-6
+        RJMP    $+2
+        INC     R17
+        RJMP    ??delay_song_0
+??delay_song_1:
+        RET
+
+        RSEG CODE:CODE:NOROOT(1)
+song:
+        LDS     R16, Timer1_C
+        LDS     R17, (Timer1_C + 1)
+        LDI     R18, 0
+        LDI     R19, 0
+        CALL    ?UL2F_L04
+        LDI     R20, 82
+        LDI     R21, 73
+        LDI     R22, 29
+        LDI     R23, 63
+        CALL    ?F_MUL_L04
+        LDI     R20, 152
+        LDI     R21, 108
+        LDI     R22, 197
+        LDI     R23, 70
+        CALL    ?F_ADD_L04
+        CALL    ?F2SL_L04
+        OUT     0x2D, R17
+        OUT     0x2C, R16
+        LDI     R16, 5
+        OUT     0x2E, R16
+        LDS     R16, Time
+        RCALL   delay_song
+        LDI     R16, 0
+        OUT     0x2E, R16
+        RET
+        REQUIRE _A_TCNT1
+        REQUIRE _A_TCCR1B
+
+        RSEG CODE:CODE:NOROOT(1)
+Song:
+        CALL    ?PROLOGUE4_L09
+        LDI     R24, 0
+        LDI     R26, 0
+        LDI     R24, 0
+??Song_0:
+        CPI     R24, 100
+        BRCC    ??Song_1
+        LDI     R25, 0
+        MOVW    R31:R30, R25:R24
+        SUBI    R30, LOW((-(MUSIC) & 0xFFFF))
+        SBCI    R31, (-(MUSIC) & 0xFFFF) >> 8
+        LD      R17, Z
+        LDI     R25, 0
+        MOVW    R31:R30, R25:R24
+        SUBI    R30, LOW((-(MUSIC) & 0xFFFF))
+        SBCI    R31, (-(MUSIC) & 0xFFFF) >> 8
+        LDD     R18, Z+1
+        LDI     R16, 7
+        MUL     R18, R16
+        ADD     R17, R0
+        DEC     R17
+        MOV     R26, R17
+        LDI     R27, 0
+        MOVW    R31:R30, R27:R26
+        SUBI    R30, LOW((-(FREQH) & 0xFFFF))
+        SBCI    R31, (-(FREQH) & 0xFFFF) >> 8
+        LD      R16, Z
+        STS     Timer1_H, R16
+        LDI     R27, 0
+        MOVW    R31:R30, R27:R26
+        SUBI    R30, LOW((-(FREQL) & 0xFFFF))
+        SBCI    R31, (-(FREQL) & 0xFFFF) >> 8
+        LD      R16, Z
+        STS     Timer1_L, R16
+        LDS     R19, Timer1_H
+        LDI     R18, 0
+        LDS     R16, Timer1_L
+        LDI     R17, 0
+        ADD     R18, R16
+        ADC     R19, R17
+        STS     Timer1_C, R18
+        STS     (Timer1_C + 1), R19
+        LDI     R25, 0
+        MOVW    R31:R30, R25:R24
+        SUBI    R30, LOW((-(MUSIC) & 0xFFFF))
+        SBCI    R31, (-(MUSIC) & 0xFFFF) >> 8
+        LDD     R16, Z+2
+        STS     Time, R16
+        RCALL   song
+        SUBI    R24, 253
+        RJMP    ??Song_0
+??Song_1:
+        LDI     R30, 4
+        JMP     ?EPILOGUE_B4_L09
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01cH
+__?EECR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01dH
+__?EEDR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01eH
+__?EEARL:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01fH
+__?EEARH:
+
+        RSEG NEAR_ID:CODE:NOROOT(0)
+`?<Initializer for MUSIC>`:
+        DC8 6, 2, 3, 5, 2, 1, 3, 2, 2, 5, 2, 2, 1, 3, 2, 6, 2, 1, 5, 2, 1, 6, 2
+        DC8 4, 3, 2, 2, 5, 2, 1, 6, 2, 1, 5, 2, 2, 3, 2, 2, 1, 2, 1, 6, 1, 1, 5
+        DC8 2, 1, 3, 2, 1, 2, 2, 4, 2, 2, 3, 3, 2, 1, 5, 2, 2, 5, 2, 1, 6, 2, 1
+        DC8 3, 2, 2, 2, 2, 2, 1, 2, 4, 5, 2, 3, 3, 2, 1, 2, 2, 1, 1, 2, 1, 6, 1
+        DC8 1, 1, 2, 1, 5, 1, 6, 0, 0, 0
+
+        RSEG INITTAB:CODE:NOROOT(0)
+`?<Segment init: NEAR_I>`:
+        DC16    SFE(NEAR_I) - SFB(NEAR_I)
+        DC16    SFB(NEAR_I)
+        DP      SFB(NEAR_ID)
+        REQUIRE ?need_segment_init
+
+        RSEG NEAR_ID:CODE:NOROOT(0)
+`?<Initializer for FREQH>`:
+        DC8 242, 243, 245, 245, 246, 247, 248, 249, 249, 250, 250, 251, 251
+        DC8 252, 252, 252, 253, 253, 253, 253, 254, 254, 254, 254, 254, 254
+        DC8 254, 255
+
+        RSEG NEAR_ID:CODE:NOROOT(0)
+`?<Initializer for FREQL>`:
+        DC8 66, 193, 23, 182, 208, 209, 182, 33, 225, 140, 216, 104, 233, 91
+        DC8 143, 238, 68, 107, 180, 244, 45, 71, 119, 162, 182, 218, 250, 22
+
+        END
+// 
+//   3 bytes in segment ABSOLUTE
+// 214 bytes in segment CODE
+//   7 bytes in segment INITTAB
+// 158 bytes in segment NEAR_I
+// 158 bytes in segment NEAR_ID
+// 
+// 372 bytes of CODE memory (+ 7 bytes shared)
+// 158 bytes of DATA memory (+ 3 bytes shared)
+//
+//Errors: none
+//Warnings: none

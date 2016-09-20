@@ -1,0 +1,363 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V6.20.2.50573 for Atmel AVR        12/Sep/2016  17:59:11 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    Source file  =  C:\Users\Admin\Desktop\ATmega128Project\src\main.c       #
+#    Command line =  C:\Users\Admin\Desktop\ATmega128Project\src\main.c       #
+#                    --cpu=m128a -ms -o C:\Users\Admin\Desktop\ATmega128Proje #
+#                    ct\Debug\Obj\ -lCN C:\Users\Admin\Desktop\ATmega128Proje #
+#                    ct\Debug\List\ -lb C:\Users\Admin\Desktop\ATmega128Proje #
+#                    ct\Debug\List\ -y --initializers_in_flash --no_cse       #
+#                    --no_inline --no_code_motion --no_cross_call             #
+#                    --no_clustering --no_tbaa --debug                        #
+#                    -DENABLE_BIT_DEFINITIONS -e -I                           #
+#                    C:\Users\Admin\Desktop\ATmega128Project\inc\             #
+#                    --eeprom_size 4096 --dlib --dlib_config "D:\Program      #
+#                    Files (x86)\IAR Systems\Embedded Workbench               #
+#                    6.5\avr\LIB\DLIB\dlAVR-3s-ec_mul-f.h" --vla              #
+#                    --use_c++_inline -On                                     #
+#    List file    =  C:\Users\Admin\Desktop\ATmega128Project\Debug\List\main. #
+#                    lst                                                      #
+#    Object file  =  C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\main.r #
+#                    90                                                       #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+C:\Users\Admin\Desktop\ATmega128Project\src\main.c
+      1          /*ATmega128开发板的工程main文件，个人学习使用*/
+      2          //TODO 使用includes包含头文件,在includes.h中包含所有需要用到的头文件
+      3          
+      4          #include <stdio.h>
+      5          #include <stdlib.h>
+      6          #include "led.h"			//LED灯的头文件
+      7          #include "delay.h"		//延时函数的头文件
+      8          #include "beep.h"			//蜂鸣器的头文件
+      9          #include "ledshow.h"		//八段式数码管的头文件
+     10          #include "my_math.h"		//一些数学处理函数
+     11          #include "key.h"			//按键的头文件
+
+   \                                 In  segment ABSOLUTE, at 0x5f
+   \   union <unnamed> volatile __io _A_SREG
+   \                     _A_SREG:
+   \   00000000                      DS8 1
+     12          #include "ds18b20.h"		//温度传感器的头文件
+     13          #include "timer.h"		//定时/计数器的头文件 
+     14          #include "uart.h"			//串口的头文件
+     15          #include "step_motor.h"	//步进电机的头文件
+     16          #include "ds1302.h"		//实时时钟的头文件
+     17          #include "e2prom.h"		//EEPROM的头文件
+     18          #include "lcd1602.h"		//1602字符屏的头文件
+     19          #include "adc.h"			//AD转换的头文件
+     20          #include "dac_tlc5615.h"	//TLC5615 DAC芯片的头文件
+     21          #include "song.h"			//单片机使用蜂鸣器播放音乐	TODO : 暂时不能实现
+     22          #include "redctrl.h"		//红外接收的头文件
+     23          #include "removectrl.h"	//无线遥控器的头文件
+     24          #include "ISR.h"
+     25          
+     26          
+     27          
+
+   \                                 In  segment NEAR_Z, align 1, keep-with-next
+   \   00000000                      REQUIRE `?<Segment init: NEAR_Z>`
+     28          unsigned int temp_num = 0;		//18B20温度
+   \                     temp_num:
+   \   00000000                      DS8 2
+     29          
+
+   \                                 In  segment NEAR_I, align 1, keep-with-next
+   \   00000000                      REQUIRE `?<Segment init: NEAR_I>`
+     30          unsigned char comp = 128; 		//PWM输出
+   \                     comp:
+   \   00000000                      DS8 1
+   \   00000001                      REQUIRE `?<Initializer for comp>`
+     31          
+     32          /*系统初始化函数*/
+
+   \                                 In  segment CODE, align 2, keep-with-next
+     33          void systemInit(void)
+   \                     systemInit:
+     34          {
+     35          	//系统各个模块的初始化函数调用
+     36          	ledInit();				//led灯初始化
+   \   00000000   ........           CALL    ledInit
+     37          //	DAC_IO_Init();			//DAC IO口配置
+     38          //	beepInit();				//蜂鸣器初始化
+     39          //	redCtrlInit();			//红外接收头的初始化
+     40          //	removeCtrlInit();		//无线遥控初始化
+     41          //	stepMotorInit();		//步进电机初始化
+     42          	ledShowInit();			//数码管初始化
+   \   00000004   ........           CALL    ledShowInit
+     43          //	independentKeyInit();	//独立按键初始化	
+     44          //	keyInit();				//矩阵键盘按键初始化
+     45          //	intKeyInit();			//外部中断按键初始化为输入模式
+     46          //	interruptKeyInit();		//外部中断使能
+     47          //	DS18B20_Init();			//DS18B20复位
+     48          	timer0Init(OVF);		//定时器0初始化，溢出中断使能		OVF or COMP
+   \   00000008   E000               LDI     R16, 0
+   \   0000000A   E010               LDI     R17, 0
+   \   0000000C   ........           CALL    timer0Init
+     49          //	timer1Init();			//定时器1初始化
+     50          	USART_Init(115200);		//串口初始化	
+   \   00000010   E000               LDI     R16, 0
+   \   00000012   EC12               LDI     R17, 194
+   \   00000014   E021               LDI     R18, 1
+   \   00000016   E030               LDI     R19, 0
+   \   00000018   ........           CALL    USART_Init
+     51          	ds1302_Init();			//DS1302实时时钟初始化
+   \   0000001C   ........           CALL    ds1302_Init
+     52          //	lcd1602Init();			//LCD1602初始化
+     53          //	adc_Init();				//ADC初始化，使能中断
+     54          //	SPI_MasterInit();		//SPI进行DAC转换初始化
+     55          	
+     56          }
+   \   00000020   9508               RET
+     57          
+     58          
+     59          /*系统的主函数*/
+
+   \                                 In  segment CODE, align 2, keep-with-next
+     60          int main(void)
+   \                     main:
+     61          {
+     62          	/*变量定义*/
+     63          //	unsigned char temp;
+     64          //	unsigned char num = 255;
+     65          //	unsigned long int num = 0;
+     66          //	unsigned int t = 0;
+     67          //	unsigned char *p = "jinpnegju";
+     68          //	unsigned char pos = 0x10;
+     69          //	unsigned char temp_key = 0xff;
+     70          //	unsigned char key = 0xff;
+     71          		
+     72          	/*需要用到的模块初始化*/
+     73          	systemInit();		//系统初始化
+   \   00000000   ....               RCALL   systemInit
+     74          	
+     75          
+     76          	/*赋初值*/
+     77          //	temp = e2prom_Read_Byte(0x0010);
+     78          //	_delay_ms(10);
+     79          //	temp++;
+     80          //	e2prom_Write_Byte(0x0010,temp);
+     81          //	_delay_ms(10);
+     82          //	printf("\r\n开机次数为% 3d\r\n",temp);
+     83          	
+     84          /*	向EEPROM中写入255个字节的数据，读出之后通过串口发送。测试EEPROM使用
+     85          	for(temp =0;temp < 255;temp++)
+     86          	{
+     87          		e2prom_Write_Byte(0x10+temp,temp);
+     88          		_delay_ms(5);
+     89          	}
+     90          	
+     91          	for(temp = 0;temp < 255;temp++)
+     92          	{
+     93          		num = e2prom_Read_Byte(0x10 + temp);
+     94          		printf("% 3d\t",num);
+     95          	}
+     96          	printf("\r\n");
+     97          
+     98          */
+     99          
+    100          //	lcd1602_Clear();
+    101          //	lcd1602_Show_Str(0x00,"Welcome JINJIN");
+    102          	
+    103          	/*开启全局中断，进入程序主循环*/
+    104          	SREG |= (1 << 7);	//全局中断使能
+   \   00000002   9478               BSET    7
+    105          	
+    106          	printf("POWER ON!!This is a test for start!\r\n");
+   \   00000004   ....               LDI     R16, LOW(`?<Constant "POWER ON!!This is a t...">`)
+   \   00000006   ....               LDI     R17, (`?<Constant "POWER ON!!This is a t...">`) >> 8
+   \   00000008   ........           CALL    printf
+    107          	
+    108          	while(1)
+    109          	{
+    110          		DS1302_Test();
+   \                     ??main_0:
+   \   0000000C   ........           CALL    DS1302_Test
+   \   00000010   CFFD               RJMP    ??main_0
+   \   00000012                      REQUIRE _A_SREG
+    111          		
+    112          //		LED_TURN(1);
+    113          //		_delay_ms(1000);
+    114          		
+    115          //		Song();
+    116          		
+    117          //		_delay_ms(500);
+    118          //		lcd1602_Write_Command(0x1c);		//右移命令，0x18是左平移
+    119          		
+    120          /*********************步进电机的测试 开始***************************/
+    121          		
+    122          //		stepMotorForeward();		//正转一周
+    123          //		stepMotorBackward();		//反转一周
+    124          		
+    125          /*********************步进电机的测试 结束***************************/
+    126          
+    127          /*********************4×4按键的测试 开始***************************/
+    128          		//采用循环扫描的方式判断是否有按键，占内存，不建议使用
+    129          //		keyTest();
+    130          		
+    131          /*********************4×4按键的测试 结束***************************/
+    132          		/*
+    133          		pos = 0x10;
+    134          		p = "jinpnegju";
+    135          		lcd1602_Clear();
+    136          		lcd1602_Show_Str(0x00,"Welcome to");
+    137          		_delay_ms(250);
+    138          		while(*p)
+    139          		{
+    140          			lcd1602_Show_Char(pos,*p);
+    141          			pos++;
+    142          			p++;
+    143          			_delay_ms(250);
+    144          		}
+    145          		_delay_ms(250);
+    146          		
+    147          		*/
+    148          		
+    149          	//函数无问题，显示不会出现最后一位特别亮的情况
+    150          //		ledShow(dua_table);
+    151          		
+    152          //		ledShowSTR("ABCDEFG9",wei_table,3);
+    153          //		
+    154          //		ledShowNumber(0x1976A523,wei_table,-1,16);
+    155          //		_delay_ms(4);
+    156          		
+    157          		//DS18B20采集太快会出现异常，定时0.5s取样一次
+    158          //		if(count == 50)
+    159          //		{
+    160          //			count = 0;
+    161          			//不是乘以0.0625的原因是为了把小数点后一位数据也转化为可以显示的数据
+    162          //			temp_num = (int)(ds18b20_read_temperature() * 0.625);	
+    163          //		}
+    164          		
+    165          //		if(count >= 1)		//500ms读取温度一次
+    166          //		{
+    167          //			count = 0;		//从新计数
+    168          //			ledShowNumber(temp,wei_table);
+    169          //		}
+    170          //		if(count >= 200)
+    171          //		{
+    172          //			count = 0;
+    173          //			temp ++;
+    174          //			if(temp == 9)
+    175          //			{
+    176          //				temp = 0;
+    177          //			}
+    178          //		}
+    179          //		
+    180          //		ledShow(dua_table + temp);
+    181          //		
+    182          //		delay_ms(20);
+    183          	
+    184          //		DAC_Run_Led();
+    185          		
+    186          //		SPI_ADC_RunLed();
+    187          		/*
+    188          		temp_key = keyBoardScan();
+    189          		
+    190          		//当有按键按下时
+    191          		if(temp_key != 0xff)
+    192          		{
+    193          			switch(temp_key)
+    194          			{
+    195          			  case '1':
+    196          				LED8 = ~LED8;
+    197          				START_ADC;		//启动一次ADC转换
+    198          				ledShowNumber(1,wei_table,7,10);
+    199          				t = 1;
+    200          				printf("您好，我按了第%d%d个按键\r\n",t,t);
+    201          				break;
+    202          			  case '2':
+    203          				LED8 = ~LED8;
+    204          				START_ADC;
+    205          				ledShowNumber(2,wei_table,7,10);
+    206          				t = 2;
+    207          				printf("你按了第%d个按键\r\n",t);
+    208          				break;
+    209          			  default:
+    210          				break;				
+    211          			}
+    212          		}
+    213          		else
+    214          		{
+    215          //			ledShowNumber(t,wei_table,7,10);
+    216          		}
+    217          	*/
+    218          		
+    219          //		ledBreath(0x00);
+    220          	}
+    221          }
+
+   \                                 In  segment NEAR_ID, align 1, keep-with-next
+   \                     `?<Initializer for <Constant "POWER ON!!This is`:
+   \   00000000   4F5045572052       DC8 "POWER ON!!This is a test for start!\015\012"
+   \              4E4F21216854
+   \              736969202073
+   \              206165747473
+   \              6620726F7320
+   \              617474720D21
+   \              000A        
+
+   \                                 In  segment NEAR_ID, align 1, keep-with-next
+   \                     `?<Initializer for comp>`:
+   \   00000000   80                 DC8 128
+
+   \                                 In  segment NEAR_I, align 1, keep-with-next
+   \   00000000                      REQUIRE `?<Segment init: NEAR_I>`
+   \                     `?<Constant "POWER ON!!This is a t...">`:
+   \   00000000                      DS8 38
+   \   00000026                      REQUIRE `?<Initializer for <Constant "POWER ON!!This is`
+    222          
+    223          
+    224          
+    225          
+    226          
+    227          
+    228          
+
+   Maximum stack usage in bytes:
+
+   RSTACK Function
+   ------ --------
+      2   main
+        2   -> DS1302_Test
+        2   -> printf
+        2   -> systemInit
+      2   systemInit
+        2   -> USART_Init
+        2   -> ds1302_Init
+        2   -> ledInit
+        2   -> ledShowInit
+        2   -> timer0Init
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      38  ?<Constant "POWER ON!!This is a t...">
+      38  ?<Initializer for <Constant "POWER ON!!This is
+       1  ?<Initializer for comp>
+       1  _A_SREG
+       1  comp
+      18  main
+      34  systemInit
+       2  temp_num
+      14  -- Other
+
+ 
+  1 byte  in segment ABSOLUTE
+ 52 bytes in segment CODE
+ 14 bytes in segment INITTAB
+ 39 bytes in segment NEAR_I
+ 39 bytes in segment NEAR_ID
+  2 bytes in segment NEAR_Z
+ 
+ 91 bytes of CODE memory (+ 14 bytes shared)
+ 41 bytes of DATA memory (+  1 byte  shared)
+
+Errors: none
+Warnings: none

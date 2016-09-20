@@ -1,0 +1,239 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V6.20.2.50573 for Atmel AVR       12/Sep/2016  16:06:13 /
+// Copyright 1996-2013 IAR Systems AB.                                        /
+//                                                                            /
+//    Source file  =  C:\Users\Admin\Desktop\ATmega128Project\src\uart.c      /
+//    Command line =  C:\Users\Admin\Desktop\ATmega128Project\src\uart.c      /
+//                    --cpu=m128a -ms -o C:\Users\Admin\Desktop\ATmega128Proj /
+//                    ect\Debug\Obj\ -lCN C:\Users\Admin\Desktop\ATmega128Pro /
+//                    ject\Debug\List\ -lb C:\Users\Admin\Desktop\ATmega128Pr /
+//                    oject\Debug\List\ -y --initializers_in_flash --no_cse   /
+//                    --no_inline --no_code_motion --no_cross_call            /
+//                    --no_clustering --no_tbaa --debug                       /
+//                    -DENABLE_BIT_DEFINITIONS -e -I                          /
+//                    C:\Users\Admin\Desktop\ATmega128Project\inc\            /
+//                    --eeprom_size 4096 --dlib --dlib_config "D:\Program     /
+//                    Files (x86)\IAR Systems\Embedded Workbench              /
+//                    6.5\avr\LIB\DLIB\dlAVR-3s-ec_mul-f.h" --vla             /
+//                    --use_c++_inline -On                                    /
+//    List file    =  C:\Users\Admin\Desktop\ATmega128Project\Debug\List\uart /
+//                    .s90                                                    /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME uart
+
+        RSEG CSTACK:DATA:NOROOT(0)
+        RSEG RSTACK:DATA:NOROOT(0)
+
+        EXTERN ?EPILOGUE_B4_L09
+        EXTERN ?EPILOGUE_B5_L09
+        EXTERN ?L_EC_MUL_L03
+        EXTERN ?PROLOGUE4_L09
+        EXTERN ?PROLOGUE5_L09
+        EXTERN ?Register_R4_is_cg_reg
+        EXTERN ?UL_DIVMOD_L03
+
+        PUBLIC ReceiveByte
+        PUBLIC ReceiveString
+        PUBLIC SendByte
+        PUBLIC SendStr
+        PUBLIC USART_Init
+        PUBWEAK _A_UBRR0H
+        PUBWEAK _A_UBRR0L
+        PUBWEAK _A_UCSR0A
+        PUBWEAK _A_UCSR0B
+        PUBWEAK _A_UCSR0C
+        PUBWEAK _A_UDR0
+        PUBWEAK __?EEARH
+        PUBWEAK __?EEARL
+        PUBWEAK __?EECR
+        PUBWEAK __?EEDR
+        PUBLIC fputc
+
+
+        ASEGN ABSOLUTE:DATA:NOROOT,029H
+// union <unnamed> volatile __io _A_UBRR0L
+_A_UBRR0L:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,02aH
+// union <unnamed> volatile __io _A_UCSR0B
+_A_UCSR0B:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,02bH
+// union <unnamed> volatile __io _A_UCSR0A
+_A_UCSR0A:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,02cH
+// union <unnamed> volatile __io _A_UDR0
+_A_UDR0:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,090H
+// union <unnamed> volatile __io _A_UBRR0H
+_A_UBRR0H:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,095H
+// union <unnamed> volatile __io _A_UCSR0C
+_A_UCSR0C:
+        DS8 1
+
+        RSEG CODE:CODE:NOROOT(1)
+USART_Init:
+        CALL    ?PROLOGUE4_L09
+        MOVW    R25:R24, R17:R16
+        MOVW    R27:R26, R19:R18
+        LDI     R16, 0
+        OUT     0x0B, R16
+        LDI     R16, 152
+        OUT     0x0A, R16
+        LDI     R16, 6
+        STS     _A_UCSR0C, R16
+        LDI     R20, 16
+        LDI     R21, 0
+        LDI     R22, 0
+        LDI     R23, 0
+        MOVW    R17:R16, R25:R24
+        MOVW    R19:R18, R27:R26
+        CALL    ?L_EC_MUL_L03
+        MOVW    R21:R20, R17:R16
+        MOVW    R23:R22, R19:R18
+        LDI     R16, 0
+        LDI     R17, 128
+        LDI     R18, 112
+        LDI     R19, 0
+        CALL    ?UL_DIVMOD_L03
+        MOVW    R31:R30, R17:R16
+        SBIW    R31:R30, 1
+        MOV     R30, R31
+        LDI     R31, 0
+        STS     _A_UBRR0H, R30
+        LDI     R20, 16
+        LDI     R21, 0
+        LDI     R22, 0
+        LDI     R23, 0
+        MOVW    R17:R16, R25:R24
+        MOVW    R19:R18, R27:R26
+        CALL    ?L_EC_MUL_L03
+        MOVW    R21:R20, R17:R16
+        MOVW    R23:R22, R19:R18
+        LDI     R16, 0
+        LDI     R17, 128
+        LDI     R18, 112
+        LDI     R19, 0
+        CALL    ?UL_DIVMOD_L03
+        DEC     R16
+        OUT     0x09, R16
+        LDI     R30, 4
+        JMP     ?EPILOGUE_B4_L09
+        REQUIRE _A_UCSR0A
+        REQUIRE _A_UCSR0B
+        REQUIRE _A_UCSR0C
+        REQUIRE _A_UBRR0H
+        REQUIRE _A_UBRR0L
+
+        RSEG CODE:CODE:NOROOT(1)
+SendByte:
+??SendByte_0:
+        SBIS    0x0B, 0x05
+        RJMP    ??SendByte_0
+        OUT     0x0C, R16
+        RET
+        REQUIRE _A_UCSR0A
+        REQUIRE _A_UDR0
+
+        RSEG CODE:CODE:NOROOT(1)
+SendStr:
+        ST      -Y, R27
+        ST      -Y, R26
+        MOVW    R27:R26, R17:R16
+??SendStr_0:
+        LD      R16, X
+        TST     R16
+        BREQ    ??SendStr_1
+        LD      R16, X
+        RCALL   SendByte
+        ADIW    R27:R26, 1
+        RJMP    ??SendStr_0
+??SendStr_1:
+        LD      R26, Y+
+        LD      R27, Y+
+        RET
+
+        RSEG CODE:CODE:NOROOT(1)
+ReceiveByte:
+??ReceiveByte_0:
+        SBIS    0x0B, 0x07
+        RJMP    ??ReceiveByte_0
+        IN      R17, 0x0C
+        MOV     R16, R17
+        OUT     0x0C, R16
+        RET
+        REQUIRE _A_UCSR0A
+        REQUIRE _A_UDR0
+
+        RSEG CODE:CODE:NOROOT(1)
+ReceiveString:
+        CALL    ?PROLOGUE5_L09
+        REQUIRE ?Register_R4_is_cg_reg
+        MOVW    R25:R24, R17:R16
+        CLR     R4
+        MOVW    R27:R26, R25:R24
+??ReceiveString_0:
+        RCALL   ReceiveByte
+        MOV     R4, R16
+        MOVW    R31:R30, R27:R26
+        ST      Z, R4
+        ADIW    R27:R26, 1
+        LDI     R16, 35
+        CP      R4, R16
+        BRNE    ??ReceiveString_0
+        LDI     R16, 0
+        MOVW    R31:R30, R27:R26
+        SBIW    R31:R30, 1
+        ST      Z, R16
+        LDI     R16, 10
+        RCALL   SendByte
+        MOVW    R17:R16, R25:R24
+        LDI     R30, 5
+        JMP     ?EPILOGUE_B5_L09
+
+        RSEG CODE:CODE:NOROOT(1)
+fputc:
+        CALL    ?PROLOGUE4_L09
+        MOVW    R25:R24, R17:R16
+        MOVW    R27:R26, R19:R18
+        MOV     R16, R24
+        RCALL   SendByte
+        MOVW    R17:R16, R25:R24
+        LDI     R30, 4
+        JMP     ?EPILOGUE_B4_L09
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01cH
+__?EECR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01dH
+__?EEDR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01eH
+__?EEARL:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01fH
+__?EEARH:
+
+        END
+// 
+//   6 bytes in segment ABSOLUTE
+// 220 bytes in segment CODE
+// 
+// 220 bytes of CODE memory
+//   0 bytes of DATA memory (+ 6 bytes shared)
+//
+//Errors: none
+//Warnings: none

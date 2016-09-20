@@ -1,0 +1,386 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V6.20.2.50573 for Atmel AVR       12/Sep/2016  16:06:11 /
+// Copyright 1996-2013 IAR Systems AB.                                        /
+//                                                                            /
+//    Source file  =  C:\Users\Admin\Desktop\ATmega128Project\src\key.c       /
+//    Command line =  C:\Users\Admin\Desktop\ATmega128Project\src\key.c       /
+//                    --cpu=m128a -ms -o C:\Users\Admin\Desktop\ATmega128Proj /
+//                    ect\Debug\Obj\ -lCN C:\Users\Admin\Desktop\ATmega128Pro /
+//                    ject\Debug\List\ -lb C:\Users\Admin\Desktop\ATmega128Pr /
+//                    oject\Debug\List\ -y --initializers_in_flash --no_cse   /
+//                    --no_inline --no_code_motion --no_cross_call            /
+//                    --no_clustering --no_tbaa --debug                       /
+//                    -DENABLE_BIT_DEFINITIONS -e -I                          /
+//                    C:\Users\Admin\Desktop\ATmega128Project\inc\            /
+//                    --eeprom_size 4096 --dlib --dlib_config "D:\Program     /
+//                    Files (x86)\IAR Systems\Embedded Workbench              /
+//                    6.5\avr\LIB\DLIB\dlAVR-3s-ec_mul-f.h" --vla             /
+//                    --use_c++_inline -On                                    /
+//    List file    =  C:\Users\Admin\Desktop\ATmega128Project\Debug\List\key. /
+//                    s90                                                     /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME key
+
+        RSEG CSTACK:DATA:NOROOT(0)
+        RSEG RSTACK:DATA:NOROOT(0)
+
+        EXTERN ?need_segment_init
+
+        PUBWEAK `?<Segment init: NEAR_Z>`
+        PUBWEAK _A_DDRC
+        PUBWEAK _A_DDRD
+        PUBWEAK _A_EICRA
+        PUBWEAK _A_EIMSK
+        PUBWEAK _A_PINC
+        PUBWEAK _A_PORTC
+        PUBWEAK _A_PORTD
+        PUBWEAK __?EEARH
+        PUBWEAK __?EEARL
+        PUBWEAK __?EECR
+        PUBWEAK __?EEDR
+        PUBLIC indekeyBoardScan
+        PUBLIC independentKeyInit
+        PUBLIC intKeyInit
+        PUBLIC interruptKeyInit
+        PUBLIC keyBoardScan
+        PUBLIC keyInit
+        PUBLIC keyTest
+
+        EXTERN ledShowNumber
+        EXTERN wei_table
+
+
+        ASEGN ABSOLUTE:DATA:NOROOT,031H
+// union <unnamed> volatile __io _A_DDRD
+_A_DDRD:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,032H
+// union <unnamed> volatile __io _A_PORTD
+_A_PORTD:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,033H
+// union <unnamed> volatile __io _A_PINC
+_A_PINC:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,034H
+// union <unnamed> volatile __io _A_DDRC
+_A_DDRC:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,035H
+// union <unnamed> volatile __io _A_PORTC
+_A_PORTC:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,059H
+// union <unnamed> volatile __io _A_EIMSK
+_A_EIMSK:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,06aH
+// union <unnamed> volatile __io _A_EICRA
+_A_EICRA:
+        DS8 1
+
+        RSEG CODE:CODE:NOROOT(1)
+independentKeyInit:
+        IN      R16, 0x14
+        ANDI    R16, 0xCF
+        OUT     0x14, R16
+        SBI     0x15, 0x04
+        SBI     0x15, 0x05
+        RET
+        REQUIRE _A_DDRC
+        REQUIRE _A_PORTC
+
+        RSEG CODE:CODE:NOROOT(1)
+intKeyInit:
+        IN      R16, 0x11
+        ANDI    R16, 0xFC
+        OUT     0x11, R16
+        SBI     0x12, 0x00
+        SBI     0x12, 0x01
+        nop
+        RET
+        REQUIRE _A_DDRD
+        REQUIRE _A_PORTD
+
+        RSEG CODE:CODE:NOROOT(1)
+interruptKeyInit:
+        LDI     R16, 10
+        STS     _A_EICRA, R16
+        IN      R16, 0x39
+        ORI     R16, 0x03
+        OUT     0x39, R16
+        RET
+        REQUIRE _A_EICRA
+        REQUIRE _A_EIMSK
+
+        RSEG CODE:CODE:NOROOT(1)
+indekeyBoardScan:
+        SBIS    0x13, 0x04
+        RJMP    ??indekeyBoardScan_0
+        SBIC    0x13, 0x05
+        RJMP    ??indekeyBoardScan_1
+??indekeyBoardScan_0:
+        LDI     R16, 51
+        LDI     R17, 115
+        NOP
+        SUBI    R16, 1
+        SBCI    R17, 0
+        BRNE    $-6
+        SBIC    0x13, 0x04
+        RJMP    ??indekeyBoardScan_2
+??indekeyBoardScan_3:
+        SBIS    0x13, 0x04
+        RJMP    ??indekeyBoardScan_3
+        LDI     R16, 49
+        RET
+??indekeyBoardScan_2:
+        SBIC    0x13, 0x05
+        RJMP    ??indekeyBoardScan_1
+??indekeyBoardScan_4:
+        SBIS    0x13, 0x05
+        RJMP    ??indekeyBoardScan_4
+        LDI     R16, 50
+        RET
+??indekeyBoardScan_1:
+        LDI     R16, 255
+        RET
+        REQUIRE _A_PINC
+
+        RSEG CODE:CODE:NOROOT(1)
+keyInit:
+        LDI     R16, 15
+        OUT     0x14, R16
+        LDI     R16, 240
+        OUT     0x15, R16
+        RET
+        REQUIRE _A_DDRC
+        REQUIRE _A_PORTC
+
+        RSEG CODE:CODE:NOROOT(1)
+keyBoardScan:
+        LDI     R16, 255
+        LDI     R18, 240
+        OUT     0x15, R18
+        LDI     R18, 240
+        OUT     0x15, R18
+        IN      R18, 0x13
+        MOV     R17, R18
+        CPI     R17, 240
+        BRNE    $+2+2
+        RJMP    ??keyBoardScan_0
+        LDI     R20, 255
+        LDI     R21, 71
+        SUBI    R20, 1
+        SBCI    R21, 0
+        BRNE    $-4
+        RJMP    $+2
+        NOP
+        IN      R18, 0x13
+        MOV     R17, R18
+        CPI     R17, 240
+        BRNE    $+2+2
+        RJMP    ??keyBoardScan_1
+        LDI     R18, 254
+        OUT     0x15, R18
+        LDI     R18, 254
+        OUT     0x15, R18
+        IN      R18, 0x13
+        MOV     R19, R18
+        MOV     R18, R19
+        SUBI    R18, 190
+        BREQ    ??keyBoardScan_2
+        SUBI    R18, 32
+        BREQ    ??keyBoardScan_3
+        SUBI    R18, 16
+        BREQ    ??keyBoardScan_4
+        SUBI    R18, 144
+        BREQ    ??keyBoardScan_5
+        RJMP    ??keyBoardScan_6
+??keyBoardScan_4:
+        LDI     R16, 15
+        RJMP    ??keyBoardScan_6
+??keyBoardScan_3:
+        LDI     R16, 11
+        RJMP    ??keyBoardScan_6
+??keyBoardScan_2:
+        LDI     R16, 7
+        RJMP    ??keyBoardScan_6
+??keyBoardScan_5:
+        LDI     R16, 3
+??keyBoardScan_6:
+        LDI     R18, 253
+        OUT     0x15, R18
+        LDI     R18, 253
+        OUT     0x15, R18
+        IN      R18, 0x13
+        MOV     R19, R18
+        MOV     R18, R19
+        SUBI    R18, 189
+        BREQ    ??keyBoardScan_7
+        SUBI    R18, 32
+        BREQ    ??keyBoardScan_8
+        SUBI    R18, 16
+        BREQ    ??keyBoardScan_9
+        SUBI    R18, 144
+        BREQ    ??keyBoardScan_10
+        RJMP    ??keyBoardScan_11
+??keyBoardScan_9:
+        LDI     R16, 14
+        RJMP    ??keyBoardScan_11
+??keyBoardScan_8:
+        LDI     R16, 10
+        RJMP    ??keyBoardScan_11
+??keyBoardScan_7:
+        LDI     R16, 6
+        RJMP    ??keyBoardScan_11
+??keyBoardScan_10:
+        LDI     R16, 2
+??keyBoardScan_11:
+        LDI     R18, 251
+        OUT     0x15, R18
+        LDI     R18, 251
+        OUT     0x15, R18
+        IN      R18, 0x13
+        MOV     R19, R18
+        MOV     R18, R19
+        SUBI    R18, 187
+        BREQ    ??keyBoardScan_12
+        SUBI    R18, 32
+        BREQ    ??keyBoardScan_13
+        SUBI    R18, 16
+        BREQ    ??keyBoardScan_14
+        SUBI    R18, 144
+        BREQ    ??keyBoardScan_15
+        RJMP    ??keyBoardScan_16
+??keyBoardScan_14:
+        LDI     R16, 13
+        RJMP    ??keyBoardScan_16
+??keyBoardScan_13:
+        LDI     R16, 9
+        RJMP    ??keyBoardScan_16
+??keyBoardScan_12:
+        LDI     R16, 5
+        RJMP    ??keyBoardScan_16
+??keyBoardScan_15:
+        LDI     R16, 1
+??keyBoardScan_16:
+        LDI     R18, 247
+        OUT     0x15, R18
+        LDI     R18, 247
+        OUT     0x15, R18
+        IN      R18, 0x13
+        MOV     R19, R18
+        MOV     R18, R19
+        SUBI    R18, 183
+        BREQ    ??keyBoardScan_17
+        SUBI    R18, 32
+        BREQ    ??keyBoardScan_18
+        SUBI    R18, 16
+        BREQ    ??keyBoardScan_19
+        SUBI    R18, 144
+        BREQ    ??keyBoardScan_20
+        RET
+??keyBoardScan_19:
+        LDI     R16, 12
+        RET
+??keyBoardScan_18:
+        LDI     R16, 8
+        RET
+??keyBoardScan_17:
+        LDI     R16, 4
+        RET
+??keyBoardScan_20:
+        LDI     R16, 0
+        RET
+??keyBoardScan_0:
+        LDI     R16, 255
+??keyBoardScan_1:
+        RET
+        REQUIRE _A_PORTC
+        REQUIRE _A_PINC
+
+        RSEG CODE:CODE:NOROOT(1)
+keyTest:
+        ST      -Y, R24
+??keyTest_0:
+        RCALL   keyBoardScan
+        MOV     R24, R16
+        CPI     R24, 255
+        BREQ    ??keyTest_1
+        STS     ??key_store, R24
+        LDI     R16, 16
+        LDI     R17, 0
+        ST      -Y, R17
+        ST      -Y, R16
+        LDI     R22, 255
+        LDI     R23, 255
+        LDI     R20, LOW(wei_table)
+        LDI     R21, (wei_table) >> 8
+        MOV     R16, R24
+        LDI     R17, 0
+        LDI     R18, 0
+        LDI     R19, 0
+        CALL    ledShowNumber
+        RJMP    ??keyTest_0
+??keyTest_1:
+        LDI     R16, 16
+        LDI     R17, 0
+        ST      -Y, R17
+        ST      -Y, R16
+        LDI     R22, 255
+        LDI     R23, 255
+        LDI     R20, LOW(wei_table)
+        LDI     R21, (wei_table) >> 8
+        LDS     R16, ??key_store
+        LDI     R17, 0
+        LDI     R18, 0
+        LDI     R19, 0
+        CALL    ledShowNumber
+        RJMP    ??keyTest_0
+
+        RSEG NEAR_Z:DATA:NOROOT(0)
+        REQUIRE `?<Segment init: NEAR_Z>`
+??key_store:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01cH
+__?EECR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01dH
+__?EEDR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01eH
+__?EEARL:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01fH
+__?EEARH:
+
+        RSEG INITTAB:CODE:NOROOT(0)
+`?<Segment init: NEAR_Z>`:
+        DC16    SFE(NEAR_Z) - SFB(NEAR_Z)
+        DC16    SFB(NEAR_Z)
+        DP      0
+        REQUIRE ?need_segment_init
+
+        END
+// 
+//   7 bytes in segment ABSOLUTE
+// 408 bytes in segment CODE
+//   7 bytes in segment INITTAB
+//   1 byte  in segment NEAR_Z
+// 
+// 408 bytes of CODE memory (+ 7 bytes shared)
+//   1 byte  of DATA memory (+ 7 bytes shared)
+//
+//Errors: none
+//Warnings: none

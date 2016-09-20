@@ -1,0 +1,375 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V6.20.2.50573 for Atmel AVR        12/Sep/2016  16:06:11 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    Source file  =  C:\Users\Admin\Desktop\ATmega128Project\src\dac_tlc5615. #
+#                    c                                                        #
+#    Command line =  C:\Users\Admin\Desktop\ATmega128Project\src\dac_tlc5615. #
+#                    c --cpu=m128a -ms -o C:\Users\Admin\Desktop\ATmega128Pro #
+#                    ject\Debug\Obj\ -lCN C:\Users\Admin\Desktop\ATmega128Pro #
+#                    ject\Debug\List\ -lb C:\Users\Admin\Desktop\ATmega128Pro #
+#                    ject\Debug\List\ -y --initializers_in_flash --no_cse     #
+#                    --no_inline --no_code_motion --no_cross_call             #
+#                    --no_clustering --no_tbaa --debug                        #
+#                    -DENABLE_BIT_DEFINITIONS -e -I                           #
+#                    C:\Users\Admin\Desktop\ATmega128Project\inc\             #
+#                    --eeprom_size 4096 --dlib --dlib_config "D:\Program      #
+#                    Files (x86)\IAR Systems\Embedded Workbench               #
+#                    6.5\avr\LIB\DLIB\dlAVR-3s-ec_mul-f.h" --vla              #
+#                    --use_c++_inline -On                                     #
+#    List file    =  C:\Users\Admin\Desktop\ATmega128Project\Debug\List\dac_t #
+#                    lc5615.lst                                               #
+#    Object file  =  C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\dac_tl #
+#                    c5615.r90                                                #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+C:\Users\Admin\Desktop\ATmega128Project\src\dac_tlc5615.c
+      1          //DAC转换驱动 采用TLC5615芯片，使用IO口模拟SPI通讯 或者 使用mega128内置SPi
+      2          
+      3          #include <iom128a.h>
+
+   \                                 In  segment ABSOLUTE, at 0x2d
+   \   union <unnamed> volatile __io _A_SPCR
+   \                     _A_SPCR:
+   \   00000000                      DS8 1
+
+   \                                 In  segment ABSOLUTE, at 0x2e
+   \   union <unnamed> volatile __io _A_SPSR
+   \                     _A_SPSR:
+   \   00000000                      DS8 1
+
+   \                                 In  segment ABSOLUTE, at 0x2f
+   \   union <unnamed> volatile __io _A_SPDR
+   \                     _A_SPDR:
+   \   00000000                      DS8 1
+
+   \                                 In  segment ABSOLUTE, at 0x37
+   \   union <unnamed> volatile __io _A_DDRB
+   \                     _A_DDRB:
+   \   00000000                      DS8 1
+
+   \                                 In  segment ABSOLUTE, at 0x38
+   \   union <unnamed> volatile __io _A_PORTB
+   \                     _A_PORTB:
+   \   00000000                      DS8 1
+      4          #include "delay.h"
+      5          #include "dac_tlc5615.h"
+      6          #include "regBit.h"
+      7          
+
+   \                                 In  segment CODE, align 2, keep-with-next
+      8          void DAC_IO_Init(void)
+   \                     DAC_IO_Init:
+      9          {
+     10          	DDRB = 0xff;		//方向输出
+   \   00000000   EF0F               LDI     R16, 255
+   \   00000002   BB07               OUT     0x17, R16
+     11          	PORTB = 0xff;		//输出高电平
+   \   00000004   EF0F               LDI     R16, 255
+   \   00000006   BB08               OUT     0x18, R16
+     12          }
+   \   00000008   9508               RET
+   \   0000000A                      REQUIRE _A_DDRB
+   \   0000000A                      REQUIRE _A_PORTB
+     13          
+     14          //DAC转换程序，IO模拟SPI
+
+   \                                 In  segment CODE, align 2, keep-with-next
+     15          void dac_Ser(unsigned int data)
+   \                     dac_Ser:
+     16          {
+     17          	unsigned char i;
+     18          	
+     19          	CS_CLR;	//片选DAC，低电平有效
+   \   00000000   98C0               CBI     0x18, 0x00
+     20          	SCLK0;
+   \   00000002   98C1               CBI     0x18, 0x01
+     21          	//十六位寄存器，高四位虚拟，低两位填充00，中间十位有效
+     22          	for(i = 0;i < 16;i++)
+   \   00000004   E020               LDI     R18, 0
+   \                     ??dac_Ser_0:
+   \   00000006   3120               CPI     R18, 16
+   \   00000008   F458               BRCC    ??dac_Ser_1
+     23          	{
+     24          		//从最高位逐位取出
+     25          		if(data & 0x8000)		
+   \   0000000A   FB17               BST     R17, 7
+   \   0000000C   F416               BRTC    ??dac_Ser_2
+     26          		{
+     27          			DIN1;		//如果该位为1 则输入1
+   \   0000000E   9AC2               SBI     0x18, 0x02
+   \   00000010   C001               RJMP    ??dac_Ser_3
+     28          		}
+     29          		else
+     30          		{
+     31          			DIN0;		//如果该位为0 则输入0
+   \                     ??dac_Ser_2:
+   \   00000012   98C2               CBI     0x18, 0x02
+     32          		}
+     33          		SCLK1;					//上升沿数据锁存
+   \                     ??dac_Ser_3:
+   \   00000014   9AC1               SBI     0x18, 0x01
+     34          		data <<= 1;			//左移一位
+   \   00000016   0F00               LSL     R16
+   \   00000018   1F11               ROL     R17
+     35          		SCLK0;
+   \   0000001A   98C1               CBI     0x18, 0x01
+     36          	}
+   \   0000001C   9523               INC     R18
+   \   0000001E   CFF3               RJMP    ??dac_Ser_0
+     37          	_delay_us(10);
+   \                     ??dac_Ser_1:
+   \   00000020   E138               LDI     R19, 24
+   \   00000022   953A               DEC     R19
+   \   00000024   F7F1               BRNE    $-2
+   \   00000026   0000               NOP
+     38          	CS_SET;
+   \   00000028   9AC0               SBI     0x18, 0x00
+     39          	SCLK0;
+   \   0000002A   98C1               CBI     0x18, 0x01
+     40          }
+   \   0000002C   9508               RET
+   \   0000002E                      REQUIRE _A_PORTB
+     41          
+     42          //DAC转换输出
+
+   \                                 In  segment CODE, align 2, keep-with-next
+     43          void DAC_Run_Led(void)
+   \                     DAC_Run_Led:
+     44          {
+   \   00000000   939A               ST      -Y, R25
+   \   00000002   938A               ST      -Y, R24
+     45          	unsigned int da_data;
+     46          	for(da_data = 0x000;da_data < 0x3ff;da_data++)
+   \   00000004   E080               LDI     R24, 0
+   \   00000006   E090               LDI     R25, 0
+   \                     ??DAC_Run_Led_0:
+   \   00000008   3F8F               CPI     R24, 255
+   \   0000000A   E003               LDI     R16, 3
+   \   0000000C   0790               CPC     R25, R16
+   \   0000000E   F468               BRCC    ??DAC_Run_Led_1
+     47          	{
+     48          		dac_Ser(da_data << 2);
+   \   00000010   018C               MOVW    R17:R16, R25:R24
+   \   00000012   0F00               LSL     R16
+   \   00000014   1F11               ROL     R17
+   \   00000016   0F00               LSL     R16
+   \   00000018   1F11               ROL     R17
+   \   0000001A   ....               RCALL   dac_Ser
+     49          		_delay_ms(2);
+   \   0000001C   E606               LDI     R16, 102
+   \   0000001E   E01E               LDI     R17, 14
+   \   00000020   5001               SUBI    R16, 1
+   \   00000022   4010               SBCI    R17, 0
+   \   00000024   F7E9               BRNE    $-4
+     50          	}
+   \   00000026   9601               ADIW    R25:R24, 1
+   \   00000028   CFEF               RJMP    ??DAC_Run_Led_0
+     51          	for(da_data = 0x3ff;da_data > 0x000;da_data--)
+   \                     ??DAC_Run_Led_1:
+   \   0000002A   EF8F               LDI     R24, 255
+   \   0000002C   E093               LDI     R25, 3
+   \                     ??DAC_Run_Led_2:
+   \   0000002E   2F08               MOV     R16, R24
+   \   00000030   2B09               OR      R16, R25
+   \   00000032   F069               BREQ    ??DAC_Run_Led_3
+     52          	{
+     53          		dac_Ser(da_data << 2);
+   \   00000034   018C               MOVW    R17:R16, R25:R24
+   \   00000036   0F00               LSL     R16
+   \   00000038   1F11               ROL     R17
+   \   0000003A   0F00               LSL     R16
+   \   0000003C   1F11               ROL     R17
+   \   0000003E   ....               RCALL   dac_Ser
+     54          		_delay_ms(2);
+   \   00000040   E606               LDI     R16, 102
+   \   00000042   E01E               LDI     R17, 14
+   \   00000044   5001               SUBI    R16, 1
+   \   00000046   4010               SBCI    R17, 0
+   \   00000048   F7E9               BRNE    $-4
+     55          	}
+   \   0000004A   9701               SBIW    R25:R24, 1
+   \   0000004C   CFF0               RJMP    ??DAC_Run_Led_2
+     56          }
+   \                     ??DAC_Run_Led_3:
+   \   0000004E   9189               LD      R24, Y+
+   \   00000050   9199               LD      R25, Y+
+   \   00000052   9508               RET
+     57          
+     58          
+     59          //使用SPI通讯协议时，读和写同步完成，
+     60          //SPI写的时候忽略读到的数据，SPI读的时候必须发送一个空字节
+     61          //SPI_SS 	-- /CS 	--PB0	从机片选信号，主设备控制
+     62          //SPI_SCK	--SCLK	--PB1	时钟信号，主设备产生
+     63          //SPI_MOSI	-- DIN	--PB2	主设备数据输出，从设备数据输入
+     64          //SPI_MISO	--DOUT	--PB3	主设备数据输入，从设备数据输出
+     65          
+     66          //SPI初始化
+
+   \                                 In  segment CODE, align 2, keep-with-next
+     67          void SPI_MasterInit(void)
+   \                     SPI_MasterInit:
+     68          {
+     69          	//配置MOSI和SCK为输出，其余为输入 
+     70          	DDRB |= (1 << 2) | (1 << 1);
+   \   00000000   B307               IN      R16, 0x17
+   \   00000002   6006               ORI     R16, 0x06
+   \   00000004   BB07               OUT     0x17, R16
+     71          //	DDRB &= ~(1 << 3) & ~(1 << 0);
+     72          	//使能SPI主机模式，设置时钟速率为FOSC/16
+     73          	SPCR = (1 << SPE) | (1 << MSTR) | (1 << SPR0);//使能SPI,主机方式，SCK频率为fosc/16
+   \   00000006   E501               LDI     R16, 81
+   \   00000008   B90D               OUT     0x0D, R16
+     74          	
+     75          }
+   \   0000000A   9508               RET
+   \   0000000C                      REQUIRE _A_DDRB
+   \   0000000C                      REQUIRE _A_SPCR
+     76          
+     77          //SPI主机发送
+
+   \                                 In  segment CODE, align 2, keep-with-next
+     78          void SPI_MasterTransmit(unsigned char data)
+   \                     SPI_MasterTransmit:
+     79          {
+     80          	//启动数据传输
+     81          	SPDR = data;
+   \   00000000   B90F               OUT     0x0F, R16
+     82          	//等待传输结束
+     83          	while(!(SPSR & (1 << SPIF)));
+   \                     ??SPI_MasterTransmit_0:
+   \   00000002   9B77               SBIS    0x0E, 0x07
+   \   00000004   CFFE               RJMP    ??SPI_MasterTransmit_0
+     84          }
+   \   00000006   9508               RET
+   \   00000008                      REQUIRE _A_SPDR
+   \   00000008                      REQUIRE _A_SPSR
+     85          
+     86          //使用SPI完成ADC转换
+
+   \                                 In  segment CODE, align 2, keep-with-next
+     87          void SPI_ADC_RunLed(void)
+   \                     SPI_ADC_RunLed:
+     88          {
+   \   00000000   939A               ST      -Y, R25
+   \   00000002   938A               ST      -Y, R24
+     89          	unsigned int da_data;
+     90          	for(da_data = 0;da_data < 0x3ff;da_data++)
+   \   00000004   E080               LDI     R24, 0
+   \   00000006   E090               LDI     R25, 0
+   \                     ??SPI_ADC_RunLed_0:
+   \   00000008   3F8F               CPI     R24, 255
+   \   0000000A   E003               LDI     R16, 3
+   \   0000000C   0790               CPC     R25, R16
+   \   0000000E   F490               BRCC    ??SPI_ADC_RunLed_1
+     91          	{
+     92          		CS_CLR;
+   \   00000010   98C0               CBI     0x18, 0x00
+     93          		//发送高八位
+     94          		SPI_MasterTransmit((unsigned char)(((da_data << 2) & 0xff00) >> 8));
+   \   00000012   E046               LDI     R20, 6
+   \   00000014   018C               MOVW    R17:R16, R25:R24
+   \   00000016   ........           CALL    ?US_SHR_L02
+   \   0000001A   ....               RCALL   SPI_MasterTransmit
+     95          		//发送低八位
+     96          		SPI_MasterTransmit((unsigned char)((da_data << 2) & 0x00ff));
+   \   0000001C   2F08               MOV     R16, R24
+   \   0000001E   0F00               LSL     R16
+   \   00000020   0F00               LSL     R16
+   \   00000022   ....               RCALL   SPI_MasterTransmit
+     97          		CS_SET;
+   \   00000024   9AC0               SBI     0x18, 0x00
+     98          		_delay_ms(2);
+   \   00000026   E606               LDI     R16, 102
+   \   00000028   E01E               LDI     R17, 14
+   \   0000002A   5001               SUBI    R16, 1
+   \   0000002C   4010               SBCI    R17, 0
+   \   0000002E   F7E9               BRNE    $-4
+     99          	}
+   \   00000030   9601               ADIW    R25:R24, 1
+   \   00000032   CFEA               RJMP    ??SPI_ADC_RunLed_0
+    100          	for(da_data = 0x3ff;da_data > 0;da_data--)
+   \                     ??SPI_ADC_RunLed_1:
+   \   00000034   EF8F               LDI     R24, 255
+   \   00000036   E093               LDI     R25, 3
+   \                     ??SPI_ADC_RunLed_2:
+   \   00000038   2F08               MOV     R16, R24
+   \   0000003A   2B09               OR      R16, R25
+   \   0000003C   F091               BREQ    ??SPI_ADC_RunLed_3
+    101          	{
+    102          		CS_CLR;
+   \   0000003E   98C0               CBI     0x18, 0x00
+    103          		//发送高八位
+    104          		SPI_MasterTransmit((unsigned char)(((da_data << 2) & 0xff00) >> 8));
+   \   00000040   E046               LDI     R20, 6
+   \   00000042   018C               MOVW    R17:R16, R25:R24
+   \   00000044   ........           CALL    ?US_SHR_L02
+   \   00000048   ....               RCALL   SPI_MasterTransmit
+    105          		//发送低八位
+    106          		SPI_MasterTransmit((unsigned char)((da_data << 2) & 0x00ff));
+   \   0000004A   2F08               MOV     R16, R24
+   \   0000004C   0F00               LSL     R16
+   \   0000004E   0F00               LSL     R16
+   \   00000050   ....               RCALL   SPI_MasterTransmit
+    107          		CS_SET;
+   \   00000052   9AC0               SBI     0x18, 0x00
+    108          		_delay_ms(2);
+   \   00000054   E606               LDI     R16, 102
+   \   00000056   E01E               LDI     R17, 14
+   \   00000058   5001               SUBI    R16, 1
+   \   0000005A   4010               SBCI    R17, 0
+   \   0000005C   F7E9               BRNE    $-4
+    109          	}
+   \   0000005E   9701               SBIW    R25:R24, 1
+   \   00000060   CFEB               RJMP    ??SPI_ADC_RunLed_2
+    110          	
+    111          	
+    112          }
+   \                     ??SPI_ADC_RunLed_3:
+   \   00000062   9189               LD      R24, Y+
+   \   00000064   9199               LD      R25, Y+
+   \   00000066   9508               RET
+   \   00000068                      REQUIRE _A_PORTB
+
+   Maximum stack usage in bytes:
+
+   CSTACK RSTACK Function
+   ------ ------ --------
+      0      2   DAC_IO_Init
+      2      2   DAC_Run_Led
+        2      2   -> dac_Ser
+      2      4   SPI_ADC_RunLed
+        2      2   -> SPI_MasterTransmit
+      0      2   SPI_MasterInit
+      0      2   SPI_MasterTransmit
+      0      2   dac_Ser
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      10  DAC_IO_Init
+      84  DAC_Run_Led
+     104  SPI_ADC_RunLed
+      12  SPI_MasterInit
+       8  SPI_MasterTransmit
+       1  _A_DDRB
+       1  _A_PORTB
+       1  _A_SPCR
+       1  _A_SPDR
+       1  _A_SPSR
+      46  dac_Ser
+
+ 
+   5 bytes in segment ABSOLUTE
+ 264 bytes in segment CODE
+ 
+ 264 bytes of CODE memory
+   0 bytes of DATA memory (+ 5 bytes shared)
+
+Errors: none
+Warnings: none

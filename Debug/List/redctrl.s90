@@ -1,0 +1,332 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V6.20.2.50573 for Atmel AVR       12/Sep/2016  16:06:10 /
+// Copyright 1996-2013 IAR Systems AB.                                        /
+//                                                                            /
+//    Source file  =  C:\Users\Admin\Desktop\ATmega128Project\src\redctrl.c   /
+//    Command line =  C:\Users\Admin\Desktop\ATmega128Project\src\redctrl.c   /
+//                    --cpu=m128a -ms -o C:\Users\Admin\Desktop\ATmega128Proj /
+//                    ect\Debug\Obj\ -lCN C:\Users\Admin\Desktop\ATmega128Pro /
+//                    ject\Debug\List\ -lb C:\Users\Admin\Desktop\ATmega128Pr /
+//                    oject\Debug\List\ -y --initializers_in_flash --no_cse   /
+//                    --no_inline --no_code_motion --no_cross_call            /
+//                    --no_clustering --no_tbaa --debug                       /
+//                    -DENABLE_BIT_DEFINITIONS -e -I                          /
+//                    C:\Users\Admin\Desktop\ATmega128Project\inc\            /
+//                    --eeprom_size 4096 --dlib --dlib_config "D:\Program     /
+//                    Files (x86)\IAR Systems\Embedded Workbench              /
+//                    6.5\avr\LIB\DLIB\dlAVR-3s-ec_mul-f.h" --vla             /
+//                    --use_c++_inline -On                                    /
+//    List file    =  C:\Users\Admin\Desktop\ATmega128Project\Debug\List\redc /
+//                    trl.s90                                                 /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME redctrl
+
+        RSEG CSTACK:DATA:NOROOT(0)
+        RSEG RSTACK:DATA:NOROOT(0)
+
+        EXTERN ?EPILOGUE_B5_L09
+        EXTERN ?PROLOGUE5_L09
+        EXTERN ?Register_R4_is_cg_reg
+        EXTERN ?need_segment_init
+
+        PUBWEAK `?<Segment init: NEAR_I>`
+        PUBWEAK _A_DDRE
+        PUBWEAK _A_PINE
+        PUBWEAK _A_PORTE
+        PUBWEAK __?EEARH
+        PUBWEAK __?EEARL
+        PUBWEAK __?EECR
+        PUBWEAK __?EEDR
+        PUBLIC key_Icode
+        PUBLIC redCodeReceice
+        PUBLIC redCtrlInit
+        PUBLIC redCtrlTest
+
+        EXTERN ledShowNumber
+        EXTERN printf
+        EXTERN wei_table
+
+
+        ASEGN ABSOLUTE:DATA:NOROOT,021H
+// union <unnamed> volatile __io _A_PINE
+_A_PINE:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,022H
+// union <unnamed> volatile __io _A_DDRE
+_A_DDRE:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,023H
+// union <unnamed> volatile __io _A_PORTE
+_A_PORTE:
+        DS8 1
+
+        RSEG CODE:CODE:NOROOT(1)
+redCtrlInit:
+        CBI     0x02, 0x03
+        SBI     0x03, 0x03
+        RET
+        REQUIRE _A_DDRE
+        REQUIRE _A_PORTE
+
+        RSEG CODE:CODE:NOROOT(1)
+redCodeReceice:
+        CALL    ?PROLOGUE5_L09
+        REQUIRE ?Register_R4_is_cg_reg
+        SBIW    R29:R28, 4
+        LDI     R25, 0
+        LDI     R27, 0
+        CLR     R4
+        LDI     R30, LOW(`?<Constant {0}>`)
+        LDI     R31, HIGH(`?<Constant {0}>`)
+        LDI     R19, (`?<Constant {0}>`) >> 16
+        OUT     0x3B, R19
+        ELPM    R20, Z+
+        ELPM    R21, Z+
+        ELPM    R22, Z+
+        ELPM    R23, Z
+        SBIW    R31:R30, 3
+        ST      Y, R20
+        STD     Y+1, R21
+        STD     Y+2, R22
+        STD     Y+3, R23
+        LDI     R24, 0
+??redCodeReceice_0:
+        CPI     R24, 19
+        BRCC    ??redCodeReceice_1
+        LDI     R16, 225
+        LDI     R17, 2
+        SUBI    R16, 1
+        SBCI    R17, 0
+        BRNE    $-4
+        SBIS    0x01, 0x03
+        RJMP    ??redCodeReceice_2
+        LDI     R16, 255
+        RJMP    ??redCodeReceice_3
+??redCodeReceice_2:
+        INC     R24
+        RJMP    ??redCodeReceice_0
+??redCodeReceice_1:
+        SBIS    0x01, 0x03
+        RJMP    ??redCodeReceice_1
+        LDI     R24, 0
+??redCodeReceice_4:
+        CPI     R24, 5
+        BRCC    ??redCodeReceice_5
+        LDI     R16, 153
+        LDI     R17, 3
+        SUBI    R16, 1
+        SBCI    R17, 0
+        BRNE    $-4
+        NOP
+        SBIC    0x01, 0x03
+        RJMP    ??redCodeReceice_6
+        LDI     R16, 255
+        RJMP    ??redCodeReceice_3
+??redCodeReceice_6:
+        INC     R24
+        RJMP    ??redCodeReceice_4
+??redCodeReceice_5:
+        SBIC    0x01, 0x03
+        RJMP    ??redCodeReceice_5
+        LDI     R24, 0
+??redCodeReceice_7:
+        CPI     R24, 4
+        BRCC    ??redCodeReceice_8
+        LDI     R26, 0
+??redCodeReceice_9:
+        CPI     R26, 8
+        BRCC    ??redCodeReceice_10
+??redCodeReceice_11:
+        SBIS    0x01, 0x03
+        RJMP    ??redCodeReceice_11
+??redCodeReceice_12:
+        SBIS    0x01, 0x03
+        RJMP    ??redCodeReceice_13
+        LDI     R16, 245
+        DEC     R16
+        BRNE    $-2
+        RJMP    $+2
+        INC     R25
+        CPI     R25, 22
+        BRCS    ??redCodeReceice_12
+        LDI     R16, 255
+        RJMP    ??redCodeReceice_3
+??redCodeReceice_13:
+        LSR     R27
+        CPI     R25, 8
+        BRCS    ??redCodeReceice_14
+        ORI     R27, 0x80
+        LDI     R16, 1
+??redCodeReceice_14:
+        LDI     R25, 0
+        INC     R26
+        RJMP    ??redCodeReceice_9
+??redCodeReceice_10:
+        MOVW    R31:R30, R29:R28
+        MOV     R16, R24
+        LDI     R17, 0
+        ADD     R30, R16
+        ADC     R31, R17
+        ST      Z, R27
+        INC     R24
+        RJMP    ??redCodeReceice_7
+??redCodeReceice_8:
+        LDD     R16, Y+2
+        RCALL   key_Icode
+        MOV     R4, R16
+        MOV     R16, R4
+??redCodeReceice_3:
+        ADIW    R29:R28, 4
+        LDI     R30, 5
+        JMP     ?EPILOGUE_B5_L09
+        REQUIRE _A_PINE
+
+        RSEG CODE:CODE:NOROOT(1)
+key_Icode:
+        MOV     R17, R16
+        LDI     R16, 10
+        MOV     R18, R17
+        SUBI    R18, 8
+        BREQ    ??key_Icode_0
+        SUBI    R18, 4
+        BREQ    ??key_Icode_1
+        SUBI    R18, 10
+        BREQ    ??key_Icode_2
+        SUBI    R18, 2
+        BREQ    ??key_Icode_3
+        SUBI    R18, 4
+        BREQ    ??key_Icode_4
+        SUBI    R18, 38
+        BREQ    ??key_Icode_5
+        SUBI    R18, 8
+        BREQ    ??key_Icode_6
+        SUBI    R18, 8
+        BREQ    ??key_Icode_7
+        SUBI    R18, 8
+        BREQ    ??key_Icode_8
+        SUBI    R18, 4
+        BREQ    ??key_Icode_9
+        RJMP    ??key_Icode_10
+??key_Icode_2:
+        LDI     R16, 0
+        RET
+??key_Icode_1:
+        LDI     R16, 1
+        RET
+??key_Icode_3:
+        LDI     R16, 2
+        RET
+??key_Icode_9:
+        LDI     R16, 3
+        RET
+??key_Icode_0:
+        LDI     R16, 4
+        RET
+??key_Icode_4:
+        LDI     R16, 5
+        RET
+??key_Icode_8:
+        LDI     R16, 6
+        RET
+??key_Icode_5:
+        LDI     R16, 7
+        RET
+??key_Icode_7:
+        LDI     R16, 8
+        RET
+??key_Icode_6:
+        LDI     R16, 9
+        RET
+??key_Icode_10:
+        LDI     R16, 10
+        RET
+
+        RSEG CODE:CODE:NOROOT(1)
+redCtrlTest:
+        ST      -Y, R25
+        ST      -Y, R24
+        LDI     R24, 0
+        LDI     R25, 255
+??redCtrlTest_0:
+        RCALL   redCodeReceice
+        MOV     R25, R16
+        CPI     R16, 255
+        BREQ    ??redCtrlTest_1
+        MOV     R24, R25
+        MOV     R16, R24
+        LDI     R17, 0
+        ST      -Y, R17
+        ST      -Y, R16
+        LDI     R16, LOW(`?<Constant "\\r\\n\\304\\343\\260\\264\\317\\302\\265\\3`)
+        LDI     R17, (`?<Constant "\\r\\n\\304\\343\\260\\264\\317\\302\\265\\3`) >> 8
+        CALL    printf
+        ADIW    R29:R28, 2
+??redCtrlTest_1:
+        LDI     R16, 10
+        LDI     R17, 0
+        ST      -Y, R17
+        ST      -Y, R16
+        LDI     R22, 255
+        LDI     R23, 255
+        LDI     R20, LOW(wei_table)
+        LDI     R21, (wei_table) >> 8
+        MOV     R16, R24
+        LDI     R17, 0
+        LDI     R18, 0
+        LDI     R19, 0
+        CALL    ledShowNumber
+        RJMP    ??redCtrlTest_0
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01cH
+__?EECR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01dH
+__?EEDR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01eH
+__?EEARL:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01fH
+__?EEARH:
+
+        RSEG NEAR_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "\\r\\n\\304\\343\\260\\`:
+        DC8 "\015\012\304\343\260\264\317\302\265\304\260\264\274\374\312\307%d\015\012"
+
+        RSEG INITTAB:CODE:NOROOT(0)
+`?<Segment init: NEAR_I>`:
+        DC16    SFE(NEAR_I) - SFB(NEAR_I)
+        DC16    SFB(NEAR_I)
+        DP      SFB(NEAR_ID)
+        REQUIRE ?need_segment_init
+
+        RSEG NEAR_I:DATA:NOROOT(0)
+        REQUIRE `?<Segment init: NEAR_I>`
+`?<Constant "\\r\\n\\304\\343\\260\\264\\317\\302\\265\\3`:
+        DS8 21
+        REQUIRE `?<Initializer for <Constant "\\r\\n\\304\\343\\260\\`
+
+        RSEG FAR_F:CODE:NOROOT(0)
+`?<Constant {0}>`:
+        DC8 0, 0, 0, 0
+
+        END
+// 
+//   3 bytes in segment ABSOLUTE
+// 354 bytes in segment CODE
+//   4 bytes in segment FAR_F
+//   7 bytes in segment INITTAB
+//  21 bytes in segment NEAR_I
+//  21 bytes in segment NEAR_ID
+// 
+// 379 bytes of CODE memory (+ 7 bytes shared)
+//  21 bytes of DATA memory (+ 3 bytes shared)
+//
+//Errors: none
+//Warnings: none

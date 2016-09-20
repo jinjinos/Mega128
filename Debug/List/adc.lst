@@ -1,0 +1,107 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V6.20.2.50573 for Atmel AVR        12/Sep/2016  16:06:10 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    Source file  =  C:\Users\Admin\Desktop\ATmega128Project\src\adc.c        #
+#    Command line =  C:\Users\Admin\Desktop\ATmega128Project\src\adc.c        #
+#                    --cpu=m128a -ms -o C:\Users\Admin\Desktop\ATmega128Proje #
+#                    ct\Debug\Obj\ -lCN C:\Users\Admin\Desktop\ATmega128Proje #
+#                    ct\Debug\List\ -lb C:\Users\Admin\Desktop\ATmega128Proje #
+#                    ct\Debug\List\ -y --initializers_in_flash --no_cse       #
+#                    --no_inline --no_code_motion --no_cross_call             #
+#                    --no_clustering --no_tbaa --debug                        #
+#                    -DENABLE_BIT_DEFINITIONS -e -I                           #
+#                    C:\Users\Admin\Desktop\ATmega128Project\inc\             #
+#                    --eeprom_size 4096 --dlib --dlib_config "D:\Program      #
+#                    Files (x86)\IAR Systems\Embedded Workbench               #
+#                    6.5\avr\LIB\DLIB\dlAVR-3s-ec_mul-f.h" --vla              #
+#                    --use_c++_inline -On                                     #
+#    List file    =  C:\Users\Admin\Desktop\ATmega128Project\Debug\List\adc.l #
+#                    st                                                       #
+#    Object file  =  C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\adc.r9 #
+#                    0                                                        #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+C:\Users\Admin\Desktop\ATmega128Project\src\adc.c
+      1          //ADC的驱动文件
+      2          //ATmega128共八路10位ADC。分别是ADC0-ADC7 - 通过PF0-PF7连接
+      3          //本次采用ADC0 --> PF0
+      4          
+      5          #include <iom128a.h>
+
+   \                                 In  segment ABSOLUTE, at 0x26
+   \   union <unnamed> volatile __io _A_ADCSR
+   \                     _A_ADCSR:
+   \   00000000                      DS8 1
+
+   \                                 In  segment ABSOLUTE, at 0x27
+   \   union <unnamed> volatile __io _A_ADMUX
+   \                     _A_ADMUX:
+   \   00000000                      DS8 1
+
+   \                                 In  segment ABSOLUTE, at 0x40
+   \   union <unnamed> volatile __io _A_SFIOR
+   \                     _A_SFIOR:
+   \   00000000                      DS8 1
+      6          #include "adc.h"
+      7          
+      8          //10位的分辨率，
+      9          //ADMUX ADC多工选择寄存器
+     10          //ADCSRA ADC控制和状态寄存器A
+     11          //ADCH + ADCL ADC数据寄存器  数据右对齐 ADCH1:0 + ADCL7:0,数据左对齐 ADCH7:0 + ADCL7:6
+     12          
+     13          
+     14          
+     15          
+     16          //ADC初始化
+
+   \                                 In  segment CODE, align 2, keep-with-next
+     17          void adc_Init(void)
+   \                     adc_Init:
+     18          {
+     19          	ADMUX = 0x40;	//0100 0000 AVCC电压为电压基准，数据右对齐，选择通道0单端输入
+   \   00000000   E400               LDI     R16, 64
+   \   00000002   B907               OUT     0x07, R16
+     20          //	ADCSRA = 0xF8;	//1111 1000 ADC启动使能，连续转换，转换结束中断使能，二分频，直接开始
+     21          	ADCSRA = 0xDE;	//1101 1110 ADC启动使能，单次转换，转换结束中断使能，六十四分频，不开始
+   \   00000004   ED0E               LDI     R16, 222
+   \   00000006   B906               OUT     0x06, R16
+     22          	//特殊功能IO寄存器初始化，
+     23          	SFIOR = 0x00;
+   \   00000008   E000               LDI     R16, 0
+   \   0000000A   BD00               OUT     0x20, R16
+     24          }
+   \   0000000C   9508               RET
+   \   0000000E                      REQUIRE _A_ADMUX
+   \   0000000E                      REQUIRE _A_ADCSR
+   \   0000000E                      REQUIRE _A_SFIOR
+     25          
+
+   Maximum stack usage in bytes:
+
+   RSTACK Function
+   ------ --------
+      2   adc_Init
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       1  _A_ADCSR
+       1  _A_ADMUX
+       1  _A_SFIOR
+      14  adc_Init
+
+ 
+  3 bytes in segment ABSOLUTE
+ 14 bytes in segment CODE
+ 
+ 14 bytes of CODE memory
+  0 bytes of DATA memory (+ 3 bytes shared)
+
+Errors: none
+Warnings: none

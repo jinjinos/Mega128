@@ -1,0 +1,261 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V6.20.2.50573 for Atmel AVR        12/Sep/2016  16:06:12 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    Source file  =  C:\Users\Admin\Desktop\ATmega128Project\src\timer.c      #
+#    Command line =  C:\Users\Admin\Desktop\ATmega128Project\src\timer.c      #
+#                    --cpu=m128a -ms -o C:\Users\Admin\Desktop\ATmega128Proje #
+#                    ct\Debug\Obj\ -lCN C:\Users\Admin\Desktop\ATmega128Proje #
+#                    ct\Debug\List\ -lb C:\Users\Admin\Desktop\ATmega128Proje #
+#                    ct\Debug\List\ -y --initializers_in_flash --no_cse       #
+#                    --no_inline --no_code_motion --no_cross_call             #
+#                    --no_clustering --no_tbaa --debug                        #
+#                    -DENABLE_BIT_DEFINITIONS -e -I                           #
+#                    C:\Users\Admin\Desktop\ATmega128Project\inc\             #
+#                    --eeprom_size 4096 --dlib --dlib_config "D:\Program      #
+#                    Files (x86)\IAR Systems\Embedded Workbench               #
+#                    6.5\avr\LIB\DLIB\dlAVR-3s-ec_mul-f.h" --vla              #
+#                    --use_c++_inline -On                                     #
+#    List file    =  C:\Users\Admin\Desktop\ATmega128Project\Debug\List\timer #
+#                    .lst                                                     #
+#    Object file  =  C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\timer. #
+#                    r90                                                      #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+C:\Users\Admin\Desktop\ATmega128Project\src\timer.c
+      1          //定时/计数器的驱动文件
+      2          
+      3          
+      4          #include <iom128a.h>
+
+   \                                 In  segment ABSOLUTE, at 0x4c
+   \   union <unnamed> volatile __io _A_TCNT1
+   \                     _A_TCNT1:
+   \   00000000                      DS8 2
+
+   \                                 In  segment ABSOLUTE, at 0x4e
+   \   union <unnamed> volatile __io _A_TCCR1B
+   \                     _A_TCCR1B:
+   \   00000000                      DS8 1
+
+   \                                 In  segment ABSOLUTE, at 0x4f
+   \   union <unnamed> volatile __io _A_TCCR1A
+   \                     _A_TCCR1A:
+   \   00000000                      DS8 1
+
+   \                                 In  segment ABSOLUTE, at 0x51
+   \   union <unnamed> volatile __io _A_OCR0
+   \                     _A_OCR0:
+   \   00000000                      DS8 1
+
+   \                                 In  segment ABSOLUTE, at 0x52
+   \   union <unnamed> volatile __io _A_TCNT0
+   \                     _A_TCNT0:
+   \   00000000                      DS8 1
+
+   \                                 In  segment ABSOLUTE, at 0x53
+   \   union <unnamed> volatile __io _A_TCCR0
+   \                     _A_TCCR0:
+   \   00000000                      DS8 1
+
+   \                                 In  segment ABSOLUTE, at 0x56
+   \   union <unnamed> volatile __io _A_TIFR
+   \                     _A_TIFR:
+   \   00000000                      DS8 1
+
+   \                                 In  segment ABSOLUTE, at 0x57
+   \   union <unnamed> volatile __io _A_TIMSK
+   \                     _A_TIMSK:
+   \   00000000                      DS8 1
+
+   \                                 In  segment ABSOLUTE, at 0x7a
+   \   union <unnamed> volatile __io _A_TCCR1C
+   \                     _A_TCCR1C:
+   \   00000000                      DS8 1
+      5          #include "timer.h"
+      6          
+      7          
+
+   \                                 In  segment NEAR_Z, align 1, keep-with-next
+   \   00000000                      REQUIRE `?<Segment init: NEAR_Z>`
+      8          unsigned char Timer1_H,Timer1_L,Time;
+   \                     Timer1_H:
+   \   00000000                      DS8 1
+
+   \                                 In  segment NEAR_Z, align 1, keep-with-next
+   \   00000000                      REQUIRE `?<Segment init: NEAR_Z>`
+   \                     Timer1_L:
+   \   00000000                      DS8 1
+
+   \                                 In  segment NEAR_Z, align 1, keep-with-next
+   \   00000000                      REQUIRE `?<Segment init: NEAR_Z>`
+   \                     Time:
+   \   00000000                      DS8 1
+
+   \                                 In  segment NEAR_Z, align 1, keep-with-next
+   \   00000000                      REQUIRE `?<Segment init: NEAR_Z>`
+      9          unsigned int  Timer1_C;
+   \                     Timer1_C:
+   \   00000000                      DS8 2
+     10          	
+     11          
+     12          void timer1Init(void);
+     13          
+     14          
+     15          //定时器0初始化,选择初始化为OVF或者COMP模式
+     16          //使用Timer0输出变化的PWM波时，依然要使用TIMER0_OVF_vect溢出中断，在溢出中断中改变占空比
+     17          //定时器0位八位定时/计数器
+
+   \                                 In  segment CODE, align 2, keep-with-next
+     18          void timer0Init(int type)		
+   \                     timer0Init:
+     19          {
+     20          	if(type == OVF)
+   \   00000000   2F20               MOV     R18, R16
+   \   00000002   2B21               OR      R18, R17
+   \   00000004   F429               BRNE    ??timer0Init_0
+     21          	{
+     22          		TCCR0 = TIME_CLK;		//T/C0控制寄存器，普通模式，OC0不输出，1024预分频
+   \   00000006   E027               LDI     R18, 7
+   \   00000008   BF23               OUT     0x33, R18
+     23          		TCNT0 = F_COUNT;	//定时10ms,赋初值
+   \   0000000A   EB28               LDI     R18, 184
+   \   0000000C   BF22               OUT     0x32, R18
+   \   0000000E   C008               RJMP    ??timer0Init_1
+     24          		
+     25          	}
+     26          	else if(type == COMP)
+   \                     ??timer0Init_0:
+   \   00000010   3101               CPI     R16, 17
+   \   00000012   E020               LDI     R18, 0
+   \   00000014   0712               CPC     R17, R18
+   \   00000016   F421               BRNE    ??timer0Init_1
+     27          	{
+     28          /**		在ledInit中有过PB的配置
+     29          		//OC0输出连接在PB4，配置PB4为输出模式，
+     30          		DDRB |= (1 << 4);
+     31          		PORTB &= ~(1 << 4);			//PB4连接 的LED将亮
+     32          	**/	
+     33          		TCCR0 = 0x68 | TIME_CLK;	//快速PWM模式，1024分频，OC0输出，匹配成功时OC0清零，计数到TOP时OC0置位
+   \   00000018   E62F               LDI     R18, 111
+   \   0000001A   BF23               OUT     0x33, R18
+     34          		OCR0 = F_COUNT_COMP;		//比较初始值128
+   \   0000001C   E820               LDI     R18, 128
+   \   0000001E   BF21               OUT     0x31, R18
+     35          		
+     36          	}
+     37          	
+     38          	TIFR |= 0x01;		//T/C中断标志寄存器，对TOV0写1清零，清空中断标志
+   \                     ??timer0Init_1:
+   \   00000020   B726               IN      R18, 0x36
+   \   00000022   6021               ORI     R18, 0x01
+   \   00000024   BF26               OUT     0x36, R18
+     39          	TIMSK |= 0x01;		//T/C中断屏蔽寄存器，使能定时器0溢出中断
+   \   00000026   B727               IN      R18, 0x37
+   \   00000028   6021               ORI     R18, 0x01
+   \   0000002A   BF27               OUT     0x37, R18
+     40          }
+   \   0000002C   9508               RET
+   \   0000002E                      REQUIRE _A_TCCR0
+   \   0000002E                      REQUIRE _A_TCNT0
+   \   0000002E                      REQUIRE _A_OCR0
+   \   0000002E                      REQUIRE _A_TIFR
+   \   0000002E                      REQUIRE _A_TIMSK
+     41          
+     42          
+     43          
+     44          //定时器1初始化，定时器1为16位定时/计数器
+     45          //返回定时器的模式
+     46          //对十六位寄存器写时要先写高八位（临时寄存器），再写低八位（触发一起写入十六位寄存器）
+     47          //对十六位寄存器读时要先读低八位（触发将高八位置于临时寄存器），再读高八位（临时寄存器）
+
+   \                                 In  segment CODE, align 2, keep-with-next
+     48          void timer1Init(void)
+   \                     timer1Init:
+     49          {
+     50          	TCCR1A = 0x00;	//OC1A OC1B OC1C都不输出  普通模式
+   \   00000000   E000               LDI     R16, 0
+   \   00000002   BD0F               OUT     0x2F, R16
+     51          	TCCR1B = 0x01;	//无输入捕捉， 1024分频		不分频
+   \   00000004   E001               LDI     R16, 1
+   \   00000006   BD0E               OUT     0x2E, R16
+     52          //	TCCR1B = 0x00;
+     53          	TCCR1C = 0x00;	//无强制输出比较
+   \   00000008   E000               LDI     R16, 0
+   \   0000000A   9300....           STS     _A_TCCR1C, R16
+     54          	
+     55          	//定时器赋初值  定时10ms  1s
+     56          //	TCNT1H = 0xE3;		//0xFF;
+     57          //	TCNT1L = 0xDF;		//255 - 72;
+     58          	TCNT1 = 58335;
+   \   0000000E   ED0F               LDI     R16, 223
+   \   00000010   EE13               LDI     R17, 227
+   \   00000012   BD1D               OUT     0x2D, R17
+   \   00000014   BD0C               OUT     0x2C, R16
+     59          	
+     60          	//如果工作在PWM模式，需要设置OCR1A  OCR1B OCR1C
+     61          	//OCR1A = 
+     62          	//OCR1B = 
+     63          	//OCR1C = 
+     64          	
+     65          	TIFR  |= (1 << 2);		//T/C中断标志寄存器，对TOV1写1清零，清空中断标志
+   \   00000016   B706               IN      R16, 0x36
+   \   00000018   6004               ORI     R16, 0x04
+   \   0000001A   BF06               OUT     0x36, R16
+     66          	TIMSK |= (1 << 2);		//T/C中断屏蔽寄存器，使能定时器1溢出中断
+   \   0000001C   B707               IN      R16, 0x37
+   \   0000001E   6004               ORI     R16, 0x04
+   \   00000020   BF07               OUT     0x37, R16
+     67          	
+     68          }
+   \   00000022   9508               RET
+   \   00000024                      REQUIRE _A_TCCR1A
+   \   00000024                      REQUIRE _A_TCCR1B
+   \   00000024                      REQUIRE _A_TCCR1C
+   \   00000024                      REQUIRE _A_TCNT1
+   \   00000024                      REQUIRE _A_TIFR
+   \   00000024                      REQUIRE _A_TIMSK
+
+   Maximum stack usage in bytes:
+
+   RSTACK Function
+   ------ --------
+      2   timer0Init
+      2   timer1Init
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       1  Time
+       2  Timer1_C
+       1  Timer1_H
+       1  Timer1_L
+       1  _A_OCR0
+       1  _A_TCCR0
+       1  _A_TCCR1A
+       1  _A_TCCR1B
+       1  _A_TCCR1C
+       1  _A_TCNT0
+       2  _A_TCNT1
+       1  _A_TIFR
+       1  _A_TIMSK
+      46  timer0Init
+      36  timer1Init
+       7  -- Other
+
+ 
+ 10 bytes in segment ABSOLUTE
+ 82 bytes in segment CODE
+  7 bytes in segment INITTAB
+  5 bytes in segment NEAR_Z
+ 
+ 82 bytes of CODE memory (+  7 bytes shared)
+  5 bytes of DATA memory (+ 10 bytes shared)
+
+Errors: none
+Warnings: none

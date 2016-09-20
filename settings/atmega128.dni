@@ -1,0 +1,47 @@
+[Stack]
+FillEnabled=0
+OverflowWarningsEnabled=1
+WarningThreshold=90
+SpWarningsEnabled=1
+WarnLogOnly=1
+UseTrigger=1
+TriggerName=main
+LimitSize=0
+ByteLimit=50
+[DebugChecksum]
+Checksum=-990671671
+[CallStack]
+ShowArgs=0
+[Disassembly]
+MixedMode=1
+[CallStackLog]
+Enabled=0
+[DriverProfiling]
+Enabled=0
+Mode=1
+Graph=0
+Symbiont=0
+Exclusions=
+[Trace1]
+Enabled=0
+ShowSource=1
+[watch_formats]
+Fmt0={W}0:LED8	1	0
+Fmt1={W}0:a	1	0
+Fmt2={W}0:b	1	0
+Fmt3={W}0:da_data	4	0
+Fmt4={W}0:key	3	0
+Fmt5={W}0:temp_low	1	0
+Fmt6={W}0:wei_str	1	0
+[Log file]
+LoggingEnabled=_ 0
+LogFile=_ ""
+Category=_ 0
+[TermIOLog]
+LoggingEnabled=_ 0
+LogFile=_ ""
+[Breakpoints]
+Count=0
+[Aliases]
+Count=0
+SuppressDialog=0

@@ -1,0 +1,167 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V6.20.2.50573 for Atmel AVR       12/Sep/2016  16:06:12 /
+// Copyright 1996-2013 IAR Systems AB.                                        /
+//                                                                            /
+//    Source file  =  C:\Users\Admin\Desktop\ATmega128Project\src\queue.c     /
+//    Command line =  C:\Users\Admin\Desktop\ATmega128Project\src\queue.c     /
+//                    --cpu=m128a -ms -o C:\Users\Admin\Desktop\ATmega128Proj /
+//                    ect\Debug\Obj\ -lCN C:\Users\Admin\Desktop\ATmega128Pro /
+//                    ject\Debug\List\ -lb C:\Users\Admin\Desktop\ATmega128Pr /
+//                    oject\Debug\List\ -y --initializers_in_flash --no_cse   /
+//                    --no_inline --no_code_motion --no_cross_call            /
+//                    --no_clustering --no_tbaa --debug                       /
+//                    -DENABLE_BIT_DEFINITIONS -e -I                          /
+//                    C:\Users\Admin\Desktop\ATmega128Project\inc\            /
+//                    --eeprom_size 4096 --dlib --dlib_config "D:\Program     /
+//                    Files (x86)\IAR Systems\Embedded Workbench              /
+//                    6.5\avr\LIB\DLIB\dlAVR-3s-ec_mul-f.h" --vla             /
+//                    --use_c++_inline -On                                    /
+//    List file    =  C:\Users\Admin\Desktop\ATmega128Project\Debug\List\queu /
+//                    e.s90                                                   /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME queue
+
+        RSEG CSTACK:DATA:NOROOT(0)
+        RSEG RSTACK:DATA:NOROOT(0)
+
+        PUBWEAK __?EEARH
+        PUBWEAK __?EEARL
+        PUBWEAK __?EECR
+        PUBWEAK __?EEDR
+        PUBLIC msgQueueIn
+        PUBLIC msgQueueInit
+        PUBLIC msgQueueOut
+
+
+        RSEG CODE:CODE:NOROOT(1)
+msgQueueInit:
+        MOVW    R19:R18, R17:R16
+        SUBI    R18, 252
+        SBCI    R19, 255
+        MOVW    R31:R30, R17:R16
+        ST      Z, R18
+        STD     Z+1, R19
+        MOVW    R19:R18, R17:R16
+        SUBI    R18, 252
+        SBCI    R19, 255
+        MOVW    R31:R30, R17:R16
+        STD     Z+2, R18
+        STD     Z+3, R19
+        LDI     R18, 0
+        MOVW    R31:R30, R17:R16
+        STD     Z+54, R18
+        RET
+
+        RSEG CODE:CODE:NOROOT(1)
+msgQueueIn:
+        MOVW    R23:R22, R27:R26
+        MOVW    R31:R30, R17:R16
+        LDD     R16, Z+54
+        CPI     R16, 50
+        BRCS    ??msgQueueIn_0
+        LDI     R16, 0
+        RJMP    ??msgQueueIn_1
+??msgQueueIn_0:
+        LD      R26, Z
+        LDD     R27, Z+1
+        ST      X, R18
+        LD      R20, Z
+        LDD     R21, Z+1
+        MOVW    R17:R16, R31:R30
+        SUBI    R16, 203
+        SBCI    R17, 255
+        CP      R20, R16
+        CPC     R21, R17
+        BRNE    ??msgQueueIn_2
+        MOVW    R17:R16, R31:R30
+        SUBI    R16, 252
+        SBCI    R17, 255
+        ST      Z, R16
+        STD     Z+1, R17
+        RJMP    ??msgQueueIn_3
+??msgQueueIn_2:
+        LD      R16, Z
+        LDD     R17, Z+1
+        SUBI    R16, 255
+        SBCI    R17, 255
+        ST      Z, R16
+        STD     Z+1, R17
+??msgQueueIn_3:
+        LDD     R16, Z+54
+        INC     R16
+        STD     Z+54, R16
+        LDI     R16, 1
+??msgQueueIn_1:
+        MOVW    R27:R26, R23:R22
+        RET
+
+        RSEG CODE:CODE:NOROOT(1)
+msgQueueOut:
+        MOV     R19, R27
+        MOV     R22, R26
+        MOVW    R31:R30, R17:R16
+        LDD     R16, Z+54
+        TST     R16
+        BRNE    ??msgQueueOut_0
+        LDI     R16, 0
+        RJMP    ??msgQueueOut_1
+??msgQueueOut_0:
+        LDD     R26, Z+2
+        LDD     R27, Z+3
+        LD      R16, X
+        MOV     R18, R16
+        LDD     R20, Z+2
+        LDD     R21, Z+3
+        MOVW    R17:R16, R31:R30
+        SUBI    R16, 203
+        SBCI    R17, 255
+        CP      R20, R16
+        CPC     R21, R17
+        BRNE    ??msgQueueOut_2
+        MOVW    R17:R16, R31:R30
+        SUBI    R16, 252
+        SBCI    R17, 255
+        STD     Z+2, R16
+        STD     Z+3, R17
+        RJMP    ??msgQueueOut_3
+??msgQueueOut_2:
+        LDD     R16, Z+2
+        LDD     R17, Z+3
+        SUBI    R16, 255
+        SBCI    R17, 255
+        STD     Z+2, R16
+        STD     Z+3, R17
+??msgQueueOut_3:
+        LDD     R16, Z+54
+        DEC     R16
+        STD     Z+54, R16
+        MOV     R16, R18
+??msgQueueOut_1:
+        MOV     R26, R22
+        MOV     R27, R19
+        RET
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01cH
+__?EECR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01dH
+__?EEDR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01eH
+__?EEARL:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01fH
+__?EEARH:
+
+        END
+// 
+// 182 bytes in segment CODE
+// 
+// 182 bytes of CODE memory
+//
+//Errors: none
+//Warnings: none

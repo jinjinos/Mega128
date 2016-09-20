@@ -1,0 +1,468 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V6.20.2.50573 for Atmel AVR       12/Sep/2016  17:59:10 /
+// Copyright 1996-2013 IAR Systems AB.                                        /
+//                                                                            /
+//    Source file  =  C:\Users\Admin\Desktop\ATmega128Project\src\ds1302.c    /
+//    Command line =  C:\Users\Admin\Desktop\ATmega128Project\src\ds1302.c    /
+//                    --cpu=m128a -ms -o C:\Users\Admin\Desktop\ATmega128Proj /
+//                    ect\Debug\Obj\ -lCN C:\Users\Admin\Desktop\ATmega128Pro /
+//                    ject\Debug\List\ -lb C:\Users\Admin\Desktop\ATmega128Pr /
+//                    oject\Debug\List\ -y --initializers_in_flash --no_cse   /
+//                    --no_inline --no_code_motion --no_cross_call            /
+//                    --no_clustering --no_tbaa --debug                       /
+//                    -DENABLE_BIT_DEFINITIONS -e -I                          /
+//                    C:\Users\Admin\Desktop\ATmega128Project\inc\            /
+//                    --eeprom_size 4096 --dlib --dlib_config "D:\Program     /
+//                    Files (x86)\IAR Systems\Embedded Workbench              /
+//                    6.5\avr\LIB\DLIB\dlAVR-3s-ec_mul-f.h" --vla             /
+//                    --use_c++_inline -On                                    /
+//    List file    =  C:\Users\Admin\Desktop\ATmega128Project\Debug\List\ds13 /
+//                    02.s90                                                  /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME ds1302
+
+        RSEG CSTACK:DATA:NOROOT(0)
+        RSEG RSTACK:DATA:NOROOT(0)
+
+        EXTERN ?EPILOGUE_B6_L09
+        EXTERN ?ML_FLASH_SRAM_24EC_16_L07
+        EXTERN ?PROLOGUE6_L09
+        EXTERN ?Register_R4_is_cg_reg
+        EXTERN ?Register_R5_is_cg_reg
+        EXTERN ?UC_DIVMOD_L01
+        EXTERN ?need_segment_init
+
+        PUBWEAK `?<Segment init: NEAR_I>`
+        PUBLIC DS1302_Test
+        PUBWEAK _A_DDRE
+        PUBWEAK _A_PINE
+        PUBWEAK _A_PORTE
+        PUBWEAK __?EEARH
+        PUBWEAK __?EEARL
+        PUBWEAK __?EECR
+        PUBWEAK __?EEDR
+        PUBLIC ds1302_Init
+        PUBLIC ds1302_Read_Byte
+        PUBLIC ds1302_Read_Time
+        PUBLIC ds1302_Write_Byte
+        PUBLIC ds1302_Write_Check
+        PUBLIC ds1302_Write_Time
+
+        EXTERN count
+        EXTERN printf
+
+
+        ASEGN ABSOLUTE:DATA:NOROOT,021H
+// union <unnamed> volatile __io _A_PINE
+_A_PINE:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,022H
+// union <unnamed> volatile __io _A_DDRE
+_A_DDRE:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,023H
+// union <unnamed> volatile __io _A_PORTE
+_A_PORTE:
+        DS8 1
+
+        RSEG CODE:CODE:NOROOT(1)
+ds1302_Init:
+        ST      -Y, R24
+        SBIW    R29:R28, 8
+        LDI     R24, 170
+        MOVW    R23:R22, R29:R28
+        LDI     R30, LOW(`?<Constant {32, 22, 8, 18, 8, 68, 80, 2}>`)
+        LDI     R31, HIGH(`?<Constant {32, 22, 8, 18, 8, 68, 80, 2}>`)
+        LDI     R19, (`?<Constant {32, 22, 8, 18, 8, 68, 80, 2}>`) >> 16
+        MOVW    R17:R16, R23:R22
+        LDI     R20, 8
+        LDI     R21, 0
+        CALL    ?ML_FLASH_SRAM_24EC_16_L07
+        CBI     0x03, 0x07
+        CBI     0x03, 0x05
+        SBI     0x02, 0x07
+        SBI     0x02, 0x05
+        LDI     R16, 192
+        RCALL   ds1302_Read_Byte
+        CP      R16, R24
+        BREQ    ??ds1302_Init_0
+        MOVW    R17:R16, R29:R28
+        RCALL   ds1302_Write_Time
+        MOV     R16, R24
+        RCALL   ds1302_Write_Check
+??ds1302_Init_0:
+        ADIW    R29:R28, 8
+        LD      R24, Y+
+        RET
+        REQUIRE _A_PORTE
+        REQUIRE _A_DDRE
+
+        RSEG CODE:CODE:NOROOT(1)
+ds1302_Write_Byte:
+        SBI     0x03, 0x07
+        SBI     0x02, 0x06
+        ANDI    R16, 0xFE
+        LDI     R19, 0
+        LDI     R18, 0
+??ds1302_Write_Byte_0:
+        CPI     R18, 8
+        BRCC    ??ds1302_Write_Byte_1
+        BST     R16, 0
+        BRTC    ??ds1302_Write_Byte_2
+        SBI     0x03, 0x06
+        RJMP    ??ds1302_Write_Byte_3
+??ds1302_Write_Byte_2:
+        CBI     0x03, 0x06
+??ds1302_Write_Byte_3:
+        SBI     0x03, 0x05
+        CBI     0x03, 0x05
+        LSR     R16
+        INC     R18
+        RJMP    ??ds1302_Write_Byte_0
+??ds1302_Write_Byte_1:
+        SBI     0x02, 0x06
+        LDI     R18, 0
+??ds1302_Write_Byte_4:
+        CPI     R18, 8
+        BRCC    ??ds1302_Write_Byte_5
+        BST     R17, 0
+        BRTC    ??ds1302_Write_Byte_6
+        SBI     0x03, 0x06
+        RJMP    ??ds1302_Write_Byte_7
+??ds1302_Write_Byte_6:
+        CBI     0x03, 0x06
+??ds1302_Write_Byte_7:
+        SBI     0x03, 0x05
+        CBI     0x03, 0x05
+        LSR     R17
+        INC     R18
+        RJMP    ??ds1302_Write_Byte_4
+??ds1302_Write_Byte_5:
+        CBI     0x03, 0x07
+        RET
+        REQUIRE _A_PORTE
+        REQUIRE _A_DDRE
+
+        RSEG CODE:CODE:NOROOT(1)
+ds1302_Read_Byte:
+        MOV     R19, R16
+        LDI     R17, 0
+        LDI     R16, 0
+        SBI     0x03, 0x07
+        SBI     0x02, 0x06
+        ORI     R19, 0x01
+        LDI     R18, 1
+        LDI     R17, 0
+??ds1302_Read_Byte_0:
+        CPI     R17, 8
+        BRCC    ??ds1302_Read_Byte_1
+        BST     R19, 0
+        BRTC    ??ds1302_Read_Byte_2
+        SBI     0x03, 0x06
+        RJMP    ??ds1302_Read_Byte_3
+??ds1302_Read_Byte_2:
+        CBI     0x03, 0x06
+??ds1302_Read_Byte_3:
+        SBI     0x03, 0x05
+        CBI     0x03, 0x05
+        LSR     R19
+        INC     R17
+        RJMP    ??ds1302_Read_Byte_0
+??ds1302_Read_Byte_1:
+        CBI     0x02, 0x06
+        SBI     0x03, 0x06
+        LDI     R17, 0
+??ds1302_Read_Byte_4:
+        CPI     R17, 8
+        BRCC    ??ds1302_Read_Byte_5
+        LSR     R16
+        SBIS    0x01, 0x06
+        RJMP    ??ds1302_Read_Byte_6
+        ORI     R16, 0x80
+        LDI     R18, 1
+        RJMP    ??ds1302_Read_Byte_7
+??ds1302_Read_Byte_6:
+        ANDI    R16, 0x7F
+        LDI     R18, 0
+??ds1302_Read_Byte_7:
+        SBI     0x03, 0x05
+        CBI     0x03, 0x05
+        INC     R17
+        RJMP    ??ds1302_Read_Byte_4
+??ds1302_Read_Byte_5:
+        CBI     0x03, 0x07
+        RET
+        REQUIRE _A_PORTE
+        REQUIRE _A_DDRE
+        REQUIRE _A_PINE
+
+        RSEG CODE:CODE:NOROOT(1)
+ds1302_Write_Time:
+        ST      -Y, R27
+        ST      -Y, R26
+        MOVW    R27:R26, R17:R16
+        LDI     R17, 0
+        LDI     R16, 142
+        RCALL   ds1302_Write_Byte
+        LDI     R17, 128
+        LDI     R16, 128
+        RCALL   ds1302_Write_Byte
+        ADIW    R27:R26, 1
+        LD      R17, X
+        SBIW    R27:R26, 1
+        LDI     R16, 140
+        RCALL   ds1302_Write_Byte
+        ADIW    R27:R26, 2
+        LD      R17, X
+        SBIW    R27:R26, 2
+        LDI     R16, 136
+        RCALL   ds1302_Write_Byte
+        ADIW    R27:R26, 3
+        LD      R17, X
+        SBIW    R27:R26, 3
+        LDI     R16, 134
+        RCALL   ds1302_Write_Byte
+        ADIW    R27:R26, 7
+        LD      R17, X
+        SBIW    R27:R26, 7
+        LDI     R16, 138
+        RCALL   ds1302_Write_Byte
+        ADIW    R27:R26, 4
+        LD      R17, X
+        SBIW    R27:R26, 4
+        LDI     R16, 132
+        RCALL   ds1302_Write_Byte
+        ADIW    R27:R26, 5
+        LD      R17, X
+        SBIW    R27:R26, 5
+        LDI     R16, 130
+        RCALL   ds1302_Write_Byte
+        ADIW    R27:R26, 6
+        LD      R17, X
+        SBIW    R27:R26, 6
+        LDI     R16, 128
+        RCALL   ds1302_Write_Byte
+        ADIW    R27:R26, 7
+        LD      R17, X
+        SBIW    R27:R26, 7
+        LDI     R16, 138
+        RCALL   ds1302_Write_Byte
+        LDI     R17, 128
+        LDI     R16, 142
+        RCALL   ds1302_Write_Byte
+        LD      R26, Y+
+        LD      R27, Y+
+        RET
+
+        RSEG CODE:CODE:NOROOT(1)
+ds1302_Read_Time:
+        CALL    ?PROLOGUE6_L09
+        REQUIRE ?Register_R4_is_cg_reg
+        REQUIRE ?Register_R5_is_cg_reg
+        MOVW    R27:R26, R17:R16
+        CLR     R4
+        LDI     R30, LOW(`?<Constant {0}>`)
+        LDI     R31, HIGH(`?<Constant {0}>`)
+        LDI     R19, (`?<Constant {0}>`) >> 16
+        OUT     0x3B, R19
+        ELPM    R24, Z+
+        ELPM    R25, Z
+        SBIW    R31:R30, 1
+        LDI     R16, 140
+        RCALL   ds1302_Read_Byte
+        MOVW    R31:R30, R27:R26
+        STD     Z+1, R16
+        LDI     R16, 136
+        RCALL   ds1302_Read_Byte
+        MOVW    R31:R30, R27:R26
+        STD     Z+2, R16
+        LDI     R16, 134
+        RCALL   ds1302_Read_Byte
+        MOVW    R31:R30, R27:R26
+        STD     Z+3, R16
+        LDI     R16, 132
+        RCALL   ds1302_Read_Byte
+        MOVW    R31:R30, R27:R26
+        STD     Z+4, R16
+        LDI     R16, 130
+        RCALL   ds1302_Read_Byte
+        MOVW    R31:R30, R27:R26
+        STD     Z+5, R16
+        LDI     R16, 128
+        RCALL   ds1302_Read_Byte
+        ANDI    R16, 0x7F
+        MOVW    R31:R30, R27:R26
+        STD     Z+6, R16
+        LDI     R16, 138
+        RCALL   ds1302_Read_Byte
+        MOVW    R31:R30, R27:R26
+        STD     Z+7, R16
+        CLR     R4
+        INC     R4
+??ds1302_Read_Time_0:
+        LDI     R16, 8
+        CP      R4, R16
+        BRCC    ??ds1302_Read_Time_1
+        CLR     R5
+        MOVW    R31:R30, R27:R26
+        ADD     R30, R4
+        ADC     R31, R5
+        LD      R16, Z
+        LDI     R20, 16
+        CALL    ?UC_DIVMOD_L01
+        MOV     R24, R16
+        CLR     R5
+        MOVW    R31:R30, R27:R26
+        ADD     R30, R4
+        ADC     R31, R5
+        LD      R16, Z
+        LDI     R20, 16
+        CALL    ?UC_DIVMOD_L01
+        MOV     R25, R20
+        LDI     R16, 10
+        MUL     R24, R16
+        ADD     R0, R25
+        CLR     R5
+        MOVW    R31:R30, R27:R26
+        ADD     R30, R4
+        ADC     R31, R5
+        ST      Z, R0
+        INC     R4
+        RJMP    ??ds1302_Read_Time_0
+??ds1302_Read_Time_1:
+        MOVW    R17:R16, R27:R26
+        LDI     R30, 6
+        JMP     ?EPILOGUE_B6_L09
+
+        RSEG CODE:CODE:NOROOT(1)
+ds1302_Write_Check:
+        ST      -Y, R24
+        MOV     R24, R16
+        LDI     R17, 0
+        LDI     R16, 142
+        RCALL   ds1302_Write_Byte
+        MOV     R17, R24
+        LDI     R16, 192
+        RCALL   ds1302_Write_Byte
+        LDI     R17, 128
+        LDI     R16, 142
+        RCALL   ds1302_Write_Byte
+        LD      R24, Y+
+        RET
+
+        RSEG CODE:CODE:NOROOT(1)
+DS1302_Test:
+        SBIW    R29:R28, 8
+        MOVW    R23:R22, R29:R28
+        LDI     R30, LOW(`?<Constant {32, 0}>`)
+        LDI     R31, HIGH(`?<Constant {32, 0}>`)
+        LDI     R19, (`?<Constant {32, 0}>`) >> 16
+        MOVW    R17:R16, R23:R22
+        LDI     R20, 8
+        LDI     R21, 0
+        CALL    ?ML_FLASH_SRAM_24EC_16_L07
+        LDS     R16, count
+        LDS     R17, (count + 1)
+        CPI     R16, 100
+        LDI     R18, 0
+        CPC     R17, R18
+        BRNE    ??DS1302_Test_0
+        LDI     R16, 0
+        LDI     R17, 0
+        STS     count, R16
+        STS     (count + 1), R17
+        MOVW    R17:R16, R29:R28
+        RCALL   ds1302_Read_Time
+        LDD     R16, Y+6
+        LDI     R17, 0
+        ST      -Y, R17
+        ST      -Y, R16
+        LDD     R16, Y+7
+        LDI     R17, 0
+        ST      -Y, R17
+        ST      -Y, R16
+        LDD     R16, Y+8
+        LDI     R17, 0
+        ST      -Y, R17
+        ST      -Y, R16
+        LDD     R16, Y+9
+        LDI     R17, 0
+        ST      -Y, R17
+        ST      -Y, R16
+        LDD     R16, Y+10
+        LDI     R17, 0
+        ST      -Y, R17
+        ST      -Y, R16
+        LDD     R16, Y+11
+        LDI     R17, 0
+        ST      -Y, R17
+        ST      -Y, R16
+        LDI     R16, LOW(`?<Constant "20%02d-%02d-%02d %02d...">`)
+        LDI     R17, (`?<Constant "20%02d-%02d-%02d %02d...">`) >> 8
+        CALL    printf
+        ADIW    R29:R28, 12
+??DS1302_Test_0:
+        ADIW    R29:R28, 8
+        RET
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01cH
+__?EECR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01dH
+__?EEDR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01eH
+__?EEARL:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01fH
+__?EEARH:
+
+        RSEG NEAR_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "20%02d-%02d-%02d `:
+        DC8 "20%02d-%02d-%02d %02d:%02d:%02d\015"
+
+        RSEG INITTAB:CODE:NOROOT(0)
+`?<Segment init: NEAR_I>`:
+        DC16    SFE(NEAR_I) - SFB(NEAR_I)
+        DC16    SFB(NEAR_I)
+        DP      SFB(NEAR_ID)
+        REQUIRE ?need_segment_init
+
+        RSEG NEAR_I:DATA:NOROOT(0)
+        REQUIRE `?<Segment init: NEAR_I>`
+`?<Constant "20%02d-%02d-%02d %02d...">`:
+        DS8 33
+        REQUIRE `?<Initializer for <Constant "20%02d-%02d-%02d `
+
+        RSEG FAR_F:CODE:NOROOT(0)
+`?<Constant {32, 22, 8, 18, 8, 68, 80, 2}>`:
+        DC8 32, 22, 8, 18, 8, 68, 80, 2
+
+        RSEG FAR_F:CODE:NOROOT(0)
+`?<Constant {0}>`:
+        DC8 0, 0
+
+        RSEG FAR_F:CODE:NOROOT(0)
+`?<Constant {32, 0}>`:
+        DC8 32, 0, 0, 0, 0, 0, 0, 0
+
+        END
+// 
+//   3 bytes in segment ABSOLUTE
+// 602 bytes in segment CODE
+//  18 bytes in segment FAR_F
+//   7 bytes in segment INITTAB
+//  33 bytes in segment NEAR_I
+//  33 bytes in segment NEAR_ID
+// 
+// 653 bytes of CODE memory (+ 7 bytes shared)
+//  33 bytes of DATA memory (+ 3 bytes shared)
+//
+//Errors: none
+//Warnings: none

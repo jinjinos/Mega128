@@ -1,0 +1,311 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V6.20.2.50573 for Atmel AVR        12/Sep/2016  16:06:12 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    Source file  =  C:\Users\Admin\Desktop\ATmega128Project\src\my_math.c    #
+#    Command line =  C:\Users\Admin\Desktop\ATmega128Project\src\my_math.c    #
+#                    --cpu=m128a -ms -o C:\Users\Admin\Desktop\ATmega128Proje #
+#                    ct\Debug\Obj\ -lCN C:\Users\Admin\Desktop\ATmega128Proje #
+#                    ct\Debug\List\ -lb C:\Users\Admin\Desktop\ATmega128Proje #
+#                    ct\Debug\List\ -y --initializers_in_flash --no_cse       #
+#                    --no_inline --no_code_motion --no_cross_call             #
+#                    --no_clustering --no_tbaa --debug                        #
+#                    -DENABLE_BIT_DEFINITIONS -e -I                           #
+#                    C:\Users\Admin\Desktop\ATmega128Project\inc\             #
+#                    --eeprom_size 4096 --dlib --dlib_config "D:\Program      #
+#                    Files (x86)\IAR Systems\Embedded Workbench               #
+#                    6.5\avr\LIB\DLIB\dlAVR-3s-ec_mul-f.h" --vla              #
+#                    --use_c++_inline -On                                     #
+#    List file    =  C:\Users\Admin\Desktop\ATmega128Project\Debug\List\my_ma #
+#                    th.lst                                                   #
+#    Object file  =  C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\my_mat #
+#                    h.r90                                                    #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+C:\Users\Admin\Desktop\ATmega128Project\src\my_math.c
+      1          
+      2          
+      3          /*给定一个正整数，求整数的位数*/
+
+   \                                 In  segment CODE, align 2, keep-with-next
+      4          int getNumberLen(unsigned int num)
+   \                     getNumberLen:
+      5          {
+   \   00000000   ........           CALL    ?PROLOGUE4_L09
+   \   00000004   01D8               MOVW    R27:R26, R17:R16
+      6          	int num_len = 0;
+   \   00000006   E080               LDI     R24, 0
+   \   00000008   E090               LDI     R25, 0
+      7          	unsigned int tnum = num;
+   \   0000000A   019D               MOVW    R19:R18, R27:R26
+      8          	do
+      9          	{
+     10          		tnum = tnum/10;
+   \                     ??getNumberLen_0:
+   \   0000000C   E04A               LDI     R20, 10
+   \   0000000E   E050               LDI     R21, 0
+   \   00000010   0189               MOVW    R17:R16, R19:R18
+   \   00000012   ........           CALL    ?US_DIVMOD_L02
+   \   00000016   0198               MOVW    R19:R18, R17:R16
+     11          		num_len++;
+   \   00000018   9601               ADIW    R25:R24, 1
+     12          	}while(tnum);
+   \   0000001A   2F02               MOV     R16, R18
+   \   0000001C   2B03               OR      R16, R19
+   \   0000001E   F7B1               BRNE    ??getNumberLen_0
+     13          	return num_len;
+   \   00000020   018C               MOVW    R17:R16, R25:R24
+   \   00000022   E0E4               LDI     R30, 4
+   \   00000024   ........           JMP     ?EPILOGUE_B4_L09
+     14          }
+     15          
+     16          
+     17          /*给定一个整数，返回一个字符串*/
+
+   \                                 In  segment CODE, align 2, keep-with-next
+     18          char* itoa(unsigned long int num,char* str,int radix)
+   \                     itoa:
+     19          {/*索引表*/
+   \   00000000   ........           CALL    ?PROLOGUE16_L09
+   \   00000004                      REQUIRE ?Register_R4_is_cg_reg
+   \   00000004                      REQUIRE ?Register_R5_is_cg_reg
+   \   00000004                      REQUIRE ?Register_R6_is_cg_reg
+   \   00000004                      REQUIRE ?Register_R7_is_cg_reg
+   \   00000004                      REQUIRE ?Register_R8_is_cg_reg
+   \   00000004                      REQUIRE ?Register_R9_is_cg_reg
+   \   00000004                      REQUIRE ?Register_R10_is_cg_reg
+   \   00000004                      REQUIRE ?Register_R11_is_cg_reg
+   \   00000004                      REQUIRE ?Register_R12_is_cg_reg
+   \   00000004                      REQUIRE ?Register_R13_is_cg_reg
+   \   00000004                      REQUIRE ?Register_R14_is_cg_reg
+   \   00000004                      REQUIRE ?Register_R15_is_cg_reg
+   \   00000004   9766               SBIW    R29:R28, 22
+   \   00000006   8309               STD     Y+1, R16
+   \   00000008   831A               STD     Y+2, R17
+   \   0000000A   832B               STD     Y+3, R18
+   \   0000000C   833C               STD     Y+4, R19
+   \   0000000E   01DA               MOVW    R27:R26, R21:R20
+   \   00000010   017B               MOVW    R15:R14, R23:R22
+     20          	char index[]="0123456789ABCDEF";
+   \   00000012   01BE               MOVW    R23:R22, R29:R28
+   \   00000014   5F6B               SUBI    R22, 251
+   \   00000016   4F7F               SBCI    R23, 255
+   \   00000018   ....               LDI     R30, LOW(`?<Constant "0123456789ABCDEF">`)
+   \   0000001A   ....               LDI     R31, HIGH(`?<Constant "0123456789ABCDEF">`)
+   \   0000001C   ....               LDI     R19, (`?<Constant "0123456789ABCDEF">`) >> 16
+   \   0000001E   018B               MOVW    R17:R16, R23:R22
+   \   00000020   E141               LDI     R20, 17
+   \   00000022   E050               LDI     R21, 0
+   \   00000024   ........           CALL    ?ML_FLASH_SRAM_24EC_16_L07
+     21          	unsigned long int unum;/*中间变量*/
+     22          	char temp;
+     23          	int i=0,j,k;
+   \   00000028   E080               LDI     R24, 0
+   \   0000002A   E090               LDI     R25, 0
+     24          	unum = num;/*其他情况*/
+   \   0000002C   8109               LDD     R16, Y+1
+   \   0000002E   811A               LDD     R17, Y+2
+   \   00000030   812B               LDD     R18, Y+3
+   \   00000032   813C               LDD     R19, Y+4
+   \   00000034   0128               MOVW    R5:R4, R17:R16
+   \   00000036   0139               MOVW    R7:R6, R19:R18
+     25          	/*转换*/
+     26          	do{
+     27          		str[i++] = index[unum % (unsigned)radix];
+   \                     ??itoa_0:
+   \   00000038   018E               MOVW    R17:R16, R29:R28
+   \   0000003A   5F0B               SUBI    R16, 251
+   \   0000003C   4F1F               SBCI    R17, 255
+   \   0000003E   0168               MOVW    R13:R12, R17:R16
+   \   00000040   01A7               MOVW    R21:R20, R15:R14
+   \   00000042   E060               LDI     R22, 0
+   \   00000044   E070               LDI     R23, 0
+   \   00000046   0182               MOVW    R17:R16, R5:R4
+   \   00000048   0193               MOVW    R19:R18, R7:R6
+   \   0000004A   ........           CALL    ?UL_DIVMOD_L03
+   \   0000004E   01F6               MOVW    R31:R30, R13:R12
+   \   00000050   0FE4               ADD     R30, R20
+   \   00000052   1FF5               ADC     R31, R21
+   \   00000054   8100               LD      R16, Z
+   \   00000056   01FD               MOVW    R31:R30, R27:R26
+   \   00000058   0FE8               ADD     R30, R24
+   \   0000005A   1FF9               ADC     R31, R25
+   \   0000005C   8300               ST      Z, R16
+   \   0000005E   9601               ADIW    R25:R24, 1
+     28          		unum /= radix;
+   \   00000060   01A7               MOVW    R21:R20, R15:R14
+   \   00000062   2F65               MOV     R22, R21
+   \   00000064   0F66               LSL     R22
+   \   00000066   0B66               SBC     R22, R22
+   \   00000068   2F76               MOV     R23, R22
+   \   0000006A   0182               MOVW    R17:R16, R5:R4
+   \   0000006C   0193               MOVW    R19:R18, R7:R6
+   \   0000006E   ........           CALL    ?UL_DIVMOD_L03
+   \   00000072   0128               MOVW    R5:R4, R17:R16
+   \   00000074   0139               MOVW    R7:R6, R19:R18
+     29          	}while(unum);
+   \   00000076   2D04               MOV     R16, R4
+   \   00000078   2905               OR      R16, R5
+   \   0000007A   2906               OR      R16, R6
+   \   0000007C   2907               OR      R16, R7
+   \   0000007E   F6E1               BRNE    ??itoa_0
+     30          	str[i]='\0';
+   \   00000080   E000               LDI     R16, 0
+   \   00000082   01FD               MOVW    R31:R30, R27:R26
+   \   00000084   0FE8               ADD     R30, R24
+   \   00000086   1FF9               ADC     R31, R25
+   \   00000088   8300               ST      Z, R16
+     31          	/*逆序*/
+     32          	if(str[0]=='-')
+   \   0000008A   01FD               MOVW    R31:R30, R27:R26
+   \   0000008C   8100               LD      R16, Z
+   \   0000008E   320D               CPI     R16, 45
+   \   00000090   F421               BRNE    ??itoa_1
+     33          		k=1;/*十进制负数*/
+   \   00000092   24BB               CLR     R11
+   \   00000094   24AA               CLR     R10
+   \   00000096   94A3               INC     R10
+   \   00000098   C002               RJMP    ??itoa_2
+     34          	else 
+     35          		k=0;
+   \                     ??itoa_1:
+   \   0000009A   24AA               CLR     R10
+   \   0000009C   24BB               CLR     R11
+     36          	
+     37          	for(j=k;j<=(i-1)/2;j++)
+   \                     ??itoa_2:
+   \   0000009E   0145               MOVW    R9:R8, R11:R10
+   \                     ??itoa_3:
+   \   000000A0   018C               MOVW    R17:R16, R25:R24
+   \   000000A2   5001               SUBI    R16, 1
+   \   000000A4   4010               SBCI    R17, 0
+   \   000000A6   0198               MOVW    R19:R18, R17:R16
+   \   000000A8   E042               LDI     R20, 2
+   \   000000AA   E050               LDI     R21, 0
+   \   000000AC   0189               MOVW    R17:R16, R19:R18
+   \   000000AE   ........           CALL    ?SS_DIVMOD_L02
+   \   000000B2   1508               CP      R16, R8
+   \   000000B4   0519               CPC     R17, R9
+   \   000000B6   F12C               BRLT    ??itoa_4
+     38          	{
+     39          		temp=str[j];
+   \   000000B8   01FD               MOVW    R31:R30, R27:R26
+   \   000000BA   0DE8               ADD     R30, R8
+   \   000000BC   1DF9               ADC     R31, R9
+   \   000000BE   8100               LD      R16, Z
+   \   000000C0   8308               ST      Y, R16
+     40          		str[j]=str[i-1+k-j];
+   \   000000C2   018C               MOVW    R17:R16, R25:R24
+   \   000000C4   0D0A               ADD     R16, R10
+   \   000000C6   1D1B               ADC     R17, R11
+   \   000000C8   5001               SUBI    R16, 1
+   \   000000CA   4010               SBCI    R17, 0
+   \   000000CC   1908               SUB     R16, R8
+   \   000000CE   0919               SBC     R17, R9
+   \   000000D0   01FD               MOVW    R31:R30, R27:R26
+   \   000000D2   0FE0               ADD     R30, R16
+   \   000000D4   1FF1               ADC     R31, R17
+   \   000000D6   8100               LD      R16, Z
+   \   000000D8   01FD               MOVW    R31:R30, R27:R26
+   \   000000DA   0DE8               ADD     R30, R8
+   \   000000DC   1DF9               ADC     R31, R9
+   \   000000DE   8300               ST      Z, R16
+     41          		str[i-1+k-j]=temp;
+   \   000000E0   8128               LD      R18, Y
+   \   000000E2   018C               MOVW    R17:R16, R25:R24
+   \   000000E4   0D0A               ADD     R16, R10
+   \   000000E6   1D1B               ADC     R17, R11
+   \   000000E8   5001               SUBI    R16, 1
+   \   000000EA   4010               SBCI    R17, 0
+   \   000000EC   1908               SUB     R16, R8
+   \   000000EE   0919               SBC     R17, R9
+   \   000000F0   01FD               MOVW    R31:R30, R27:R26
+   \   000000F2   0FE0               ADD     R30, R16
+   \   000000F4   1FF1               ADC     R31, R17
+   \   000000F6   8320               ST      Z, R18
+     42          	}
+   \   000000F8   E001               LDI     R16, 1
+   \   000000FA   0E80               ADD     R8, R16
+   \   000000FC   E000               LDI     R16, 0
+   \   000000FE   1E90               ADC     R9, R16
+   \   00000100   CFCF               RJMP    ??itoa_3
+     43          	return str;
+   \                     ??itoa_4:
+   \   00000102   018D               MOVW    R17:R16, R27:R26
+   \   00000104   9666               ADIW    R29:R28, 22
+   \   00000106   E1E0               LDI     R30, 16
+   \   00000108   ........           JMP     ?EPILOGUE_B16_L09
+     44          }
+
+   \                                 In  segment FAR_F, align 1, keep-with-next
+   \                     `?<Constant "0123456789ABCDEF">`:
+   \   00000000   313033323534       DC8 "0123456789ABCDEF"
+   \              373639384241
+   \              4443464500  
+     45          
+     46          
+     47          
+     48          //原版函数
+     49          //char* itoa(int num,char* str,int radix)
+     50          //{/*索引表*/
+     51          //	char index[]="0123456789ABCDEF";
+     52          //	unsigned unum;/*中间变量*/
+     53          //	char temp;
+     54          //	int i=0,j,k;
+     55          //	/*确定unum的值*/
+     56          //	if(radix == 10 && num < 0)/*十进制负数*/
+     57          //	{
+     58          //		unum=(unsigned)-num;
+     59          //		str[i++]='-';
+     60          //	}
+     61          //	else 
+     62          //		unum=(unsigned)num;/*其他情况*/
+     63          //	/*转换*/
+     64          //	do{
+     65          //		str[i++] = index[unum % (unsigned)radix];
+     66          //		unum /= radix;
+     67          //	}while(unum);
+     68          //	str[i]='\0';
+     69          //	/*逆序*/
+     70          //	if(str[0]=='-')
+     71          //		k=1;/*十进制负数*/
+     72          //	else 
+     73          //		k=0;
+     74          //	
+     75          //	for(j=k;j<=(i-1)/2;j++)
+     76          //	{
+     77          //		temp=str[j];
+     78          //		str[j]=str[i-1+k-j];
+     79          //		str[i-1+k-j]=temp;
+     80          //	}
+     81          //	return str;
+     82          //}
+     83          
+
+   Maximum stack usage in bytes:
+
+   CSTACK RSTACK Function
+   ------ ------ --------
+      4      4   getNumberLen
+     38      4   itoa
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      17  ?<Constant "0123456789ABCDEF">
+      40  getNumberLen
+     268  itoa
+
+ 
+ 308 bytes in segment CODE
+  17 bytes in segment FAR_F
+ 
+ 325 bytes of CODE memory
+
+Errors: none
+Warnings: none

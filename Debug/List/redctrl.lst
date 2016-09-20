@@ -1,0 +1,463 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V6.20.2.50573 for Atmel AVR        12/Sep/2016  16:06:10 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    Source file  =  C:\Users\Admin\Desktop\ATmega128Project\src\redctrl.c    #
+#    Command line =  C:\Users\Admin\Desktop\ATmega128Project\src\redctrl.c    #
+#                    --cpu=m128a -ms -o C:\Users\Admin\Desktop\ATmega128Proje #
+#                    ct\Debug\Obj\ -lCN C:\Users\Admin\Desktop\ATmega128Proje #
+#                    ct\Debug\List\ -lb C:\Users\Admin\Desktop\ATmega128Proje #
+#                    ct\Debug\List\ -y --initializers_in_flash --no_cse       #
+#                    --no_inline --no_code_motion --no_cross_call             #
+#                    --no_clustering --no_tbaa --debug                        #
+#                    -DENABLE_BIT_DEFINITIONS -e -I                           #
+#                    C:\Users\Admin\Desktop\ATmega128Project\inc\             #
+#                    --eeprom_size 4096 --dlib --dlib_config "D:\Program      #
+#                    Files (x86)\IAR Systems\Embedded Workbench               #
+#                    6.5\avr\LIB\DLIB\dlAVR-3s-ec_mul-f.h" --vla              #
+#                    --use_c++_inline -On                                     #
+#    List file    =  C:\Users\Admin\Desktop\ATmega128Project\Debug\List\redct #
+#                    rl.lst                                                   #
+#    Object file  =  C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\redctr #
+#                    l.r90                                                    #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+C:\Users\Admin\Desktop\ATmega128Project\src\redctrl.c
+      1          /*红外遥控控制解码通信实验*/
+      2          
+      3          #include <iom128a.h>
+
+   \                                 In  segment ABSOLUTE, at 0x21
+   \   union <unnamed> volatile __io _A_PINE
+   \                     _A_PINE:
+   \   00000000                      DS8 1
+
+   \                                 In  segment ABSOLUTE, at 0x22
+   \   union <unnamed> volatile __io _A_DDRE
+   \                     _A_DDRE:
+   \   00000000                      DS8 1
+
+   \                                 In  segment ABSOLUTE, at 0x23
+   \   union <unnamed> volatile __io _A_PORTE
+   \                     _A_PORTE:
+   \   00000000                      DS8 1
+      4          #include <stdio.h>
+      5          #include "redctrl.h"
+      6          #include "delay.h"
+      7          #include "ledshow.h"
+      8          
+      9          
+     10          //红外接收头共有三个引脚
+     11          //VCC GND OUT,其中OUT与PE3连接
+     12          
+     13          //红外接收头管脚初始化
+
+   \                                 In  segment CODE, align 2, keep-with-next
+     14          void redCtrlInit(void)
+   \                     redCtrlInit:
+     15          {
+     16          //	DDRE  |= (1 << 3);	
+     17          	RED_IN;					//配置PE3为输入模式	
+   \   00000000   9813               CBI     0x02, 0x03
+     18          	RED_SET;				//使能上拉电阻
+   \   00000002   9A1B               SBI     0x03, 0x03
+     19          }
+   \   00000004   9508               RET
+   \   00000006                      REQUIRE _A_DDRE
+   \   00000006                      REQUIRE _A_PORTE
+     20          
+     21          
+     22          //遥控器解码
+
+   \                                 In  segment CODE, align 2, keep-with-next
+     23          unsigned char redCodeReceice(void)
+   \                     redCodeReceice:
+     24          {
+   \   00000000   ........           CALL    ?PROLOGUE5_L09
+   \   00000004                      REQUIRE ?Register_R4_is_cg_reg
+   \   00000004   9724               SBIW    R29:R28, 4
+     25          	unsigned char i,j,k = 0;
+   \   00000006   E090               LDI     R25, 0
+     26          	unsigned char code_value = 0,key = 0;
+   \   00000008   E0B0               LDI     R27, 0
+   \   0000000A   2444               CLR     R4
+     27          	unsigned char key_code[4] = {'\0'};
+   \   0000000C   ....               LDI     R30, LOW(`?<Constant {0}>`)
+   \   0000000E   ....               LDI     R31, HIGH(`?<Constant {0}>`)
+   \   00000010   ....               LDI     R19, (`?<Constant {0}>`) >> 16
+   \   00000012   BF3B               OUT     0x3B, R19
+   \   00000014   9147               ELPM    R20, Z+
+   \   00000016   9157               ELPM    R21, Z+
+   \   00000018   9167               ELPM    R22, Z+
+   \   0000001A   9176               ELPM    R23, Z
+   \   0000001C   9733               SBIW    R31:R30, 3
+   \   0000001E   8348               ST      Y, R20
+   \   00000020   8359               STD     Y+1, R21
+   \   00000022   836A               STD     Y+2, R22
+   \   00000024   837B               STD     Y+3, R23
+     28          	
+     29          	for(i = 0 ;i < 19;i++)
+   \   00000026   E080               LDI     R24, 0
+   \                     ??redCodeReceice_0:
+   \   00000028   3183               CPI     R24, 19
+   \   0000002A   F458               BRCC    ??redCodeReceice_1
+     30          	{
+     31          		_delay_us(400);			
+   \   0000002C   EE01               LDI     R16, 225
+   \   0000002E   E012               LDI     R17, 2
+   \   00000030   5001               SUBI    R16, 1
+   \   00000032   4010               SBCI    R17, 0
+   \   00000034   F7E9               BRNE    $-4
+     32          		if(RED_R)		//9ms内有高电平就判断为干扰，退出处理程序
+   \   00000036   9B0B               SBIS    0x01, 0x03
+   \   00000038   C002               RJMP    ??redCodeReceice_2
+     33          		{
+     34          			return 0xFF;
+   \   0000003A   EF0F               LDI     R16, 255
+   \   0000003C   C03C               RJMP    ??redCodeReceice_3
+     35          		}
+     36          	}
+   \                     ??redCodeReceice_2:
+   \   0000003E   9583               INC     R24
+   \   00000040   CFF3               RJMP    ??redCodeReceice_0
+     37          	while(!RED_R);		//等待9ms低电平过去
+   \                     ??redCodeReceice_1:
+   \   00000042   9B0B               SBIS    0x01, 0x03
+   \   00000044   CFFE               RJMP    ??redCodeReceice_1
+     38          	
+     39          	//判断是否连发码,
+     40          	for(i = 0;i < 5;i++)
+   \   00000046   E080               LDI     R24, 0
+   \                     ??redCodeReceice_4:
+   \   00000048   3085               CPI     R24, 5
+   \   0000004A   F460               BRCC    ??redCodeReceice_5
+     41          	{
+     42          		_delay_us(500);
+   \   0000004C   E909               LDI     R16, 153
+   \   0000004E   E013               LDI     R17, 3
+   \   00000050   5001               SUBI    R16, 1
+   \   00000052   4010               SBCI    R17, 0
+   \   00000054   F7E9               BRNE    $-4
+   \   00000056   0000               NOP
+     43          		if(!RED_R)
+   \   00000058   990B               SBIC    0x01, 0x03
+   \   0000005A   C002               RJMP    ??redCodeReceice_6
+     44          		{
+     45          			return 0xFF;
+   \   0000005C   EF0F               LDI     R16, 255
+   \   0000005E   C02B               RJMP    ??redCodeReceice_3
+     46          		}
+     47          	}
+   \                     ??redCodeReceice_6:
+   \   00000060   9583               INC     R24
+   \   00000062   CFF2               RJMP    ??redCodeReceice_4
+     48          	
+     49          	while(RED_R);		//等待4.5ms高电平过去
+   \                     ??redCodeReceice_5:
+   \   00000064   990B               SBIC    0x01, 0x03
+   \   00000066   CFFE               RJMP    ??redCodeReceice_5
+     50          	
+     51          	//接收四个字节的数据
+     52          	for(i = 0; i < 4; i++)
+   \   00000068   E080               LDI     R24, 0
+   \                     ??redCodeReceice_7:
+   \   0000006A   3084               CPI     R24, 4
+   \   0000006C   F500               BRCC    ??redCodeReceice_8
+     53          	{
+     54          		//每个字节数据8位
+     55          		for(j = 0; j < 8;j++)
+   \   0000006E   E0A0               LDI     R26, 0
+   \                     ??redCodeReceice_9:
+   \   00000070   30A8               CPI     R26, 8
+   \   00000072   F4A8               BRCC    ??redCodeReceice_10
+     56          		{
+     57          			while(!RED_R);	//等待变高电平
+   \                     ??redCodeReceice_11:
+   \   00000074   9B0B               SBIS    0x01, 0x03
+   \   00000076   CFFE               RJMP    ??redCodeReceice_11
+     58          			
+     59          			while(RED_R)	//计算高电平时间
+   \                     ??redCodeReceice_12:
+   \   00000078   9B0B               SBIS    0x01, 0x03
+   \   0000007A   C009               RJMP    ??redCodeReceice_13
+     60          			{
+     61          				_delay_us(100);
+   \   0000007C   EF05               LDI     R16, 245
+   \   0000007E   950A               DEC     R16
+   \   00000080   F7F1               BRNE    $-2
+   \   00000082   C000               RJMP    $+2
+     62          				k++;
+   \   00000084   9593               INC     R25
+     63          				//高电平时间过程就退出处理程序
+     64          				if(k >= 22)
+   \   00000086   3196               CPI     R25, 22
+   \   00000088   F3B8               BRCS    ??redCodeReceice_12
+     65          				{
+     66          					return 0xFF;
+   \   0000008A   EF0F               LDI     R16, 255
+   \   0000008C   C014               RJMP    ??redCodeReceice_3
+     67          				}
+     68          			}
+     69          			
+     70          			code_value >>= 1;		//接受一位数据
+   \                     ??redCodeReceice_13:
+   \   0000008E   95B6               LSR     R27
+     71          			if( k >= 8)
+   \   00000090   3098               CPI     R25, 8
+   \   00000092   F010               BRCS    ??redCodeReceice_14
+     72          			{
+     73          				code_value |= 0x80;		//高电平时间大于0.56，则为数据1
+   \   00000094   68B0               ORI     R27, 0x80
+   \   00000096   E001               LDI     R16, 1
+     74          			}
+     75          			k = 0;			//定时计数清零
+   \                     ??redCodeReceice_14:
+   \   00000098   E090               LDI     R25, 0
+     76          		}
+   \   0000009A   95A3               INC     R26
+   \   0000009C   CFE9               RJMP    ??redCodeReceice_9
+     77          		key_code[i] = code_value;		//四个字节的数据
+   \                     ??redCodeReceice_10:
+   \   0000009E   01FE               MOVW    R31:R30, R29:R28
+   \   000000A0   2F08               MOV     R16, R24
+   \   000000A2   E010               LDI     R17, 0
+   \   000000A4   0FE0               ADD     R30, R16
+   \   000000A6   1FF1               ADC     R31, R17
+   \   000000A8   83B0               ST      Z, R27
+     78          	}
+   \   000000AA   9583               INC     R24
+   \   000000AC   CFDE               RJMP    ??redCodeReceice_7
+     79          	
+     80          	key = key_Icode(key_code[2]);
+   \                     ??redCodeReceice_8:
+   \   000000AE   810A               LDD     R16, Y+2
+   \   000000B0   ....               RCALL   key_Icode
+   \   000000B2   2E40               MOV     R4, R16
+     81          	
+     82          //	ledShowNumber(key,wei_table,-1,10);
+     83          
+     84          	return key;
+   \   000000B4   2D04               MOV     R16, R4
+   \                     ??redCodeReceice_3:
+   \   000000B6   9624               ADIW    R29:R28, 4
+   \   000000B8   E0E5               LDI     R30, 5
+   \   000000BA   ........           JMP     ?EPILOGUE_B5_L09
+   \   000000BE                      REQUIRE _A_PINE
+     85          }
+     86          
+     87          
+
+   \                                 In  segment CODE, align 2, keep-with-next
+     88          unsigned char key_Icode(unsigned char key_code)
+   \                     key_Icode:
+     89          {
+   \   00000000   2F10               MOV     R17, R16
+     90          	unsigned char key_num = 10;
+   \   00000002   E00A               LDI     R16, 10
+     91          	switch(key_code)
+   \   00000004   2F21               MOV     R18, R17
+   \   00000006   5028               SUBI    R18, 8
+   \   00000008   F0D9               BREQ    ??key_Icode_0
+   \   0000000A   5024               SUBI    R18, 4
+   \   0000000C   F099               BREQ    ??key_Icode_1
+   \   0000000E   502A               SUBI    R18, 10
+   \   00000010   F079               BREQ    ??key_Icode_2
+   \   00000012   5022               SUBI    R18, 2
+   \   00000014   F089               BREQ    ??key_Icode_3
+   \   00000016   5024               SUBI    R18, 4
+   \   00000018   F0A9               BREQ    ??key_Icode_4
+   \   0000001A   5226               SUBI    R18, 38
+   \   0000001C   F0B9               BREQ    ??key_Icode_5
+   \   0000001E   5028               SUBI    R18, 8
+   \   00000020   F0C9               BREQ    ??key_Icode_6
+   \   00000022   5028               SUBI    R18, 8
+   \   00000024   F0A9               BREQ    ??key_Icode_7
+   \   00000026   5028               SUBI    R18, 8
+   \   00000028   F079               BREQ    ??key_Icode_8
+   \   0000002A   5024               SUBI    R18, 4
+   \   0000002C   F039               BREQ    ??key_Icode_9
+   \   0000002E   C014               RJMP    ??key_Icode_10
+     92          	{
+     93          	  case KEY_0:key_num = 0;break;
+   \                     ??key_Icode_2:
+   \   00000030   E000               LDI     R16, 0
+   \   00000032   9508               RET
+     94          	  case KEY_1:key_num = 1;break;
+   \                     ??key_Icode_1:
+   \   00000034   E001               LDI     R16, 1
+   \   00000036   9508               RET
+     95          	  case KEY_2:key_num = 2;break;
+   \                     ??key_Icode_3:
+   \   00000038   E002               LDI     R16, 2
+   \   0000003A   9508               RET
+     96          	  case KEY_3:key_num = 3;break;
+   \                     ??key_Icode_9:
+   \   0000003C   E003               LDI     R16, 3
+   \   0000003E   9508               RET
+     97          	  case KEY_4:key_num = 4;break;
+   \                     ??key_Icode_0:
+   \   00000040   E004               LDI     R16, 4
+   \   00000042   9508               RET
+     98          	  case KEY_5:key_num = 5;break;
+   \                     ??key_Icode_4:
+   \   00000044   E005               LDI     R16, 5
+   \   00000046   9508               RET
+     99          	  case KEY_6:key_num = 6;break;
+   \                     ??key_Icode_8:
+   \   00000048   E006               LDI     R16, 6
+   \   0000004A   9508               RET
+    100          	  case KEY_7:key_num = 7;break;
+   \                     ??key_Icode_5:
+   \   0000004C   E007               LDI     R16, 7
+   \   0000004E   9508               RET
+    101          	  case KEY_8:key_num = 8;break;
+   \                     ??key_Icode_7:
+   \   00000050   E008               LDI     R16, 8
+   \   00000052   9508               RET
+    102          	  case KEY_9:key_num = 9;break;
+   \                     ??key_Icode_6:
+   \   00000054   E009               LDI     R16, 9
+   \   00000056   9508               RET
+    103          	  default:key_num = 10;break;
+   \                     ??key_Icode_10:
+   \   00000058   E00A               LDI     R16, 10
+    104          	}
+    105          	return key_num;
+   \   0000005A   9508               RET
+    106          }
+    107          
+    108          
+    109          
+    110          
+
+   \                                 In  segment CODE, align 2, keep-with-next
+    111          void redCtrlTest(void)
+   \                     redCtrlTest:
+    112          {
+   \   00000000   939A               ST      -Y, R25
+   \   00000002   938A               ST      -Y, R24
+    113          	unsigned char key = 0,temp_key = 0xff;
+   \   00000004   E080               LDI     R24, 0
+   \   00000006   EF9F               LDI     R25, 255
+    114          	while(1)
+    115          	{
+    116          		if((temp_key = redCodeReceice()) != 0xFF)
+   \                     ??redCtrlTest_0:
+   \   00000008   ....               RCALL   redCodeReceice
+   \   0000000A   2F90               MOV     R25, R16
+   \   0000000C   3F0F               CPI     R16, 255
+   \   0000000E   F051               BREQ    ??redCtrlTest_1
+    117          		{
+    118          			key = temp_key;
+   \   00000010   2F89               MOV     R24, R25
+    119          //			beepBeep(50);
+    120          			printf("\r\n你按下的按键是%d\r\n",key);
+   \   00000012   2F08               MOV     R16, R24
+   \   00000014   E010               LDI     R17, 0
+   \   00000016   931A               ST      -Y, R17
+   \   00000018   930A               ST      -Y, R16
+   \   0000001A   ....               LDI     R16, LOW(`?<Constant "\\r\\n\\304\\343\\260\\264\\317\\302\\265\\3`)
+   \   0000001C   ....               LDI     R17, (`?<Constant "\\r\\n\\304\\343\\260\\264\\317\\302\\265\\3`) >> 8
+   \   0000001E   ........           CALL    printf
+   \   00000022   9622               ADIW    R29:R28, 2
+    121          		}
+    122          		ledShowNumber(key,wei_table,-1,10);
+   \                     ??redCtrlTest_1:
+   \   00000024   E00A               LDI     R16, 10
+   \   00000026   E010               LDI     R17, 0
+   \   00000028   931A               ST      -Y, R17
+   \   0000002A   930A               ST      -Y, R16
+   \   0000002C   EF6F               LDI     R22, 255
+   \   0000002E   EF7F               LDI     R23, 255
+   \   00000030   ....               LDI     R20, LOW(wei_table)
+   \   00000032   ....               LDI     R21, (wei_table) >> 8
+   \   00000034   2F08               MOV     R16, R24
+   \   00000036   E010               LDI     R17, 0
+   \   00000038   E020               LDI     R18, 0
+   \   0000003A   E030               LDI     R19, 0
+   \   0000003C   ........           CALL    ledShowNumber
+   \   00000040   CFE3               RJMP    ??redCtrlTest_0
+    123          		
+    124          /*		//通过判断按键来修改PWM输出的占空比
+    125          		switch(key)
+    126          		{
+    127          		  case 0:	comp = 20;	break;
+    128          		  case 1:	comp = 40;	break;
+    129          		  case 2:	comp = 60;	break;
+    130          		  case 3:	comp = 80;	break;
+    131          		  case 4:	comp = 100;	break;
+    132          		  case 5:	comp = 120;	break;
+    133          		  case 6:	comp = 140;	break;
+    134          		  case 7:	comp = 160;	break;
+    135          		  case 8:	comp = 180;	break;
+    136          		  case 9:	comp = 200;	break;
+    137          		  case 10:	comp = 220;	break;
+    138          		  default:	comp = 128;	break;
+    139          		}
+    140          		*/
+    141          	}
+    142          }
+
+   \                                 In  segment NEAR_ID, align 1, keep-with-next
+   \                     `?<Initializer for <Constant "\\r\\n\\304\\343\\260\\`:
+   \   00000000   0A0DE3C4B4B0       DC8 "\015\012\304\343\260\264\317\302\265\304\260\264\274\374\312\307%d\015\012"
+   \              C2CFC4B5B4B0
+   \              FCBCC7CA6425
+   \              0A0D00      
+
+   \                                 In  segment NEAR_I, align 1, keep-with-next
+   \   00000000                      REQUIRE `?<Segment init: NEAR_I>`
+   \                     `?<Constant "\\r\\n\\304\\343\\260\\264\\317\\302\\265\\3`:
+   \   00000000                      DS8 21
+   \   00000015                      REQUIRE `?<Initializer for <Constant "\\r\\n\\304\\343\\260\\`
+
+   \                                 In  segment FAR_F, align 1, keep-with-next
+   \                     `?<Constant {0}>`:
+   \   00000000   00000000           DC8 0, 0, 0, 0
+
+   Maximum stack usage in bytes:
+
+   CSTACK RSTACK Function
+   ------ ------ --------
+      0      2   key_Icode
+      9      2   redCodeReceice
+        9      2   -> key_Icode
+      0      2   redCtrlInit
+      4      2   redCtrlTest
+        4      2   -> ledShowNumber
+        4      2   -> printf
+        2      2   -> redCodeReceice
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      21  ?<Constant "\r\n\304\343\260\264\317\302\265\3
+       4  ?<Constant {0}>
+      21  ?<Initializer for <Constant "\r\n\304\343\260\
+       1  _A_DDRE
+       1  _A_PINE
+       1  _A_PORTE
+      92  key_Icode
+     190  redCodeReceice
+       6  redCtrlInit
+      66  redCtrlTest
+       7  -- Other
+
+ 
+   3 bytes in segment ABSOLUTE
+ 354 bytes in segment CODE
+   4 bytes in segment FAR_F
+   7 bytes in segment INITTAB
+  21 bytes in segment NEAR_I
+  21 bytes in segment NEAR_ID
+ 
+ 379 bytes of CODE memory (+ 7 bytes shared)
+  21 bytes of DATA memory (+ 3 bytes shared)
+
+Errors: none
+Warnings: none

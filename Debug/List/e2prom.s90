@@ -1,0 +1,214 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V6.20.2.50573 for Atmel AVR       12/Sep/2016  16:06:11 /
+// Copyright 1996-2013 IAR Systems AB.                                        /
+//                                                                            /
+//    Source file  =  C:\Users\Admin\Desktop\ATmega128Project\src\e2prom.c    /
+//    Command line =  C:\Users\Admin\Desktop\ATmega128Project\src\e2prom.c    /
+//                    --cpu=m128a -ms -o C:\Users\Admin\Desktop\ATmega128Proj /
+//                    ect\Debug\Obj\ -lCN C:\Users\Admin\Desktop\ATmega128Pro /
+//                    ject\Debug\List\ -lb C:\Users\Admin\Desktop\ATmega128Pr /
+//                    oject\Debug\List\ -y --initializers_in_flash --no_cse   /
+//                    --no_inline --no_code_motion --no_cross_call            /
+//                    --no_clustering --no_tbaa --debug                       /
+//                    -DENABLE_BIT_DEFINITIONS -e -I                          /
+//                    C:\Users\Admin\Desktop\ATmega128Project\inc\            /
+//                    --eeprom_size 4096 --dlib --dlib_config "D:\Program     /
+//                    Files (x86)\IAR Systems\Embedded Workbench              /
+//                    6.5\avr\LIB\DLIB\dlAVR-3s-ec_mul-f.h" --vla             /
+//                    --use_c++_inline -On                                    /
+//    List file    =  C:\Users\Admin\Desktop\ATmega128Project\Debug\List\e2pr /
+//                    om.s90                                                  /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME e2prom
+
+        RSEG CSTACK:DATA:NOROOT(0)
+        RSEG RSTACK:DATA:NOROOT(0)
+
+        EXTERN ?EPILOGUE_B5_L09
+        EXTERN ?PROLOGUE5_L09
+        EXTERN ?Register_R4_is_cg_reg
+
+        PUBWEAK _A_EEAR
+        PUBWEAK _A_EECR
+        PUBWEAK _A_EEDR
+        PUBWEAK _A_SREG
+        PUBWEAK __?EEARH
+        PUBWEAK __?EEARL
+        PUBWEAK __?EECR
+        PUBWEAK __?EEDR
+        PUBLIC e2prom_Read
+        PUBLIC e2prom_Read2
+        PUBLIC e2prom_Read_Byte
+        PUBLIC e2prom_Write
+        PUBLIC e2prom_Write_Byte
+
+
+        ASEGN ABSOLUTE:DATA:NOROOT,03cH
+// union <unnamed> volatile __io _A_EECR
+_A_EECR:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,03dH
+// union <unnamed> volatile __io _A_EEDR
+_A_EEDR:
+        DS8 1
+
+        ASEGN ABSOLUTE:DATA:NOROOT,03eH
+// union <unnamed> volatile __io _A_EEAR
+_A_EEAR:
+        DS8 2
+
+        ASEGN ABSOLUTE:DATA:NOROOT,05fH
+// union <unnamed> volatile __io _A_SREG
+_A_SREG:
+        DS8 1
+
+        RSEG CODE:CODE:NOROOT(1)
+e2prom_Read_Byte:
+        MOVW    R19:R18, R17:R16
+??e2prom_Read_Byte_0:
+        SBIC    0x1C, 0x01
+        RJMP    ??e2prom_Read_Byte_0
+        MOVW    R17:R16, R19:R18
+        MOV     R16, R17
+        LDI     R17, 0
+        OUT     0x1F, R16
+        MOV     R16, R18
+        OUT     0x1E, R16
+        SBI     0x1C, 0x00
+        IN      R16, 0x1D
+        RET
+        REQUIRE _A_EECR
+        REQUIRE _A_EEAR
+        REQUIRE _A_EEDR
+
+        RSEG CODE:CODE:NOROOT(1)
+e2prom_Read:
+??e2prom_Read_0:
+        SBIC    0x1C, 0x01
+        RJMP    ??e2prom_Read_0
+??e2prom_Read_1:
+        MOV     R19, R18
+        MOV     R18, R19
+        DEC     R18
+        TST     R19
+        BREQ    ??e2prom_Read_2
+        MOVW    R23:R22, R17:R16
+        MOV     R22, R23
+        LDI     R23, 0
+        OUT     0x1F, R22
+        MOV     R19, R16
+        OUT     0x1E, R19
+        SBI     0x1C, 0x00
+        IN      R19, 0x1D
+        MOVW    R31:R30, R21:R20
+        ST      Z, R19
+        SUBI    R16, 255
+        SBCI    R17, 255
+        SUBI    R20, 255
+        SBCI    R21, 255
+        RJMP    ??e2prom_Read_1
+??e2prom_Read_2:
+        RET
+        REQUIRE _A_EECR
+        REQUIRE _A_EEAR
+        REQUIRE _A_EEDR
+
+        RSEG CODE:CODE:NOROOT(1)
+e2prom_Read2:
+        CALL    ?PROLOGUE5_L09
+        REQUIRE ?Register_R4_is_cg_reg
+        MOVW    R25:R24, R17:R16
+        MOV     R4, R18
+        MOVW    R27:R26, R21:R20
+??e2prom_Read2_0:
+        MOV     R16, R4
+        MOV     R4, R16
+        DEC     R4
+        TST     R16
+        BREQ    ??e2prom_Read2_1
+        MOVW    R17:R16, R25:R24
+        RCALL   e2prom_Read_Byte
+        ST      X, R16
+        ADIW    R25:R24, 1
+        ADIW    R27:R26, 1
+        RJMP    ??e2prom_Read2_0
+??e2prom_Read2_1:
+        LDI     R30, 5
+        JMP     ?EPILOGUE_B5_L09
+
+        RSEG CODE:CODE:NOROOT(1)
+e2prom_Write_Byte:
+??e2prom_Write_Byte_0:
+        IN      R19, 0x1C
+        ANDI    R19, 0x02
+        OUT     0x1C, R19
+        TST     R19
+        BRNE    ??e2prom_Write_Byte_0
+        MOVW    R21:R20, R17:R16
+        MOV     R20, R21
+        LDI     R21, 0
+        OUT     0x1F, R20
+        MOV     R19, R16
+        OUT     0x1E, R19
+        OUT     0x1D, R18
+        BCLR    7
+        SBI     0x1C, 0x02
+        CBI     0x1C, 0x01
+        SBI     0x1C, 0x01
+        BSET    7
+        RET
+        REQUIRE _A_EECR
+        REQUIRE _A_EEAR
+        REQUIRE _A_EEDR
+        REQUIRE _A_SREG
+
+        RSEG CODE:CODE:NOROOT(1)
+e2prom_Write:
+        CALL    ?PROLOGUE5_L09
+        REQUIRE ?Register_R4_is_cg_reg
+        MOVW    R25:R24, R17:R16
+        MOV     R4, R18
+        MOVW    R27:R26, R21:R20
+??e2prom_Write_0:
+        MOV     R16, R4
+        MOV     R4, R16
+        DEC     R4
+        TST     R16
+        BREQ    ??e2prom_Write_1
+        LD      R18, X
+        MOVW    R17:R16, R25:R24
+        RCALL   e2prom_Write_Byte
+        ADIW    R25:R24, 1
+        ADIW    R27:R26, 1
+        RJMP    ??e2prom_Write_0
+??e2prom_Write_1:
+        LDI     R30, 5
+        JMP     ?EPILOGUE_B5_L09
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01cH
+__?EECR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01dH
+__?EEDR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01eH
+__?EEARL:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01fH
+__?EEARH:
+
+        END
+// 
+//   5 bytes in segment ABSOLUTE
+// 182 bytes in segment CODE
+// 
+// 182 bytes of CODE memory
+//   0 bytes of DATA memory (+ 5 bytes shared)
+//
+//Errors: none
+//Warnings: none

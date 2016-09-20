@@ -1,0 +1,333 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V6.20.2.50573 for Atmel AVR        12/Sep/2016  16:06:10 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    Source file  =  C:\Users\Admin\Desktop\ATmega128Project\src\song.c       #
+#    Command line =  C:\Users\Admin\Desktop\ATmega128Project\src\song.c       #
+#                    --cpu=m128a -ms -o C:\Users\Admin\Desktop\ATmega128Proje #
+#                    ct\Debug\Obj\ -lCN C:\Users\Admin\Desktop\ATmega128Proje #
+#                    ct\Debug\List\ -lb C:\Users\Admin\Desktop\ATmega128Proje #
+#                    ct\Debug\List\ -y --initializers_in_flash --no_cse       #
+#                    --no_inline --no_code_motion --no_cross_call             #
+#                    --no_clustering --no_tbaa --debug                        #
+#                    -DENABLE_BIT_DEFINITIONS -e -I                           #
+#                    C:\Users\Admin\Desktop\ATmega128Project\inc\             #
+#                    --eeprom_size 4096 --dlib --dlib_config "D:\Program      #
+#                    Files (x86)\IAR Systems\Embedded Workbench               #
+#                    6.5\avr\LIB\DLIB\dlAVR-3s-ec_mul-f.h" --vla              #
+#                    --use_c++_inline -On                                     #
+#    List file    =  C:\Users\Admin\Desktop\ATmega128Project\Debug\List\song. #
+#                    lst                                                      #
+#    Object file  =  C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\song.r #
+#                    90                                                       #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+C:\Users\Admin\Desktop\ATmega128Project\src\song.c
+      1          
+      2          //唱歌的文件，8051移植
+      3          #include "delay.h"
+      4          #include <iom128a.h>
+
+   \                                 In  segment ABSOLUTE, at 0x4c
+   \   union <unnamed> volatile __io _A_TCNT1
+   \                     _A_TCNT1:
+   \   00000000                      DS8 2
+
+   \                                 In  segment ABSOLUTE, at 0x4e
+   \   union <unnamed> volatile __io _A_TCCR1B
+   \                     _A_TCCR1B:
+   \   00000000                      DS8 1
+      5          #include "timer.h"
+      6          
+      7          
+      8          //不能实现唱歌的功能
+      9          //8051采用12M晶振
+     10          //TODO:音阶频率表有问题
+     11          
+     12                                   //世上只有妈妈好数据表
+
+   \                                 In  segment NEAR_I, align 1, keep-with-next
+   \   00000000                      REQUIRE `?<Segment init: NEAR_I>`
+     13          const unsigned char MUSIC[]={         6,2,3,      5,2,1,      3,2,2,    5,2,2,    1,3,2,    6,2,1,    5,2,1,		//19 20 16
+   \                     MUSIC:
+   \   00000000                      DS8 102
+   \   00000066                      REQUIRE `?<Initializer for MUSIC>`
+     14                                                6,2,4,      3,2,2,      5,2,1,    6,2,1, 	  5,2,2, 	3,2,2, 	  1,2,1,
+     15                                                6,1,1,      5,2,1,      3,2,1, 	2,2,4, 	  2,2,3, 	3,2,1,    5,2,2,
+     16                                                5,2,1,      6,2,1,      3,2,2, 	2,2,2,    1,2,4, 	5,2,3, 	  3,2,1,
+     17                                                2,2,1,      1,2,1,      6,1,1, 	1,2,1, 	  5,1,6, 	0,0,0 
+     18                                                };
+     19                                   // 音阶频率表，高八位
+
+   \                                 In  segment NEAR_I, align 1, keep-with-next
+   \   00000000                      REQUIRE `?<Segment init: NEAR_I>`
+     20          const unsigned char FREQH[]={
+   \                     FREQH:
+   \   00000000                      DS8 28
+   \   0000001C                      REQUIRE `?<Initializer for FREQH>`
+     21                                          0xF2,0xF3,0xF5,0xF5,0xF6,0xF7,0xF8, 
+     22                                          0xF9,0xF9,0xFA,0xFA,0xFB,0xFB,0xFC,0xFC, //1,2,3,4,5,6,7,8,i
+     23                                          0xFC,0xFD,0xFD,0xFD,0xFD,0xFE,
+     24                                          0xFE,0xFE,0xFE,0xFE,0xFE,0xFE,0xFF,
+     25                                         } ;
+     26          
+     27                                   // 音阶频率表，低八位
+
+   \                                 In  segment NEAR_I, align 1, keep-with-next
+   \   00000000                      REQUIRE `?<Segment init: NEAR_I>`
+     28          const unsigned char FREQL[]={
+   \                     FREQL:
+   \   00000000                      DS8 28
+   \   0000001C                      REQUIRE `?<Initializer for FREQL>`
+     29                                           0x42,0xC1,0x17,0xB6,0xD0,0xD1,0xB6,
+     30                                           0x21,0xE1,0x8C,0xD8,0x68,0xE9,0x5B,0x8F, //1,2,3,4,5,6,7,8,i
+     31                                           0xEE,0x44,0x6B,0xB4,0xF4,0x2D, 
+     32                                           0x47,0x77,0xA2,0xB6,0xDA,0xFA,0x16,
+     33                                          };
+     34          
+     35          
+     36          /*
+     37          	各调1/4节拍时间
+     38           调4/4  125ms
+     39           调2/4  250ms
+     40           调3/4  187ms
+     41          */
+
+   \                                 In  segment CODE, align 2, keep-with-next
+     42          void delay_song(unsigned char t)
+   \                     delay_song:
+     43          {
+     44          	unsigned char i;
+     45          	for(i = 0; i < t;i++)
+   \   00000000   E010               LDI     R17, 0
+   \                     ??delay_song_0:
+   \   00000002   1710               CP      R17, R16
+   \   00000004   F450               BRCC    ??delay_song_1
+     46          	{
+     47          		_delay_ms(407);
+   \   00000006   E541               LDI     R20, 81
+   \   00000008   E258               LDI     R21, 40
+   \   0000000A   E069               LDI     R22, 9
+   \   0000000C   5041               SUBI    R20, 1
+   \   0000000E   4050               SBCI    R21, 0
+   \   00000010   4060               SBCI    R22, 0
+   \   00000012   F7E1               BRNE    $-6
+   \   00000014   C000               RJMP    $+2
+     48          	}
+   \   00000016   9513               INC     R17
+   \   00000018   CFF4               RJMP    ??delay_song_0
+     49          }
+   \                     ??delay_song_1:
+   \   0000001A   9508               RET
+     50          
+
+   \                                 In  segment CODE, align 2, keep-with-next
+     51          void song(void)
+   \                     song:
+     52          {
+     53          //	TCNT1H = Timer1_H;
+     54          //	TCNT1L = Timer1_L;
+     55          	
+     56          	TCNT1 = (unsigned int)(0.6144 * Timer1_C + 65535 * 0.3856);
+   \   00000000   9100....           LDS     R16, Timer1_C
+   \   00000004   9110....           LDS     R17, (Timer1_C + 1)
+   \   00000008   E020               LDI     R18, 0
+   \   0000000A   E030               LDI     R19, 0
+   \   0000000C   ........           CALL    ?UL2F_L04
+   \   00000010   E542               LDI     R20, 82
+   \   00000012   E459               LDI     R21, 73
+   \   00000014   E16D               LDI     R22, 29
+   \   00000016   E37F               LDI     R23, 63
+   \   00000018   ........           CALL    ?F_MUL_L04
+   \   0000001C   E948               LDI     R20, 152
+   \   0000001E   E65C               LDI     R21, 108
+   \   00000020   EC65               LDI     R22, 197
+   \   00000022   E476               LDI     R23, 70
+   \   00000024   ........           CALL    ?F_ADD_L04
+   \   00000028   ........           CALL    ?F2SL_L04
+   \   0000002C   BD1D               OUT     0x2D, R17
+   \   0000002E   BD0C               OUT     0x2C, R16
+     57          	
+     58          	TIMER1_START;		//定时器中断使能
+   \   00000030   E005               LDI     R16, 5
+   \   00000032   BD0E               OUT     0x2E, R16
+     59          //	TIMSK |= (1 << 2);
+     60          	delay_song(Time);		//延时所需要的节拍
+   \   00000034   9100....           LDS     R16, Time
+   \   00000038   ....               RCALL   delay_song
+     61          //	TIMSK &= ~(1 << 2);
+     62          	TIMER1_STOP;	//关闭定时器中断使能
+   \   0000003A   E000               LDI     R16, 0
+   \   0000003C   BD0E               OUT     0x2E, R16
+     63          }
+   \   0000003E   9508               RET
+   \   00000040                      REQUIRE _A_TCNT1
+   \   00000040                      REQUIRE _A_TCCR1B
+     64          
+     65          
+
+   \                                 In  segment CODE, align 2, keep-with-next
+     66          void Song(void)
+   \                     Song:
+     67          {
+   \   00000000   ........           CALL    ?PROLOGUE4_L09
+     68          	unsigned char i = 0,k =0 ;
+   \   00000004   E080               LDI     R24, 0
+   \   00000006   E0A0               LDI     R26, 0
+     69          	
+     70          	
+     71          	for(i = 0; i< 100;i += 3)
+   \   00000008   E080               LDI     R24, 0
+   \                     ??Song_0:
+   \   0000000A   3684               CPI     R24, 100
+   \   0000000C   F598               BRCC    ??Song_1
+     72          	{					//音乐数组长度，唱完从头再来
+     73          		k = MUSIC[i] + 7 * MUSIC[i + 1] - 1;	//去音符振荡频率所需数据
+   \   0000000E   E090               LDI     R25, 0
+   \   00000010   01FC               MOVW    R31:R30, R25:R24
+   \   00000012   ....               SUBI    R30, LOW((-(MUSIC) & 0xFFFF))
+   \   00000014   ....               SBCI    R31, (-(MUSIC) & 0xFFFF) >> 8
+   \   00000016   8110               LD      R17, Z
+   \   00000018   E090               LDI     R25, 0
+   \   0000001A   01FC               MOVW    R31:R30, R25:R24
+   \   0000001C   ....               SUBI    R30, LOW((-(MUSIC) & 0xFFFF))
+   \   0000001E   ....               SBCI    R31, (-(MUSIC) & 0xFFFF) >> 8
+   \   00000020   8121               LDD     R18, Z+1
+   \   00000022   E007               LDI     R16, 7
+   \   00000024   9F20               MUL     R18, R16
+   \   00000026   0D10               ADD     R17, R0
+   \   00000028   951A               DEC     R17
+   \   0000002A   2FA1               MOV     R26, R17
+     74          		
+     75          		Timer1_H = FREQH[k];
+   \   0000002C   E0B0               LDI     R27, 0
+   \   0000002E   01FD               MOVW    R31:R30, R27:R26
+   \   00000030   ....               SUBI    R30, LOW((-(FREQH) & 0xFFFF))
+   \   00000032   ....               SBCI    R31, (-(FREQH) & 0xFFFF) >> 8
+   \   00000034   8100               LD      R16, Z
+   \   00000036   9300....           STS     Timer1_H, R16
+     76          		Timer1_L = FREQL[k];
+   \   0000003A   E0B0               LDI     R27, 0
+   \   0000003C   01FD               MOVW    R31:R30, R27:R26
+   \   0000003E   ....               SUBI    R30, LOW((-(FREQL) & 0xFFFF))
+   \   00000040   ....               SBCI    R31, (-(FREQL) & 0xFFFF) >> 8
+   \   00000042   8100               LD      R16, Z
+   \   00000044   9300....           STS     Timer1_L, R16
+     77          		
+     78          		Timer1_C = (unsigned int)(Timer1_H << 8) + Timer1_L;
+   \   00000048   9130....           LDS     R19, Timer1_H
+   \   0000004C   E020               LDI     R18, 0
+   \   0000004E   9100....           LDS     R16, Timer1_L
+   \   00000052   E010               LDI     R17, 0
+   \   00000054   0F20               ADD     R18, R16
+   \   00000056   1F31               ADC     R19, R17
+   \   00000058   9320....           STS     Timer1_C, R18
+   \   0000005C   9330....           STS     (Timer1_C + 1), R19
+     79          		
+     80          		Time = MUSIC[i + 2];	//节拍时长
+   \   00000060   E090               LDI     R25, 0
+   \   00000062   01FC               MOVW    R31:R30, R25:R24
+   \   00000064   ....               SUBI    R30, LOW((-(MUSIC) & 0xFFFF))
+   \   00000066   ....               SBCI    R31, (-(MUSIC) & 0xFFFF) >> 8
+   \   00000068   8102               LDD     R16, Z+2
+   \   0000006A   9300....           STS     Time, R16
+     81          				
+     82          		song();
+   \   0000006E   ....               RCALL   song
+     83          		
+     84          	}
+   \   00000070   5F8D               SUBI    R24, 253
+   \   00000072   CFCB               RJMP    ??Song_0
+     85          	
+     86          }
+   \                     ??Song_1:
+   \   00000074   E0E4               LDI     R30, 4
+   \   00000076   ........           JMP     ?EPILOGUE_B4_L09
+
+   \                                 In  segment NEAR_ID, align 1, keep-with-next
+   \                     `?<Initializer for MUSIC>`:
+   \   00000000   020605030102       DC8 6, 2, 3, 5, 2, 1, 3, 2, 2, 5, 2, 2, 1, 3, 2, 6, 2, 1, 5, 2, 1, 6, 2
+   \              020305020202
+   \              030106020102
+   \              0205060102  
+   \   00000017   030402020205       DC8 4, 3, 2, 2, 5, 2, 1, 6, 2, 1, 5, 2, 2, 3, 2, 2, 1, 2, 1, 6, 1, 1, 5
+   \              060101020205
+   \              030202020201
+   \              0601010105  
+   \   0000002E   010202030201       DC8 2, 1, 3, 2, 1, 2, 2, 4, 2, 2, 3, 3, 2, 1, 5, 2, 2, 5, 2, 1, 6, 2, 1
+   \              040202020303
+   \              010202050502
+   \              0102020601  
+   \   00000045   020302020202       DC8 3, 2, 2, 2, 2, 2, 1, 2, 4, 5, 2, 3, 3, 2, 1, 2, 2, 1, 1, 2, 1, 6, 1
+   \              020105040302
+   \              020302010102
+   \              0201060101  
+   \   0000005C   010101020105       DC8 1, 1, 2, 1, 5, 1, 6, 0, 0, 0
+   \              00060000    
+
+   \                                 In  segment NEAR_ID, align 1, keep-with-next
+   \                     `?<Initializer for FREQH>`:
+   \   00000000   F3F2F5F5F7F6       DC8 242, 243, 245, 245, 246, 247, 248, 249, 249, 250, 250, 251, 251
+   \              F9F8FAF9FBFA
+   \              FB          
+   \   0000000D   FCFCFDFCFDFD       DC8 252, 252, 252, 253, 253, 253, 253, 254, 254, 254, 254, 254, 254
+   \              FEFDFEFEFEFE
+   \              FE          
+   \   0000001A   FFFE               DC8 254, 255
+
+   \                                 In  segment NEAR_ID, align 1, keep-with-next
+   \                     `?<Initializer for FREQL>`:
+   \   00000000   C142B617D1D0       DC8 66, 193, 23, 182, 208, 209, 182, 33, 225, 140, 216, 104, 233, 91
+   \              21B68CE168D8
+   \              5BE9        
+   \   0000000E   EE8F6B44F4B4       DC8 143, 238, 68, 107, 180, 244, 45, 71, 119, 162, 182, 218, 250, 22
+   \              472DA277DAB6
+   \              16FA        
+     87          
+     88          
+     89          
+     90          
+
+   Maximum stack usage in bytes:
+
+   CSTACK RSTACK Function
+   ------ ------ --------
+      4      2   Song
+        4      2   -> song
+      0      2   delay_song
+      0      4   song
+        0      2   -> delay_song
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      28  ?<Initializer for FREQH>
+      28  ?<Initializer for FREQL>
+     102  ?<Initializer for MUSIC>
+      28  FREQH
+      28  FREQL
+     102  MUSIC
+     122  Song
+       1  _A_TCCR1B
+       2  _A_TCNT1
+      28  delay_song
+      64  song
+       7  -- Other
+
+ 
+   3 bytes in segment ABSOLUTE
+ 214 bytes in segment CODE
+   7 bytes in segment INITTAB
+ 158 bytes in segment NEAR_I
+ 158 bytes in segment NEAR_ID
+ 
+ 372 bytes of CODE memory (+ 7 bytes shared)
+ 158 bytes of DATA memory (+ 3 bytes shared)
+
+Errors: none
+Warnings: none

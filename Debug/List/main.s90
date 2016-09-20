@@ -1,0 +1,150 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V6.20.2.50573 for Atmel AVR       12/Sep/2016  17:59:11 /
+// Copyright 1996-2013 IAR Systems AB.                                        /
+//                                                                            /
+//    Source file  =  C:\Users\Admin\Desktop\ATmega128Project\src\main.c      /
+//    Command line =  C:\Users\Admin\Desktop\ATmega128Project\src\main.c      /
+//                    --cpu=m128a -ms -o C:\Users\Admin\Desktop\ATmega128Proj /
+//                    ect\Debug\Obj\ -lCN C:\Users\Admin\Desktop\ATmega128Pro /
+//                    ject\Debug\List\ -lb C:\Users\Admin\Desktop\ATmega128Pr /
+//                    oject\Debug\List\ -y --initializers_in_flash --no_cse   /
+//                    --no_inline --no_code_motion --no_cross_call            /
+//                    --no_clustering --no_tbaa --debug                       /
+//                    -DENABLE_BIT_DEFINITIONS -e -I                          /
+//                    C:\Users\Admin\Desktop\ATmega128Project\inc\            /
+//                    --eeprom_size 4096 --dlib --dlib_config "D:\Program     /
+//                    Files (x86)\IAR Systems\Embedded Workbench              /
+//                    6.5\avr\LIB\DLIB\dlAVR-3s-ec_mul-f.h" --vla             /
+//                    --use_c++_inline -On                                    /
+//    List file    =  C:\Users\Admin\Desktop\ATmega128Project\Debug\List\main /
+//                    .s90                                                    /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME main
+
+        RSEG CSTACK:DATA:NOROOT(0)
+        RSEG RSTACK:DATA:NOROOT(0)
+
+        EXTERN ?need_segment_init
+
+        PUBWEAK `?<Segment init: NEAR_I>`
+        PUBWEAK `?<Segment init: NEAR_Z>`
+        PUBWEAK _A_SREG
+        PUBWEAK __?EEARH
+        PUBWEAK __?EEARL
+        PUBWEAK __?EECR
+        PUBWEAK __?EEDR
+        PUBLIC comp
+        PUBLIC main
+        PUBLIC systemInit
+        PUBLIC temp_num
+
+        EXTERN DS1302_Test
+        EXTERN USART_Init
+        EXTERN ds1302_Init
+        EXTERN ledInit
+        EXTERN ledShowInit
+        EXTERN printf
+        EXTERN timer0Init
+
+
+        ASEGN ABSOLUTE:DATA:NOROOT,05fH
+// union <unnamed> volatile __io _A_SREG
+_A_SREG:
+        DS8 1
+
+        RSEG NEAR_Z:DATA:NOROOT(0)
+        REQUIRE `?<Segment init: NEAR_Z>`
+temp_num:
+        DS8 2
+
+        RSEG NEAR_I:DATA:NOROOT(0)
+        REQUIRE `?<Segment init: NEAR_I>`
+`?<Constant "POWER ON!!This is a t...">`:
+        DS8 38
+        REQUIRE `?<Initializer for <Constant "POWER ON!!This is`
+
+        RSEG NEAR_I:DATA:NOROOT(0)
+        REQUIRE `?<Segment init: NEAR_I>`
+comp:
+        DS8 1
+        REQUIRE `?<Initializer for comp>`
+
+        RSEG CODE:CODE:NOROOT(1)
+systemInit:
+        CALL    ledInit
+        CALL    ledShowInit
+        LDI     R16, 0
+        LDI     R17, 0
+        CALL    timer0Init
+        LDI     R16, 0
+        LDI     R17, 194
+        LDI     R18, 1
+        LDI     R19, 0
+        CALL    USART_Init
+        CALL    ds1302_Init
+        RET
+
+        RSEG CODE:CODE:NOROOT(1)
+main:
+        RCALL   systemInit
+        BSET    7
+        LDI     R16, LOW(`?<Constant "POWER ON!!This is a t...">`)
+        LDI     R17, (`?<Constant "POWER ON!!This is a t...">`) >> 8
+        CALL    printf
+??main_0:
+        CALL    DS1302_Test
+        RJMP    ??main_0
+        REQUIRE _A_SREG
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01cH
+__?EECR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01dH
+__?EEDR:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01eH
+__?EEARL:
+
+        ASEGN ABSOLUTE:DATA:NOROOT,01fH
+__?EEARH:
+
+        RSEG NEAR_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "POWER ON!!This is`:
+        DC8 "POWER ON!!This is a test for start!\015\012"
+
+        RSEG INITTAB:CODE:NOROOT(0)
+`?<Segment init: NEAR_I>`:
+        DC16    SFE(NEAR_I) - SFB(NEAR_I)
+        DC16    SFB(NEAR_I)
+        DP      SFB(NEAR_ID)
+        REQUIRE ?need_segment_init
+
+        RSEG INITTAB:CODE:NOROOT(0)
+`?<Segment init: NEAR_Z>`:
+        DC16    SFE(NEAR_Z) - SFB(NEAR_Z)
+        DC16    SFB(NEAR_Z)
+        DP      0
+        REQUIRE ?need_segment_init
+
+        RSEG NEAR_ID:CODE:NOROOT(0)
+`?<Initializer for comp>`:
+        DC8 128
+
+        END
+// 
+//  1 byte  in segment ABSOLUTE
+// 52 bytes in segment CODE
+// 14 bytes in segment INITTAB
+// 39 bytes in segment NEAR_I
+// 39 bytes in segment NEAR_ID
+//  2 bytes in segment NEAR_Z
+// 
+// 91 bytes of CODE memory (+ 14 bytes shared)
+// 41 bytes of DATA memory (+  1 byte  shared)
+//
+//Errors: none
+//Warnings: none
