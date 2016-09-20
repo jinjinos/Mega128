@@ -1,66 +1,66 @@
 ################################################################################
 #                                                                              #
-#      IAR Universal Linker V5.4.1.30                                          #
+#      IAR Universal Linker V5.7.0.39                                          #
 #                                                                              #
-#           Link time     =  12/Sep/2016  17:59:11                             #
+#           Link time     =  20/Sep/2016  17:32:34                             #
 #           Target CPU    =  A90                                               #
-#           List file     =  C:\Users\Admin\Desktop\ATmega128Project\Debug\Lis #
-#                            t\atmega128.map                                   #
-#           Output file 1 =  C:\Users\Admin\Desktop\ATmega128Project\Debug\Exe #
-#                            \atmega128.d90                                    #
+#           List file     =  C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\List\atmega128.map                           #
+#           Output file 1 =  C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\Exe\atmega128.d90                            #
 #                            Format: debug                                     #
 #                            UBROF version 10.0.6                              #
 #                            Using library modules for C-SPY (-rt)             #
-#           Command line  =  C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj #
-#                            \ISR.r90                                          #
-#                            C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj #
-#                            \adc.r90                                          #
-#                            C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj #
-#                            \beep.r90                                         #
-#                            C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj #
-#                            \dac_tlc5615.r90                                  #
-#                            C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj #
-#                            \delay.r90                                        #
-#                            C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj #
-#                            \ds1302.r90                                       #
-#                            C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj #
-#                            \ds18b20.r90                                      #
-#                            C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj #
-#                            \e2prom.r90                                       #
-#                            C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj #
-#                            \key.r90                                          #
-#                            C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj #
-#                            \lcd1602.r90                                      #
-#                            C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj #
-#                            \led.r90                                          #
-#                            C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj #
-#                            \ledshow.r90                                      #
-#                            C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj #
-#                            \main.r90                                         #
-#                            C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj #
-#                            \my_math.r90                                      #
-#                            C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj #
-#                            \queue.r90                                        #
-#                            C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj #
-#                            \redctrl.r90                                      #
-#                            C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj #
-#                            \removectrl.r90                                   #
-#                            C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj #
-#                            \song.r90                                         #
-#                            C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj #
-#                            \spi.r90                                          #
-#                            C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj #
-#                            \step_motor.r90                                   #
-#                            C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj #
-#                            \timer.r90                                        #
-#                            C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj #
-#                            \uart.r90                                         #
+#           Command line  =  C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\Obj\ISR.r90                                  #
+#                            C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\Obj\adc.r90                                  #
+#                            C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\Obj\beep.r90                                 #
+#                            C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\Obj\dac_tlc5615.r90                          #
+#                            C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\Obj\delay.r90                                #
+#                            C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\Obj\ds1302.r90                               #
+#                            C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\Obj\ds18b20.r90                              #
+#                            C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\Obj\e2prom.r90                               #
+#                            C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\Obj\key.r90                                  #
+#                            C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\Obj\lcd1602.r90                              #
+#                            C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\Obj\led.r90                                  #
+#                            C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\Obj\ledshow.r90                              #
+#                            C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\Obj\main.r90                                 #
+#                            C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\Obj\my_math.r90                              #
+#                            C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\Obj\queue.r90                                #
+#                            C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\Obj\redctrl.r90                              #
+#                            C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\Obj\removectrl.r90                           #
+#                            C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\Obj\song.r90                                 #
+#                            C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\Obj\spi.r90                                  #
+#                            C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\Obj\step_motor.r90                           #
+#                            C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\Obj\timer.r90                                #
+#                            C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\Obj\uart.r90                                 #
 #                            -o                                                #
-#                            C:\Users\Admin\Desktop\ATmega128Project\Debug\Exe #
-#                            \atmega128.d90                                    #
+#                            C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\Exe\atmega128.d90                            #
 #                            -l                                                #
-#                            C:\Users\Admin\Desktop\ATmega128Project\Debug\Lis #
-#                            t\atmega128.map                                   #
+#                            C:\Users\Administrator\Desktop\ATmega128Project\D #
+#                            ebug\List\atmega128.map                           #
 #                            -xms                                              #
 #                            "-ID:\Program Files (x86)\IAR Systems\Embedded Wo #
 #                            rkbench 6.5\avr\LIB\"                             #
@@ -124,7 +124,7 @@
 #                            "D:\Program Files (x86)\IAR Systems\Embedded Work #
 #                            bench 6.5\avr\LIB\DLIB\dlAVR-3s-ec_mul-f.r90"     #
 #                                                                              #
-#                           Copyright (C) 1987-2012 IAR Systems AB.            #
+#                           Copyright (C) 1987-2013 IAR Systems AB.            #
 ################################################################################
 
 
@@ -228,7 +228,7 @@ Absolute parts
            _..X_INTVEC_SIZE        0000008C 
     *************************************************************************
 
-  FILE NAME : C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\ISR.r90
+  FILE NAME : C:\Users\Administrator\Desktop\ATmega128Project\Debug\Obj\ISR.r90
   PROGRAM MODULE, NAME : ISR
 
   SEGMENTS IN THE MODULE
@@ -465,11 +465,11 @@ INTVEC
                                    00000078 
     -------------------------------------------------------------------------
 NEAR_ID
-  Relative segment, address: CODE 00000E84 - 00000E90 (0xd bytes), align: 0
+  Relative segment, address: CODE 00000E82 - 00000E8E (0xd bytes), align: 0
   Segment part 21.            Intra module refs:   Segment part 20
     -------------------------------------------------------------------------
 INITTAB
-  Relative segment, address: CODE 00000E76 - 00000E7C (0x7 bytes), align: 0
+  Relative segment, address: CODE 00000E74 - 00000E7A (0x7 bytes), align: 0
   Segment part 22.            Intra module refs:   Segment part 13 (ds1302)
                                                    Segment part 20
                                                    Segment part 3 (?xprintfsmall_nomb)
@@ -478,16 +478,16 @@ INITTAB
            ENTRY                   ADDRESS         REF BY
            =====                   =======         ======
            ?<Segment init: NEAR_I>
-                                   00000E76 
+                                   00000E74 
     -------------------------------------------------------------------------
 INITTAB
-  Relative segment, address: CODE 00000E7D - 00000E83 (0x7 bytes), align: 0
+  Relative segment, address: CODE 00000E7B - 00000E81 (0x7 bytes), align: 0
   Segment part 24.            Intra module refs:   Segment part 5 (?xfiles)
                                                    count
            ENTRY                   ADDRESS         REF BY
            =====                   =======         ======
            ?<Segment init: NEAR_Z>
-                                   00000E7D 
+                                   00000E7B 
     -------------------------------------------------------------------------
 NEAR_I
   Relative segment, address: DATA 0000021F - 0000022B (0xd bytes), align: 0
@@ -495,7 +495,7 @@ NEAR_I
 
     *************************************************************************
 
-  FILE NAME : C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\adc.r90
+  FILE NAME : C:\Users\Administrator\Desktop\ATmega128Project\Debug\Obj\adc.r90
   PROGRAM MODULE, NAME : adc
 
   SEGMENTS IN THE MODULE
@@ -533,7 +533,7 @@ ABSOLUTE
 
     *************************************************************************
 
-  FILE NAME : C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\beep.r90
+  FILE NAME : C:\Users\Administrator\Desktop\ATmega128Project\Debug\Obj\beep.r90
   PROGRAM MODULE, NAME : beep
 
   SEGMENTS IN THE MODULE
@@ -560,7 +560,7 @@ ABSOLUTE
 
     *************************************************************************
 
-  FILE NAME : C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\dac_tlc5615.r90
+  FILE NAME : C:\Users\Administrator\Desktop\ATmega128Project\Debug\Obj\dac_tlc5615.r90
   PROGRAM MODULE, NAME : dac_tlc5615
 
   SEGMENTS IN THE MODULE
@@ -617,10 +617,10 @@ ABSOLUTE
 
     *************************************************************************
 
-  FILE NAME : C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\delay.r90
+  FILE NAME : C:\Users\Administrator\Desktop\ATmega128Project\Debug\Obj\delay.r90
     *************************************************************************
 
-  FILE NAME : C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\ds1302.r90
+  FILE NAME : C:\Users\Administrator\Desktop\ATmega128Project\Debug\Obj\ds1302.r90
   PROGRAM MODULE, NAME : ds1302
 
   SEGMENTS IN THE MODULE
@@ -728,7 +728,7 @@ CODE
                RSTACK = 00000000 ( 00000004 )
     -------------------------------------------------------------------------
 NEAR_ID
-  Relative segment, address: CODE 00000E91 - 00000EB1 (0x21 bytes), align: 0
+  Relative segment, address: CODE 00000E8F - 00000EAF (0x21 bytes), align: 0
   Segment part 14.            Intra module refs:   Segment part 13
     -------------------------------------------------------------------------
 NEAR_I
@@ -736,20 +736,20 @@ NEAR_I
   Segment part 13.            Intra module refs:   DS1302_Test
     -------------------------------------------------------------------------
 <FAR_F> 1 (was FAR_F)
-  Relative segment, address: CODE 00000E64 - 00000E6B (0x8 bytes), align: 0
+  Relative segment, address: CODE 00000E62 - 00000E69 (0x8 bytes), align: 0
   Segment part 10.            Intra module refs:   ds1302_Init
     -------------------------------------------------------------------------
 <FAR_F> 1 (was FAR_F)
-  Relative segment, address: CODE 00000E6C - 00000E6D (0x2 bytes), align: 0
+  Relative segment, address: CODE 00000E6A - 00000E6B (0x2 bytes), align: 0
   Segment part 11.            Intra module refs:   ds1302_Read_Time
     -------------------------------------------------------------------------
 <FAR_F> 1 (was FAR_F)
-  Relative segment, address: CODE 00000E6E - 00000E75 (0x8 bytes), align: 0
+  Relative segment, address: CODE 00000E6C - 00000E73 (0x8 bytes), align: 0
   Segment part 12.            Intra module refs:   DS1302_Test
 
     *************************************************************************
 
-  FILE NAME : C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\ds18b20.r90
+  FILE NAME : C:\Users\Administrator\Desktop\ATmega128Project\Debug\Obj\ds18b20.r90
   PROGRAM MODULE, NAME : ds18b20
 
   SEGMENTS IN THE MODULE
@@ -757,7 +757,7 @@ NEAR_I
 
     *************************************************************************
 
-  FILE NAME : C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\e2prom.r90
+  FILE NAME : C:\Users\Administrator\Desktop\ATmega128Project\Debug\Obj\e2prom.r90
   PROGRAM MODULE, NAME : e2prom
 
   SEGMENTS IN THE MODULE
@@ -806,7 +806,7 @@ ABSOLUTE
 
     *************************************************************************
 
-  FILE NAME : C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\key.r90
+  FILE NAME : C:\Users\Administrator\Desktop\ATmega128Project\Debug\Obj\key.r90
   PROGRAM MODULE, NAME : key
 
   SEGMENTS IN THE MODULE
@@ -863,7 +863,7 @@ ABSOLUTE
 
     *************************************************************************
 
-  FILE NAME : C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\lcd1602.r90
+  FILE NAME : C:\Users\Administrator\Desktop\ATmega128Project\Debug\Obj\lcd1602.r90
   PROGRAM MODULE, NAME : lcd1602
 
   SEGMENTS IN THE MODULE
@@ -910,7 +910,7 @@ ABSOLUTE
 
     *************************************************************************
 
-  FILE NAME : C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\led.r90
+  FILE NAME : C:\Users\Administrator\Desktop\ATmega128Project\Debug\Obj\led.r90
   PROGRAM MODULE, NAME : led
 
   SEGMENTS IN THE MODULE
@@ -925,7 +925,7 @@ CODE
 
     *************************************************************************
 
-  FILE NAME : C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\ledshow.r90
+  FILE NAME : C:\Users\Administrator\Desktop\ATmega128Project\Debug\Obj\ledshow.r90
   PROGRAM MODULE, NAME : ledshow
 
   SEGMENTS IN THE MODULE
@@ -940,7 +940,7 @@ CODE
 
     *************************************************************************
 
-  FILE NAME : C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\main.r90
+  FILE NAME : C:\Users\Administrator\Desktop\ATmega128Project\Debug\Obj\main.r90
   PROGRAM MODULE, NAME : main
 
   SEGMENTS IN THE MODULE
@@ -968,18 +968,18 @@ CODE
                RSTACK = 00000000 ( 00000002 )
     -------------------------------------------------------------------------
 NEAR_ID
-  Relative segment, address: CODE 00000EB2 - 00000ED7 (0x26 bytes), align: 0
+  Relative segment, address: CODE 00000EB0 - 00000ED5 (0x26 bytes), align: 0
   Segment part 9.             Intra module refs:   Segment part 8
 
     *************************************************************************
 
-  FILE NAME : C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\my_math.r90
+  FILE NAME : C:\Users\Administrator\Desktop\ATmega128Project\Debug\Obj\my_math.r90
     *************************************************************************
 
-  FILE NAME : C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\queue.r90
+  FILE NAME : C:\Users\Administrator\Desktop\ATmega128Project\Debug\Obj\queue.r90
     *************************************************************************
 
-  FILE NAME : C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\redctrl.r90
+  FILE NAME : C:\Users\Administrator\Desktop\ATmega128Project\Debug\Obj\redctrl.r90
   PROGRAM MODULE, NAME : redctrl
 
   SEGMENTS IN THE MODULE
@@ -987,7 +987,7 @@ NEAR_ID
 
     *************************************************************************
 
-  FILE NAME : C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\removectrl.r90
+  FILE NAME : C:\Users\Administrator\Desktop\ATmega128Project\Debug\Obj\removectrl.r90
   PROGRAM MODULE, NAME : removectrl
 
   SEGMENTS IN THE MODULE
@@ -995,7 +995,7 @@ NEAR_ID
 
     *************************************************************************
 
-  FILE NAME : C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\song.r90
+  FILE NAME : C:\Users\Administrator\Desktop\ATmega128Project\Debug\Obj\song.r90
   PROGRAM MODULE, NAME : song
 
   SEGMENTS IN THE MODULE
@@ -1012,7 +1012,7 @@ ABSOLUTE
 
     *************************************************************************
 
-  FILE NAME : C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\spi.r90
+  FILE NAME : C:\Users\Administrator\Desktop\ATmega128Project\Debug\Obj\spi.r90
   PROGRAM MODULE, NAME : spi
 
   SEGMENTS IN THE MODULE
@@ -1020,7 +1020,7 @@ ABSOLUTE
 
     *************************************************************************
 
-  FILE NAME : C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\step_motor.r90
+  FILE NAME : C:\Users\Administrator\Desktop\ATmega128Project\Debug\Obj\step_motor.r90
   PROGRAM MODULE, NAME : step_motor
 
   SEGMENTS IN THE MODULE
@@ -1028,7 +1028,7 @@ ABSOLUTE
 
     *************************************************************************
 
-  FILE NAME : C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\timer.r90
+  FILE NAME : C:\Users\Administrator\Desktop\ATmega128Project\Debug\Obj\timer.r90
   PROGRAM MODULE, NAME : timer
 
   SEGMENTS IN THE MODULE
@@ -1103,7 +1103,7 @@ CODE
 
     *************************************************************************
 
-  FILE NAME : C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\uart.r90
+  FILE NAME : C:\Users\Administrator\Desktop\ATmega128Project\Debug\Obj\uart.r90
   PROGRAM MODULE, NAME : uart
 
   SEGMENTS IN THE MODULE
@@ -1875,7 +1875,7 @@ NEAR_I
            __iar_Stdout            00000273        putchar (?putchar)
     -------------------------------------------------------------------------
 NEAR_ID
-  Relative segment, address: CODE 00000ED8 - 00000EFF (0x28 bytes), align: 0
+  Relative segment, address: CODE 00000ED6 - 00000EFD (0x28 bytes), align: 0
   Segment part 10.            Intra module refs:   __iar_Stdout
 
     -------------------------------------------------------------------------
@@ -1884,7 +1884,7 @@ NEAR_ID
   SEGMENTS IN THE MODULE
   ======================
 CODE
-  Relative segment, address: CODE 000007F4 - 00000AD3 (0x2e0 bytes), align: 1
+  Relative segment, address: CODE 000007F4 - 00000AD1 (0x2de bytes), align: 1
   Segment part 6.
            ENTRY                   ADDRESS         REF BY
            =====                   =======         ======
@@ -1894,201 +1894,201 @@ CODE
                RSTACK = 00000000 ( 00000004 )
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000AD4 - 00000AD9 (0x6 bytes), align: 1
+  Relative segment, address: CODE 00000AD2 - 00000AD7 (0x6 bytes), align: 1
   Segment part 7.             Intra module refs:   _PrintfSmallNoMb
                                                    _PutcharsSmallNoMb
                                                    pad
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000ADA - 00000ADB (0x2 bytes), align: 1
+  Relative segment, address: CODE 00000AD8 - 00000AD9 (0x2 bytes), align: 1
   Segment part 8.             Intra module refs:   _LitobSmallNoMb
                                                    _PrintfSmallNoMb
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000ADC - 00000AE1 (0x6 bytes), align: 1
+  Relative segment, address: CODE 00000ADA - 00000ADF (0x6 bytes), align: 1
   Segment part 9.             Intra module refs:   Segment part 11
                                                    Segment part 24
                                                    Segment part 8
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000AE2 - 00000AE7 (0x6 bytes), align: 1
+  Relative segment, address: CODE 00000AE0 - 00000AE5 (0x6 bytes), align: 1
   Segment part 10.            Intra module refs:   _PrintfSmallNoMb
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000AE8 - 00000AEF (0x8 bytes), align: 1
+  Relative segment, address: CODE 00000AE6 - 00000AED (0x8 bytes), align: 1
   Segment part 11.            Intra module refs:   _PrintfSmallNoMb
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000AF0 - 00000AF7 (0x8 bytes), align: 1
+  Relative segment, address: CODE 00000AEE - 00000AF5 (0x8 bytes), align: 1
   Segment part 12.            Intra module refs:   _PrintfSmallNoMb
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000AF8 - 00000B0D (0x16 bytes), align: 1
+  Relative segment, address: CODE 00000AF6 - 00000B0B (0x16 bytes), align: 1
   Segment part 13.            Intra module refs:   _PrintfSmallNoMb
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000B0E - 00000B17 (0xa bytes), align: 1
+  Relative segment, address: CODE 00000B0C - 00000B15 (0xa bytes), align: 1
   Segment part 14.            Intra module refs:   Segment part 17
                                                    _PrintfSmallNoMb
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000B18 - 00000B1F (0x8 bytes), align: 1
+  Relative segment, address: CODE 00000B16 - 00000B1D (0x8 bytes), align: 1
   Segment part 15.            Intra module refs:   _PrintfSmallNoMb
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000B20 - 00000B21 (0x2 bytes), align: 1
+  Relative segment, address: CODE 00000B1E - 00000B1F (0x2 bytes), align: 1
   Segment part 16.            Intra module refs:   _PrintfSmallNoMb
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000B22 - 00000B2F (0xe bytes), align: 1
+  Relative segment, address: CODE 00000B20 - 00000B2D (0xe bytes), align: 1
   Segment part 17.            Intra module refs:   Segment part 16
                                                    _PrintfSmallNoMb
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000B30 - 00000B35 (0x6 bytes), align: 1
+  Relative segment, address: CODE 00000B2E - 00000B33 (0x6 bytes), align: 1
   Segment part 18.            Intra module refs:   LoadInt
                                                    Segment part 15
                                                    Segment part 16
                                                    _PrintfSmallNoMb
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000B36 - 00000B37 (0x2 bytes), align: 1
+  Relative segment, address: CODE 00000B34 - 00000B35 (0x2 bytes), align: 1
   Segment part 19.            Intra module refs:   _PrintfSmallNoMb
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000B38 - 00000B3D (0x6 bytes), align: 1
+  Relative segment, address: CODE 00000B36 - 00000B3B (0x6 bytes), align: 1
   Segment part 20.            Intra module refs:   Segment part 19
                                                    _PrintfSmallNoMb
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000B3E - 00000B47 (0xa bytes), align: 1
+  Relative segment, address: CODE 00000B3C - 00000B45 (0xa bytes), align: 1
   Segment part 21.            Intra module refs:   _PrintfSmallNoMb
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000B48 - 00000B4D (0x6 bytes), align: 1
+  Relative segment, address: CODE 00000B46 - 00000B4B (0x6 bytes), align: 1
   Segment part 22.            Intra module refs:   _PrintfSmallNoMb
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000B4E - 00000B51 (0x4 bytes), align: 1
+  Relative segment, address: CODE 00000B4C - 00000B4F (0x4 bytes), align: 1
   Segment part 23.            Intra module refs:   Segment part 22
                                                    Segment part 31
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000B52 - 00000B5B (0xa bytes), align: 1
+  Relative segment, address: CODE 00000B50 - 00000B59 (0xa bytes), align: 1
   Segment part 24.            Intra module refs:   _PrintfSmallNoMb
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000B5C - 00000B5D (0x2 bytes), align: 1
+  Relative segment, address: CODE 00000B5A - 00000B5B (0x2 bytes), align: 1
   Segment part 25.            Intra module refs:   _PrintfSmallNoMb
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000B5E - 00000B69 (0xc bytes), align: 1
+  Relative segment, address: CODE 00000B5C - 00000B67 (0xc bytes), align: 1
   Segment part 26.            Intra module refs:   Segment part 25
                                                    Segment part 28
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000B6A - 00000B6F (0x6 bytes), align: 1
+  Relative segment, address: CODE 00000B68 - 00000B6D (0x6 bytes), align: 1
   Segment part 27.            Intra module refs:   Segment part 25
                                                    _PrintfSmallNoMb
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000B70 - 00000B77 (0x8 bytes), align: 1
+  Relative segment, address: CODE 00000B6E - 00000B75 (0x8 bytes), align: 1
   Segment part 28.            Intra module refs:   _PrintfSmallNoMb
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000B78 - 00000B81 (0xa bytes), align: 1
+  Relative segment, address: CODE 00000B76 - 00000B7F (0xa bytes), align: 1
   Segment part 29.            Intra module refs:   Segment part 10
                                                    Segment part 28
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000B82 - 00000B85 (0x4 bytes), align: 1
+  Relative segment, address: CODE 00000B80 - 00000B83 (0x4 bytes), align: 1
   Segment part 30.            Intra module refs:   _PrintfSmallNoMb
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000B86 - 00000B8D (0x8 bytes), align: 1
+  Relative segment, address: CODE 00000B84 - 00000B8B (0x8 bytes), align: 1
   Segment part 31.            Intra module refs:   Segment part 30
                                                    _PrintfSmallNoMb
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000B8E - 00000BFF (0x72 bytes), align: 1
+  Relative segment, address: CODE 00000B8C - 00000BFD (0x72 bytes), align: 1
   Segment part 32.            Intra module refs:   _PrintfSmallNoMb
            LOCAL                   ADDRESS         
            =====                   =======         
-           LoadInt                 00000B8E 
+           LoadInt                 00000B8C 
                RSTACK = 00000000 ( 00000002 )
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000C00 - 00000C05 (0x6 bytes), align: 1
+  Relative segment, address: CODE 00000BFE - 00000C03 (0x6 bytes), align: 1
   Segment part 33.            Intra module refs:   LoadInt
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000C06 - 00000C19 (0x14 bytes), align: 1
+  Relative segment, address: CODE 00000C04 - 00000C17 (0x14 bytes), align: 1
   Segment part 34.            Intra module refs:   LoadInt
                                                    Segment part 33
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000C1A - 00000C1F (0x6 bytes), align: 1
+  Relative segment, address: CODE 00000C18 - 00000C1D (0x6 bytes), align: 1
   Segment part 35.            Intra module refs:   LoadInt
                                                    _PrintfSmallNoMb
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000C20 - 00000C29 (0xa bytes), align: 1
+  Relative segment, address: CODE 00000C1E - 00000C27 (0xa bytes), align: 1
   Segment part 36.            Intra module refs:   LoadInt
                                                    _PrintfSmallNoMb
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000C2A - 00000C65 (0x3c bytes), align: 1
+  Relative segment, address: CODE 00000C28 - 00000C63 (0x3c bytes), align: 1
   Segment part 37.            Intra module refs:   Segment part 31
            LOCAL                   ADDRESS         
            =====                   =======         
-           pad                     00000C2A 
+           pad                     00000C28 
                calls direct
                CSTACK = 00000000 ( 00000009 )
                RSTACK = 00000000 ( 00000002 )
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000C66 - 00000C69 (0x4 bytes), align: 1
+  Relative segment, address: CODE 00000C64 - 00000C67 (0x4 bytes), align: 1
   Segment part 38.            Intra module refs:   _PrintfSmallNoMb
                                                    _PutcharsSmallNoMb
                                                    pad
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000C6A - 00000DC9 (0x160 bytes), align: 1
+  Relative segment, address: CODE 00000C68 - 00000DC7 (0x160 bytes), align: 1
   Segment part 39.            Intra module refs:   _PrintfSmallNoMb
            LOCAL                   ADDRESS         
            =====                   =======         
-           _LitobSmallNoMb         00000C6A 
+           _LitobSmallNoMb         00000C68 
                CSTACK = 00000000 ( 00000013 )
                RSTACK = 00000000 ( 00000004 )
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000DCA - 00000DD7 (0xe bytes), align: 1
+  Relative segment, address: CODE 00000DC8 - 00000DD5 (0xe bytes), align: 1
   Segment part 40.            Intra module refs:   _LitobSmallNoMb
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000DD8 - 00000E11 (0x3a bytes), align: 1
+  Relative segment, address: CODE 00000DD6 - 00000E0F (0x3a bytes), align: 1
   Segment part 41.            Intra module refs:   _PrintfSmallNoMb
                                                    _PutcharsSmallNoMb
            LOCAL                   ADDRESS         
            =====                   =======         
-           _PutcharSmallNoMb       00000DD8 
+           _PutcharSmallNoMb       00000DD6 
                calls indirect
                CSTACK = 00000000 ( 00000002 )
                RSTACK = 00000000 ( 00000002 )
     -------------------------------------------------------------------------
 CODE
-  Relative segment, address: CODE 00000E12 - 00000E3F (0x2e bytes), align: 1
+  Relative segment, address: CODE 00000E10 - 00000E3D (0x2e bytes), align: 1
   Segment part 42.            Intra module refs:   Segment part 22
                                                    pad
            LOCAL                   ADDRESS         
            =====                   =======         
-           _PutcharsSmallNoMb      00000E12 
+           _PutcharsSmallNoMb      00000E10 
                calls direct
                CSTACK = 00000000 ( 00000008 )
                RSTACK = 00000000 ( 00000002 )
     -------------------------------------------------------------------------
 NEAR_ID
-  Relative segment, address: CODE 00000F00 - 00000F05 (0x6 bytes), align: 0
+  Relative segment, address: CODE 00000EFE - 00000F03 (0x6 bytes), align: 0
   Segment part 4.             Intra module refs:   Segment part 3
     -------------------------------------------------------------------------
 NEAR_I
@@ -2101,11 +2101,11 @@ NEAR_I
   SEGMENTS IN THE MODULE
   ======================
 CODE
-  Relative segment, address: CODE 00000E40 - 00000E63 (0x24 bytes), align: 1
+  Relative segment, address: CODE 00000E3E - 00000E61 (0x24 bytes), align: 1
   Segment part 3.
            ENTRY                   ADDRESS         REF BY
            =====                   =======         ======
-           _Prout                  00000E40        printf (?printf)
+           _Prout                  00000E3E        printf (?printf)
                calls direct
                CSTACK = 00000000 ( 00000004 )
                RSTACK = 00000000 ( 00000002 )
@@ -2139,10 +2139,10 @@ SEGMENT              SPACE    START ADDRESS   END ADDRESS     SIZE  TYPE  ALIGN
 =======              =====    =============   ===========     ====  ====  =====
 INTVEC               CODE          00000000 - 0000007B          7C   com    1
 ?FILL1               CODE          0000007C - 0000008B          10   rel    0
-CODE                 CODE          0000008C - 00000E63         DD8   rel    1
-<FAR_F> 1            CODE          00000E64 - 00000E75          12   rel    0
-INITTAB              CODE          00000E76 - 00000E83           E   rel    0
-NEAR_ID              CODE          00000E84 - 00000F05          82   rel    0
+CODE                 CODE          0000008C - 00000E61         DD6   rel    1
+<FAR_F> 1            CODE          00000E62 - 00000E73          12   rel    0
+INITTAB              CODE          00000E74 - 00000E81           E   rel    0
+NEAR_ID              CODE          00000E82 - 00000F03          82   rel    0
 ABSOLUTE             DATA               0000001C                     rel    0
                      DATA               0000001D                   
                      DATA               0000001E                   
@@ -2174,7 +2174,7 @@ NEAR_Z               DATA          000002A1 - 000002F2          52   rel    0
                 *                                      *
                 ****************************************
 
- 3 830 bytes of CODE memory (+             16 range fill )
+ 3 828 bytes of CODE memory (+             16 range fill )
    499 bytes of DATA memory (+ 47 absolute )
 
 Errors: none

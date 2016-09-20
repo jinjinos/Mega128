@@ -1,31 +1,33 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V6.20.2.50573 for Atmel AVR        12/Sep/2016  16:06:10 #
+# IAR C/C++ Compiler V6.21.3.50641 for Atmel AVR        20/Sep/2016  17:32:33 #
 # Copyright 1996-2013 IAR Systems AB.                                         #
 #                                                                             #
-#    Source file  =  C:\Users\Admin\Desktop\ATmega128Project\src\redctrl.c    #
-#    Command line =  C:\Users\Admin\Desktop\ATmega128Project\src\redctrl.c    #
-#                    --cpu=m128a -ms -o C:\Users\Admin\Desktop\ATmega128Proje #
-#                    ct\Debug\Obj\ -lCN C:\Users\Admin\Desktop\ATmega128Proje #
-#                    ct\Debug\List\ -lb C:\Users\Admin\Desktop\ATmega128Proje #
-#                    ct\Debug\List\ -y --initializers_in_flash --no_cse       #
+#    Source file  =  C:\Users\Administrator\Desktop\ATmega128Project\src\redc #
+#                    trl.c                                                    #
+#    Command line =  C:\Users\Administrator\Desktop\ATmega128Project\src\redc #
+#                    trl.c --cpu=m128a -ms -o C:\Users\Administrator\Desktop\ #
+#                    ATmega128Project\Debug\Obj\ -lCN                         #
+#                    C:\Users\Administrator\Desktop\ATmega128Project\Debug\Li #
+#                    st\ -lb C:\Users\Administrator\Desktop\ATmega128Project\ #
+#                    Debug\List\ -y --initializers_in_flash --no_cse          #
 #                    --no_inline --no_code_motion --no_cross_call             #
 #                    --no_clustering --no_tbaa --debug                        #
 #                    -DENABLE_BIT_DEFINITIONS -e -I                           #
-#                    C:\Users\Admin\Desktop\ATmega128Project\inc\             #
+#                    C:\Users\Administrator\Desktop\ATmega128Project\inc\     #
 #                    --eeprom_size 4096 --dlib --dlib_config "D:\Program      #
 #                    Files (x86)\IAR Systems\Embedded Workbench               #
 #                    6.5\avr\LIB\DLIB\dlAVR-3s-ec_mul-f.h" --vla              #
 #                    --use_c++_inline -On                                     #
-#    List file    =  C:\Users\Admin\Desktop\ATmega128Project\Debug\List\redct #
-#                    rl.lst                                                   #
-#    Object file  =  C:\Users\Admin\Desktop\ATmega128Project\Debug\Obj\redctr #
-#                    l.r90                                                    #
+#    List file    =  C:\Users\Administrator\Desktop\ATmega128Project\Debug\Li #
+#                    st\redctrl.lst                                           #
+#    Object file  =  C:\Users\Administrator\Desktop\ATmega128Project\Debug\Ob #
+#                    j\redctrl.r90                                            #
 #                                                                             #
 #                                                                             #
 ###############################################################################
 
-C:\Users\Admin\Desktop\ATmega128Project\src\redctrl.c
+C:\Users\Administrator\Desktop\ATmega128Project\src\redctrl.c
       1          /*红外遥控控制解码通信实验*/
       2          
       3          #include <iom128a.h>
